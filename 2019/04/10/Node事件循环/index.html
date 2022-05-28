@@ -1,0 +1,256 @@
+<!DOCTYPE html><html lang="zh-Hans" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Node事件循环 | Hexo</title><meta name="keywords" content="光与路契合，月与海浪漫"><meta name="author" content="宇宙建筑家"><meta name="copyright" content="宇宙建筑家"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Node中的事件循环和异步API1、介绍单线程编程会因阻塞I&#x2F;O导致硬件资源得不到更优的使用。多线程编程也因为编程中的死锁、状态同步等问题让开发人员头痛。Node在两者之间给出了它的解决方案：利用单线程，远离多线程死锁、状态同步等问题；利用异步I&#x2F;O，让单线程远离阻塞，以好使用CPU。 实际上，node只是在应用层属于单线程，底层其实通过libuv维护了一个阻塞I&#x2F;O">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node事件循环">
+<meta property="og:url" content="http://example.com/2019/04/10/Node%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Node中的事件循环和异步API1、介绍单线程编程会因阻塞I&#x2F;O导致硬件资源得不到更优的使用。多线程编程也因为编程中的死锁、状态同步等问题让开发人员头痛。Node在两者之间给出了它的解决方案：利用单线程，远离多线程死锁、状态同步等问题；利用异步I&#x2F;O，让单线程远离阻塞，以好使用CPU。 实际上，node只是在应用层属于单线程，底层其实通过libuv维护了一个阻塞I&#x2F;O">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/img/people.png">
+<meta property="article:published_time" content="2019-04-10T07:06:30.000Z">
+<meta property="article:modified_time" content="2022-05-27T14:14:47.116Z">
+<meta property="article:author" content="宇宙建筑家">
+<meta property="article:tag" content="光与路契合，月与海浪漫">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/people.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2019/04/10/Node%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Node事件循环',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-05-27 22:14:47'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/./img/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">11</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">5</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/./img/people.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Hexo</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Node事件循环</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2019-04-10T07:06:30.000Z" title="Created 2019-04-10 15:06:30">2019-04-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-05-27T14:14:47.116Z" title="Updated 2022-05-27 22:14:47">2022-05-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Javaacript/">Javaacript</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Node事件循环"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Node中的事件循环和异步API"><a href="#Node中的事件循环和异步API" class="headerlink" title="Node中的事件循环和异步API"></a>Node中的事件循环和异步API</h1><h3 id="1、介绍"><a href="#1、介绍" class="headerlink" title="1、介绍"></a>1、介绍</h3><p>单线程编程会因阻塞I&#x2F;O导致硬件资源得不到更优的使用。多线程编程也因为编程中的死锁、状态同步等问题让开发人员头痛。<br>Node在两者之间给出了它的解决方案：利用单线程，远离多线程死锁、状态同步等问题；利用异步I&#x2F;O，让单线程远离阻塞，以好使用CPU。</p>
+<p>实际上，node只是在应用层属于单线程，底层其实通过libuv维护了一个阻塞I&#x2F;O调用的线程池。</p>
+<blockquote>
+<p>但是：在应用层面，JS是单线程的，业务代码中不能存在耗时过长的代码，否则可能会严重拖后续代码（包括回调）的处理。如果遇到需要复杂的业务计算时，应当想办法启用独立进程或交给其他服务进行处理。</p>
+</blockquote>
+<h4 id="1-1-异步I-x2F-O"><a href="#1-1-异步I-x2F-O" class="headerlink" title="1.1 异步I&#x2F;O"></a>1.1 异步I&#x2F;O</h4><p>在Node中，JS是在单线程中执行的没错，但是内部完成I&#x2F;O工作的另有线程池，使用一个主进程和多个I&#x2F;O线程来模拟异步I&#x2F;O。</p>
+<p>当主线程发起I&#x2F;O调用时，I&#x2F;O操作会被放在I&#x2F;O线程来执行，主线程继续执行下面的任务，在I&#x2F;O线程完成操作后会带着数据通知主线程发起回调。</p>
+<h4 id="1-2-事件循环"><a href="#1-2-事件循环" class="headerlink" title="1.2 事件循环"></a>1.2 事件循环</h4><p>事件循环是Node的执行模型，正是这种模型使得回调函数非常普遍。</p>
+<p>在进程启动时，Node便会创建一个类似while(true)的循环，执行每次循环的过程就是判断有没有待处理的事件，如果有，就取出事件及其相关的回调并执行他们，然后进入下一个循环。如果不再有事件处理，就退出进程。</p>
+<p><img src="/2019/04/10/Node%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/five.png" alt="img"></p>
+<p>Event loop是一种程序结构，是实现异步的一种机制。Event loop可以简单理解为：</p>
+<ul>
+<li><p>所有任务都在主线程上执行，形成一个执行栈（execution context stack）。</p>
+</li>
+<li><p>主线程之外，还存在一个”任务队列”（task queue）。系统把异步任务放到”任务队列”之中，然后主线程继续执行后续的任务。</p>
+</li>
+<li><p>一旦”执行栈”中的所有任务执行完毕，系统就会读取”任务队列”。如果这个时候，异步任务已经结束了等待状态，就会从”任务队列”进入执行栈，恢复执行。</p>
+</li>
+<li><p>主线程不断重复上面的第三步。</p>
+</li>
+</ul>
+<p><strong>Node中事件循环阶段解析:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">   ┌───────────────────────┐</span><br><span class="line">┌─&gt;│        timers         │</span><br><span class="line">│  └──────────┬────────────┘</span><br><span class="line">│  ┌──────────┴────────────┐</span><br><span class="line">│  │     I/O callbacks     │</span><br><span class="line">│  └──────────┬────────────┘</span><br><span class="line">│  ┌──────────┴────────────┐</span><br><span class="line">│  │     idle, prepare     │</span><br><span class="line">│  └──────────┬────────────┘      ┌───────────────┐</span><br><span class="line">│  ┌──────────┴────────────┐      │   incoming:   │</span><br><span class="line">│  │         poll          │&lt;─────┤ connections,  │</span><br><span class="line">│  └──────────┬────────────┘      │  data, etc.   │</span><br><span class="line">│  ┌──────────┴────────────┐      └───────────────┘</span><br><span class="line">│  │         check         │</span><br><span class="line">│  └──────────┬────────────┘</span><br><span class="line">│  ┌──────────┴────────────┐</span><br><span class="line">└──┤    close callbacks    │</span><br><span class="line">   └───────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p>每个阶段都有一个FIFO的回调队列（queue）要执行。而每个阶段有自己的特殊之处，简单说，就是当event loop进入某个阶段后，会执行该阶段特定的（任意）操作，然后才会执行这个阶段的队列里的回调。当队列被执行完，或者执行的回调数量达到上限后，event loop会进入下个阶段。</p>
+<p><strong>Phases Overview 阶段总览</strong></p>
+<ul>
+<li>timers: 这个阶段执行setTimeout()、setInterval()设定的回调。</li>
+<li>I&#x2F;O callbacks: 执行几乎所有的回调，除了close callbacks、setTimeout()、setInterval()、setImmediate()的回调。</li>
+<li>idle, prepare: 仅内部使用。</li>
+<li>poll: 获取新的I&#x2F;O事件；node会在适当条件下阻塞在这里。</li>
+<li>check: 执行setImmediate()设定的回调。</li>
+<li>close callbacks: 执行比如socket.on(‘close’, …)的回调。</li>
+</ul>
+<p><strong>1. timers</strong></p>
+<p>一个timer指定一个下限时间而不是准确时间，定时器setTimeout()和setInterval()在达到这个下限时间后执行回调。在指定的时间过后，timers会尽早的执行回调，但是系统调度或者其他回调的执行可能会延迟它们。</p>
+<p>从技术上来说，poll阶段控制timers什么时候执行，而执行的具体位置在timers。</p>
+<p>下限的时间有一个范围：[1, 2147483647]，如果设定的时间不在这个范围，将被设置为1。</p>
+<p><strong>2. I&#x2F;O callbacks</strong></p>
+<p>执行除了close callbacks、setTimeout()、setInterval()、setImmediate()回调之外几乎所有回调，比如说TCP连接发生错误。</p>
+<p><strong>3. idle, prepare</strong></p>
+<p>系统内部的一些调用。</p>
+<p><strong>4. poll</strong></p>
+<p>这是最复杂的一个阶段。poll会检索新的I&#x2F;O events，并且会在合适的时候阻塞，等待回调被加入。</p>
+<p>poll阶段有两个主要的功能：一是执行下限时间已经达到的timers的回调，一是处理poll队列里的事件。<br>注：Node很多API都是基于事件订阅完成的，这些API的回调应该都在poll阶段完成。</p>
+<p>当事件循环进入poll阶段：</p>
+<ul>
+<li><p>poll队列不为空的时候，事件循环肯定是先遍历队列并同步执行回调，直到队列清空或执行回调数达到系统上限。</p>
+</li>
+<li><p>poll队列为空的时候，这里有两种情况。</p>
+<ul>
+<li><p>如果代码已经被setImmediate()设定了回调，那么事件循环直接结束poll阶段进入check阶段来执行check队列里的回调。</p>
+</li>
+<li><p>如果代码没有被设定setImmediate()设定回调：</p>
+<ul>
+<li>如果有被设定的timers，那么此时事件循环会检查timers，如果有一个或多个timers下限时间已经到达，那么事件循环将绕回timers阶段，并执行timers的有效回调队列。</li>
+<li>如果没有被设定timers，这个时候事件循环是阻塞在poll阶段等待事件回调被加入poll队列。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Node的很多API都是基于事件订阅完成的，比如fs.readFile，这些回调应该都在poll阶段完成。</p>
+<p><strong>5. check</strong><br>setImmediate()在这个阶段执行。</p>
+<p>这个阶段允许在poll阶段结束后立即执行回调。如果poll阶段空闲，并且有被setImmediate()设定的回调，那么事件循环直接跳到check执行而不是阻塞在poll阶段等待poll 事件们 (poll events)被加入。</p>
+<p>注意：如果进行到了poll阶段，setImmediate()具有最高优先级，只要poll队列为空且注册了setImmediate()，无论是否有timers达到下限时间，setImmediate()的代码都先执行。</p>
+<p><strong>6. close callbacks</strong><br>如果一个socket或handle被突然关掉（比如socket.destroy()），close事件将在这个阶段被触发，否则将通过process.nextTick()触发。</p>
+<h4 id="1-3-请求对象"><a href="#1-3-请求对象" class="headerlink" title="1.3 请求对象"></a>1.3 请求对象</h4><p>对于Node中的异步I&#x2F;O调用而言，回调函数不由开发者来调用，从JS发起调用到I&#x2F;O操作完成，存在一个中间产物，叫请求对象。</p>
+<p>在JS发起调用后，JS调用Node的核心模块，核心模块调用C++内建模块，內建模块通过libuv判断平台并进行系统调用。在进行系统调用时，从JS层传入的方法和参数都被封装在一个请求对象中，请求对象被放在线程池中等待执行。JS立即返回继续后续操作。</p>
+<h4 id="1-4-执行回调"><a href="#1-4-执行回调" class="headerlink" title="1.4 执行回调"></a>1.4 执行回调</h4><p>在线程可用时，线程会取出请求对象来执行I&#x2F;O操作，执行完后将结果放在请求对象中，并归还线程。<br>在事件循环中，I&#x2F;O观察者会不断的找到线程池中已经完成的请求对象，从中取出回调函数和数据并执行。</p>
+<p><img src="/2019/04/10/Node%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/six-16536600238094.png" alt="img"></p>
+<p>跑完当前执行环境下能跑完的代码。每一个事件消息都被运行直到完成为止，在此之前，任何其他事件都不会被处理。这和C等一些语言不通，它们可能在一个线程里面，函数跑着跑着突然停下来，然后其他线程又跑起来了。JS这种机制的一个典型的坏处，就是当某个事件处理耗时过长时，后面的事件处理都会被延后，直到这个事件处理结束，在浏览器环境中运行时，可能会出现某个脚本运行时间过长，页面无响应的提示。Node环境则可能出现大量用户请求被挂起，不能及时响应的情况。</p>
+<h3 id="2、非I-x2F-O的异步API"><a href="#2、非I-x2F-O的异步API" class="headerlink" title="2、非I&#x2F;O的异步API"></a>2、非I&#x2F;O的异步API</h3><p>Node中除了异步I&#x2F;O之外，还有一些与I&#x2F;O无关的异步API，分别是：setTimeout()、setInterval()、process.nextTick()、setImmediate()，他们并不是像普通I&#x2F;O操作那样真的需要等待事件异步处理结束再进行回调，而是出于定时或延迟处理的原因才设计的。</p>
+<h4 id="2-1-setTimeout-与setInterval"><a href="#2-1-setTimeout-与setInterval" class="headerlink" title="2.1 setTimeout()与setInterval()"></a>2.1 setTimeout()与setInterval()</h4><p>这两个方法实现原理与异步I&#x2F;O相似，只不过不用I&#x2F;O线程池的参与。</p>
+<p>使用它们创建的定时器会被放入timers队列的一个红黑树中，每次事件循环执行时会从相应队列中取出并判断是否超过定时时间，超过就形成一个事件，回调立即执行。</p>
+<p>所以，和浏览器中一样，这个并不精确，会被长时间的同步事件阻塞。</p>
+<p><img src="/2019/04/10/Node%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/eight.png" alt="img"></p>
+<p>值得一提的是，在Node的setTimeout的源码中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Node源码</span></span><br><span class="line">after *= <span class="number">1</span>; <span class="comment">// coalesce to number or NaN</span></span><br><span class="line"><span class="keyword">if</span> (!(after &gt;= <span class="number">1</span> &amp;&amp; after &lt;= <span class="variable constant_">TIMEOUT_MAX</span>)) &#123;</span><br><span class="line">  <span class="keyword">if</span> (after &gt; <span class="variable constant_">TIMEOUT_MAX</span>) &#123;</span><br><span class="line">    process.<span class="title function_">emitWarning</span>(...);</span><br><span class="line">  &#125;</span><br><span class="line">  after = <span class="number">1</span>; <span class="comment">// schedule on next tick, follows browser behavior</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>意思是如果没有设置这个after，或者小于1，或者大于TIMEOUT_MAX（2^31-1），都会被强制设置为1ms。也就是说setTimeout(xxx,0)其实等同于setTimeout(xxx,1)。</p>
+<h4 id="2-2-setImmediate"><a href="#2-2-setImmediate" class="headerlink" title="2.2 setImmediate()"></a>2.2 setImmediate()</h4><p>setImmediate()是放在check阶段执行的，实际上是一个特殊的timer，跑在event loop中一个独立的阶段。它使用libuv的API来设定在 poll 阶段结束后立即执行回调。</p>
+<p>来看看这个例子：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;setTimeout&#x27;</span>)</span><br><span class="line">&#125;, <span class="number">0</span>)</span><br><span class="line"><span class="title function_">setImmediate</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;setImmediate&#x27;</span>)</span><br><span class="line">&#125;) <span class="comment">// 输出不稳定</span></span><br></pre></td></tr></table></figure>
+
+<p>setTimeout与setImmediate先后入队之后，首先进入的是timers阶段，如果我们的机器性能一般或者加入了一个同步长耗时操作，那么进入timers阶段，1ms已经过去了，那么setTimeout的回调会首先执行。</p>
+<p>如果没有到1ms，那么在timers阶段的时候，超时时间没到，setTimeout回调不执行，事件循环来到了poll阶段，这个时候队列为空，此时有代码被setImmediate()，于是先执行了setImmediate()的回调函数，之后在下一个事件循环再执行setTimemout的回调函数。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;set timeout&#x27;</span>)</span><br><span class="line">&#125;, <span class="number">0</span>)</span><br><span class="line"><span class="title function_">setImmediate</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;set Immediate&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">100000</span>; i++) &#123;&#125;           <span class="comment">// 可以保证执行时间超过1ms</span></span><br><span class="line"><span class="comment">// 稳定输出： setTimeout    setImmediate</span></span><br></pre></td></tr></table></figure>
+<p>这样就可以稳定输出了。</p>
+<p>再一个栗子：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>)</span><br><span class="line">fs.<span class="title function_">readFile</span>(<span class="string">&#x27;./filePath.js&#x27;</span>, <span class="function">(<span class="params">err, data</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;setTimeout&#x27;</span>) , <span class="number">0</span>)</span><br><span class="line">  <span class="title function_">setImmediate</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;setImmediate&#x27;</span>))</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;开始了&#x27;</span>)</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">100000</span>; i++) &#123;&#125;        </span><br><span class="line">&#125;) <span class="comment">// 输出 开始了 setImmediate setTimeout</span></span><br></pre></td></tr></table></figure>
+
+<p>这里我们就会发现，setImmediate永远先于setTimeout执行。</p>
+<p>fs.readFile的回调是在poll阶段执行的，当其回调执行完毕之后，setTimeout与setImmediate先后入了timers与check的队列，继续到poll，poll队列为空，此时发现有setImmediate，于是事件循环先进入check阶段执行回调，之后在下一个事件循环再在timers阶段中执行setTimeout回调，虽然这个setTimeout已经到了超时时间。</p>
+<p>再来个栗子：</p>
+<p>同样的，这段代码也是一样的道理：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="title function_">setImmediate</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;setImmediate&#x27;</span>) )</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;setTimeout&#x27;</span>) , <span class="number">0</span>)</span><br><span class="line">&#125;, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<p>以上的代码在timers阶段执行外部的setTimeout回调后，内层的setTimeout和setImmediate入队，之后事件循环继续往后面的阶段走，走到poll阶段的时候发现队列为空，此时有代码被setImmedate()，所以直接进入check阶段执行响应回调（注意这里没有去检测timers队列中是否有成员到达超时事件，因为setImmediate()优先）。之后在下一个事件循环的timers阶段中再去执行相应的回调。</p>
+<h4 id="2-3-process-nextTick-与Promise"><a href="#2-3-process-nextTick-与Promise" class="headerlink" title="2.3 process.nextTick()与Promise"></a>2.3 process.nextTick()与Promise</h4><p>对于这两个，我们可以把它们理解成一个微任务。也就是说，它们其实不属于事件循环的一部分。</p>
+<p>有时我们想要立即异步执行一个任务，可能会使用延时为0的定时器，但是这样开销很大。我们可以换而使用process.nextTick()，它会将传入的回调放入nextTickQueue队列中，下一轮Tick之后取出执行，不管事件循环进行到什么地步，都在当前执行栈的操作结束的时候调用，参见Nodejs官网。</p>
+<p>process.nextTick方法指定的回调函数，总是在当前执行队列的尾部触发，多个process.nextTick语句总是一次执行完（不管它们是否嵌套），递归调用process.nextTick，将会没完没了，主线程根本不会去读取事件队列，导致阻塞后续调用，直至达到最大调用限制。</p>
+<p>相比于在定时器中采用红黑树树的操作时间复杂度为0(lg(n))，而process.nextTick()的时间复杂度为0(1)，相比之下更高效。</p>
+<p>来举一个复杂的栗子，这个栗子搞懂基本上就全部理解了：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  process.<span class="title function_">nextTick</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;nextTick1&#x27;</span>))</span><br><span class="line">  </span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;setTimout1&#x27;</span>)</span><br><span class="line">    process.<span class="title function_">nextTick</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;nextTick2&#x27;</span>)</span><br><span class="line">      <span class="title function_">setImmediate</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;setImmediate1&#x27;</span>))</span><br><span class="line">      process.<span class="title function_">nextTick</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;nextTick3&#x27;</span>))</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="title function_">setImmediate</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;setImmediate2&#x27;</span>))</span><br><span class="line">    process.<span class="title function_">nextTick</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;nextTick4&#x27;</span>))</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;sync2&#x27;</span>)</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;setTimout2&#x27;</span>), <span class="number">0</span>)</span><br><span class="line">  &#125;, <span class="number">0</span>)</span><br><span class="line">  </span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;sync1&#x27;</span>)</span><br><span class="line">&#125;, <span class="number">0</span>) </span><br><span class="line"><span class="comment">// 输出： sync1 nextTick1 setTimout1 sync2 nextTick2 nextTick4 nextTick3 setImmediate2 setImmediate1 setTimout2</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2-4-结论"><a href="#2-4-结论" class="headerlink" title="2.4 结论"></a>2.4 结论</h4><ul>
+<li>process.nextTick()，效率最高，消费资源小，但会阻塞CPU的后续调用；</li>
+<li>setTimeout()，精确度不高，可能有延迟执行的情况发生，且因为动用了红黑树，所以消耗资源大；</li>
+<li>setImmediate()，消耗的资源小，也不会造成阻塞，但效率也是最低的。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="http://example.com">宇宙建筑家</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://example.com/2019/04/10/Node%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/">http://example.com/2019/04/10/Node%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/./img/people.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/gh/overtrue/share.js@master/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2019/04/11/%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87%E4%B8%8E%E5%87%BD%E6%95%B0%E6%8F%90%E5%8D%87/"><img class="prev-cover" src="/./img/back.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">变量提升与函数提升</div></div></a></div><div class="next-post pull-right"><a href="/2019/04/08/Node%E4%B8%AD%E9%97%B4%E4%BB%B6/"><img class="next-cover" src="/./img/girl.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Node中间件</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/./img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">宇宙建筑家</div><div class="author-info__description">今夜无雪无晴无悲喜</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">11</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/withu0519" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:xxxxxx@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Node%E4%B8%AD%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E5%92%8C%E5%BC%82%E6%AD%A5API"><span class="toc-number">1.</span> <span class="toc-text">Node中的事件循环和异步API</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.0.1.</span> <span class="toc-text">1、介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-%E5%BC%82%E6%AD%A5I-x2F-O"><span class="toc-number">1.0.1.1.</span> <span class="toc-text">1.1 异步I&#x2F;O</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF"><span class="toc-number">1.0.1.2.</span> <span class="toc-text">1.2 事件循环</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-%E8%AF%B7%E6%B1%82%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.0.1.3.</span> <span class="toc-text">1.3 请求对象</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-%E6%89%A7%E8%A1%8C%E5%9B%9E%E8%B0%83"><span class="toc-number">1.0.1.4.</span> <span class="toc-text">1.4 执行回调</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E9%9D%9EI-x2F-O%E7%9A%84%E5%BC%82%E6%AD%A5API"><span class="toc-number">1.0.2.</span> <span class="toc-text">2、非I&#x2F;O的异步API</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-setTimeout-%E4%B8%8EsetInterval"><span class="toc-number">1.0.2.1.</span> <span class="toc-text">2.1 setTimeout()与setInterval()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-setImmediate"><span class="toc-number">1.0.2.2.</span> <span class="toc-text">2.2 setImmediate()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-process-nextTick-%E4%B8%8EPromise"><span class="toc-number">1.0.2.3.</span> <span class="toc-text">2.3 process.nextTick()与Promise</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-%E7%BB%93%E8%AE%BA"><span class="toc-number">1.0.2.4.</span> <span class="toc-text">2.4 结论</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2019/04/11/%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87%E4%B8%8E%E5%87%BD%E6%95%B0%E6%8F%90%E5%8D%87/" title="变量提升与函数提升"><img src="/./img/back.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="变量提升与函数提升"/></a><div class="content"><a class="title" href="/2019/04/11/%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87%E4%B8%8E%E5%87%BD%E6%95%B0%E6%8F%90%E5%8D%87/" title="变量提升与函数提升">变量提升与函数提升</a><time datetime="2019-04-11T13:19:19.000Z" title="Created 2019-04-11 21:19:19">2019-04-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2019/04/10/Node%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" title="Node事件循环"><img src="/./img/people.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Node事件循环"/></a><div class="content"><a class="title" href="/2019/04/10/Node%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" title="Node事件循环">Node事件循环</a><time datetime="2019-04-10T07:06:30.000Z" title="Created 2019-04-10 15:06:30">2019-04-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2019/04/08/Node%E4%B8%AD%E9%97%B4%E4%BB%B6/" title="Node中间件"><img src="/./img/girl.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Node中间件"/></a><div class="content"><a class="title" href="/2019/04/08/Node%E4%B8%AD%E9%97%B4%E4%BB%B6/" title="Node中间件">Node中间件</a><time datetime="2019-04-08T12:30:05.000Z" title="Created 2019-04-08 20:30:05">2019-04-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2019/04/04/MYSQL%E5%B0%8F%E6%80%BB%E7%BB%93/" title="MQSQL小总结"><img src="/./img/back.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MQSQL小总结"/></a><div class="content"><a class="title" href="/2019/04/04/MYSQL%E5%B0%8F%E6%80%BB%E7%BB%93/" title="MQSQL小总结">MQSQL小总结</a><time datetime="2019-04-04T07:59:30.000Z" title="Created 2019-04-04 15:59:30">2019-04-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2019/04/03/js%E8%8B%B1%E6%96%87%E8%AF%8D%E6%B1%87/" title="js中的英文词汇"><img src="/./img/back.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="js中的英文词汇"/></a><div class="content"><a class="title" href="/2019/04/03/js%E8%8B%B1%E6%96%87%E8%AF%8D%E6%B1%87/" title="js中的英文词汇">js中的英文词汇</a><time datetime="2019-04-02T16:05:29.000Z" title="Created 2019-04-03 00:05:29">2019-04-03</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By 宇宙建筑家</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","hOffset":50,"width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7}});</script></body></html>
