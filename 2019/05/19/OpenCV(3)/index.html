@@ -1,0 +1,833 @@
+<!DOCTYPE html><html lang="zh-Hans" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>OpenCv(3) | Hexo</title><meta name="keywords" content="光与路契合，月与海浪漫"><meta name="author" content="宇宙建筑家"><meta name="copyright" content="宇宙建筑家"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="OpenCV进阶篇01第14章　视频处理OpenCV不仅能够处理图像，还能够处理视频。视频是由大量的图像构成的，这些图像以固定的时间间隔从视频中获取。这样，就能够使用图像处理的方法对这些图像进行处理，进而达到处理视频的目的。要处理视频，需要先对视频进行读取、显示和保存等相关操作。为此，OpenCV提供了VideoCapture类和VideoWriter类的相关方法。  14.1　读取并显示摄像头视">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenCv(3)">
+<meta property="og:url" content="http://example.com/2019/05/19/OpenCV(3)/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="OpenCV进阶篇01第14章　视频处理OpenCV不仅能够处理图像，还能够处理视频。视频是由大量的图像构成的，这些图像以固定的时间间隔从视频中获取。这样，就能够使用图像处理的方法对这些图像进行处理，进而达到处理视频的目的。要处理视频，需要先对视频进行读取、显示和保存等相关操作。为此，OpenCV提供了VideoCapture类和VideoWriter类的相关方法。  14.1　读取并显示摄像头视">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/img/girl.png">
+<meta property="article:published_time" content="2019-05-19T12:02:56.000Z">
+<meta property="article:modified_time" content="2022-05-28T01:43:53.033Z">
+<meta property="article:author" content="宇宙建筑家">
+<meta property="article:tag" content="光与路契合，月与海浪漫">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/girl.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2019/05/19/OpenCV(3)/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'OpenCv(3)',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-05-28 09:43:53'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/./img/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/./img/girl.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Hexo</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">OpenCv(3)</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2019-05-19T12:02:56.000Z" title="Created 2019-05-19 20:02:56">2019-05-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-05-28T01:43:53.033Z" title="Updated 2022-05-28 09:43:53">2022-05-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">数据分析</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="OpenCv(3)"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="OpenCV进阶篇01"><a href="#OpenCV进阶篇01" class="headerlink" title="OpenCV进阶篇01"></a>OpenCV进阶篇01</h1><h1 id="第14章-视频处理"><a href="#第14章-视频处理" class="headerlink" title="第14章　视频处理"></a>第14章　视频处理</h1><p>OpenCV不仅能够处理图像，还能够处理视频。视频是由大量的图像构成的，这些图像以固定的时间间隔从视频中获取。这样，就能够使用图像处理的方法对这些图像进行处理，进而达到处理视频的目的。要处理视频，需要先对视频进行读取、显示和保存等相关操作。为此，OpenCV提供了VideoCapture类和VideoWriter类的相关方法。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128195439971.png" alt="image-20211128195439971"></p>
+<h2 id="14-1-读取并显示摄像头视频"><a href="#14-1-读取并显示摄像头视频" class="headerlink" title="14.1　读取并显示摄像头视频"></a>14.1　读取并显示摄像头视频</h2><p>摄像头视频指的是从摄像头（见图14.1）中实时读取到的视频。为了读取并显示摄像头视频，OpenCV提供了VideoCapture类的相关方法，这些方法包括摄像头的初始化方法、检验摄像头初始化是否成功的方法、从摄像头中读取帧的方法和关闭摄像头的方法等。下面依次对这些方法进行讲解。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128195512490.png" alt="image-20211128195512490"></p>
+<p>​                                                                                         图14.1　摄像头说明<br>视频是由大量的图像构成的，把这些图像称作帧。</p>
+<h3 id="14-1-1-VideoCapture类"><a href="#14-1-1-VideoCapture类" class="headerlink" title="14.1.1　VideoCapture类"></a>14.1.1　VideoCapture类</h3><p>VideoCapture类提供了构造方法VideoCapture()，用于完成摄像头的初始化工作。VideoCapture()的语法格式如下：</p>
+<pre><code> capture = cv2.VideoCapture(index)
+</code></pre>
+<p>参数说明：　</p>
+<p>capture：要打开的摄像头。　</p>
+<p>index：摄像头的设备索引。</p>
+<p>注意<br>摄像头的数量及其设备索引的先后顺序由操作系统决定，因为OpenCV没有提供查询摄像头的数量及其设备索引的任何方法。<br>当index的值为0时，表示要打开的是第1个摄像头；对于64位的Windows 10笔记本，当index的值为0时，表示要打开的是笔记本内置摄像头，关键代码如下：</p>
+<pre><code> capture = cv2.VideoCapture(0)
+</code></pre>
+<p>当index的值为1时，表示要打开的是第2个摄像头；对于64位的Windows 10笔记本，当index的值为1时，表示要打开的是一个连接笔记本的外置摄像头，关键代码如下：</p>
+<pre><code> capture = cv2.VideoCapture(1)
+</code></pre>
+<p>为了检验摄像头初始化是否成功，VideoCapture类提供了isOpened()方法。isOpened()方法的语法格式如下：</p>
+<pre><code> retval = cv2.VideoCapture.isOpened()
+</code></pre>
+<p>参数说明：　</p>
+<p>retval：isOpened()方法的返回值。如果摄像头初始化成功，retval的值为True；否则，retval的值为False。</p>
+<p>说明<br>在VideoCapture()的语法格式基础上，isOpened()方法的语法格式可以简写为retval &#x3D; capture.isOpened()<br>摄像头初始化后，可以从摄像头中读取帧，为此VideoCapture类提供了read()方法。read()方法的语法格式如下：</p>
+<pre><code> retval, image = cv2.VideoCapture.read() # 可以简写为retval, image = capture.read()
+</code></pre>
+<p>参数说明：　</p>
+<p>retval：是否读取到帧。如果读取到帧，retval的值为True；否则，retval的值为False。　</p>
+<p>image：读取到的帧。因为帧指的是构成视频的图像，所以可以把“读取到的帧”理解为“读取到的图像”。</p>
+<p>OpenCV官网特别强调，在不需要摄像头时，要关闭摄像头。为此，VideoCapture类提供了release()方法。release()方法的语法格式如下：</p>
+<pre><code> cv2.VideoCapture.release() # 可以简写为capture.release()
+</code></pre>
+<h3 id="14-1-2-如何使用VideoCapture类"><a href="#14-1-2-如何使用VideoCapture类" class="headerlink" title="14.1.2　如何使用VideoCapture类"></a>14.1.2　如何使用VideoCapture类</h3><p>在14.1.1节中，介绍了VideoCapture类中的VideoCapture()方法、isOpened()方法、read()方法和release()方法。那么，在程序开发的过程中，如何使用这些方法呢？本节将通过3个实例进行讲解。</p>
+<p>【实例14.1】　读取并显示摄像头视频。<br>编写一个程序，打开笔记本内置摄像头实时读取并显示视频。当按下空格键时，关闭笔记本内置摄像头，销毁显示摄像头视频的窗口，代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128200517716.png" alt="image-20211128200517716"></p>
+<p>上述代码的运行结果如图14.2所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128200557699.png" alt="image-20211128200557699"></p>
+<p>​                                                                                     图14.2　读取并显示摄像头视频说明<br>图14.2是笔者用笔记本内置摄像头实时读取并显示公司天花板的视频。<br>在实例14.1运行期间，如果按下空格键，笔记本内置摄像头将被关闭，显示摄像头视频的窗口也将被销毁。此外，PyCharm控制台将输出如图14.3所示的警告信息。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128200630928.png" alt="image-20211128200630928"></p>
+<p>​                                                                             图14.3　PyCharm控制台输出的警告信息<br>为了消除图14.3所示的警告信息，需要将实例14.1第3行代码：</p>
+<pre><code> capture = cv2.VideoCapture(0) # 打开笔记本内置摄像头
+</code></pre>
+<p>修改为如下代码：</p>
+<pre><code> capture = cv2.VideoCapture(0, cv2.CAP_DSHOW) # 打开笔记本内置摄像头
+</code></pre>
+<p>如果想打开的是一个连接笔记本的外置摄像头，那么需要将实例14.1第3行代码：</p>
+<p>capture &#x3D; cv2.VideoCapture(0) # 打开笔记本内置摄像头<br>修改为如下代码：</p>
+<pre><code> capture = cv2.VideoCapture(1, cv2.CAP_DSHOW) # 打开笔记本外置摄像头
+</code></pre>
+<p>实例14.1已经成功地读取并显示了摄像头视频，那么如何对这个视频进行处理呢？其实，处理视频所用的方法与处理图像所用的方法是相同的。实例14.2将使用处理图像的相关方法把实例14.1读取并显示的彩色视频转换为灰度视频。</p>
+<p>【实例14.2】　将摄像头视频由彩色视频转换为灰度视频。<br>编写一个程序，使用图像处理的相关方法把实例14.1读取并显示的彩色视频转换为灰度视频。当按下空格键时，关闭笔记本内置摄像头，销毁显示摄像头视频的窗口，代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128200727172.png" alt="image-20211128200727172"></p>
+<p>上述代码的运行结果如图14.4所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128200757312.png" alt="image-20211128200757312"></p>
+<pre><code>                                                                           图14.4　把彩色视频转换为灰度视频
+</code></pre>
+<p>实例14.1和实例14.2都用到了按键指令。当按下空格键时，关闭笔记本内置摄像头，销毁显示摄像头视频的窗口。那么，能否通过按键指令，保存并显示摄像头视频某一时刻的图像？带着这个疑问，请读者朋友继续阅读实例14.3。</p>
+<p>【实例14.3】　显示并保存摄像头视频某一时刻的图像。<br>编写一个程序，打开笔记本内置摄像头实时读取并显示视频。当按下空格键时，关闭笔记本内置摄像头，保存并显示此时摄像头视频中的图像，代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128200847208.png" alt="image-20211128200847208"></p>
+<p>上述代码的运行结果如图14.5所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128200934953.png" alt="image-20211128200934953"></p>
+<p>​                                                                          图14.5　显示摄像头视频某一时刻的图像<br>实例14.3除能够显示摄像头视频某一时刻的图像外（见图14.5），还能够把图14.5保存为D盘根目录下的copy.png文件，如图14.6所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128201000098.png" alt="image-20211128201000098"></p>
+<p>​                                                                         图14.6　把图14.5保存为D盘根目录下的copy.png<br>实例14.1～实例14.3打开的都是笔记本内置摄像头，如果在打开笔记本内置摄像头的同时，再打开一个连接笔记本的外置摄像头，应该如何实现呢？</p>
+<p>【实例14.4】　读取并显示2个摄像头视频。</p>
+<p>编写一个程序，在打开笔记本内置摄像头实时读取并显示视频的同时，再打开一个连接笔记本的外置摄像头。当按下空格键时，关闭笔记本内置摄像头和连接笔记本的外置摄像头，销毁显示摄像头视频的窗口。代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128201055804.png" alt="image-20211128201055804"></p>
+<p>上述代码的运行结果如图14.7和图14.8所示。其中，图14.7是读取并显示笔记本内置摄像头视频，图14.8是读取并显示连接笔记本的外置摄像头视频。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128201118623.png" alt="image-20211128201118623"></p>
+<p>​                                                                             图14.7　读取并显示笔记本内置摄像头视频</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128201143279.png" alt="image-20211128201143279"></p>
+<p>​                                                                   图14.8　读取并显示连接笔记本的外置摄像头视频</p>
+<h2 id="14-2-播放视频文件"><a href="#14-2-播放视频文件" class="headerlink" title="14.2　播放视频文件"></a>14.2　播放视频文件</h2><p>VideoCapture类及其方法除了能够读取并显示摄像头视频外，还能够读取并显示视频文件。当窗口根据视频文件的时长显示视频文件时，便实现了播放视频文件的效果。</p>
+<h3 id="14-2-1-读取并显示视频文件"><a href="#14-2-1-读取并显示视频文件" class="headerlink" title="14.2.1　读取并显示视频文件"></a>14.2.1　读取并显示视频文件</h3><p>VideoCapture类的构造方法VideoCapture()不仅能够完成摄像头的初始化工作，还能够完成视频文件的初始化工作。当VideoCapture()用于初始化视频文件时，其语法格式如下：</p>
+<p>video &#x3D; cv2.VideoCapture(filename)<br>参数说明：　</p>
+<p>video：要打开的视频。　</p>
+<p>filename：打开视频的文件名。例如，公司宣传.avi等。</p>
+<p>注意<br>OpenCV中的VideoCapture类虽然支持各种格式的视频文件，但是这个类在不同的操作系统中，支持的视频文件格式不同。尽管如此，VideoCapture类能够在不同的操作系统中支持后缀名为.avi的视频文件。</p>
+<p>【实例14.5】　读取并显示视频文件。<br>编写一个程序，读取并显示PyCharm当前项目路径下名为“公司宣传.avi”的视频文件。当按Esc键时，关闭视频文件并销毁显示视频文件的窗口，代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128201246445.png" alt="image-20211128201246445"></p>
+<p>上述代码的运行结果如图14.9所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128201314133.png" alt="image-20211128201314133"></p>
+<pre><code>                                                        图14.9　读取并显示名为“公司宣传.avi”的视频文件说明
+</code></pre>
+<p>调整waitKey()方法中的参数值可以控制视频文件的播播放速度。例如，当代码为cv2.waitKey(1)时，等待用户按下键盘的时间为1ms，视频文件的播放速度非常快；当代码为cv2.waitKey(50)时，等待用户按下键盘的时间为50ms，能够减缓视频文件的播放速度。<br>使用处理图像的相关方法，能够将摄像头视频由彩色视频转换为灰度视频。那么，使用相同的方法，也能够将视频文件由彩色视频转换为灰度视频。</p>
+<p>【实例14.6】　将视频文件由彩色视频转换为灰度视频。<br>编写一个程序，使用处理图像的相关方法，先将PyCharm当前项目路径下名为“公司宣传.avi”的视频文件由彩色视频转换为灰度视频，再显示转换后的灰度图像，代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128201410162.png" alt="image-20211128201410162"></p>
+<p>上述代码的运行结果如图14.10所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128201434739.png" alt="image-20211128201434739"></p>
+<p>​                                                            图14.10　将“公司宣传.avi”由彩色视频转换为灰度视频</p>
+<h3 id="14-2-2-视频的暂停播放和继续播放"><a href="#14-2-2-视频的暂停播放和继续播放" class="headerlink" title="14.2.2　视频的暂停播放和继续播放"></a>14.2.2　视频的暂停播放和继续播放</h3><p>实例14.5使用VideoCapture类及其相关方法实现了在窗口中播放视频文件的效果。那么，能否在实例14.5的基础上，通过按键指令，在播放视频的过程中，实现视频的暂停播放和继续播放呢？答案是肯定的。</p>
+<p>【实例14.7】　视频的暂停播放和继续播放。<br>编写一个程序，读取并显示PyCharm当前项目路径下名为“公司宣传.avi”的视频文件。在播放视频文件的过程中，当按空格键时，暂停播放视频；当再次按空格键时，继续播放视频；当按Esc键时，关闭视频文件并销毁显示视频文件的窗口，代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128201543614.png" alt="image-20211128201543614"></p>
+<p>上述代码的运行结果如图14.11和图14.12所示（其中，图14.11是暂停播放视频的效果，图14.12是继续播放视频的效果）。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128202037480.png" alt="image-20211128202037480"></p>
+<p>​                                                                                  图14.11　暂停播放视频</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128202102795.png" alt="image-20211128202102795"></p>
+<p>​                                                                                          图14.12　继续播放视频</p>
+<h3 id="14-2-3-获取视频文件的属性"><a href="#14-2-3-获取视频文件的属性" class="headerlink" title="14.2.3　获取视频文件的属性"></a>14.2.3　获取视频文件的属性</h3><p>在实际开发中，有时需要获取视频文件的属性。为此，VideoCapture类提供了get()方法。get()方法的语法格式如下：</p>
+<pre><code> retval = cv2.VideoCapture.get(propId)
+</code></pre>
+<p>参数说明：　</p>
+<p>retval：获取与propId对应的属性值。　</p>
+<p>propId：视频文件的属性值。　</p>
+<p>VideoCapture类提供视频文件的属性值及其含义如表14.1所示。                        </p>
+<p>​                                                                     表14.1　视频文件的属性值及其含义</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128202208827.png" alt="image-20211128202208827"></p>
+<p>说明<br>（1）视频是由大量的、连续的图像构成的，把其中的每一幅图像称作一帧。<br>（2）帧数指的是视频文件中含有的图像总数，帧数越多，视频播放时越流畅。<br>（3）在播放视频的过程中，把每秒显示图像的数量称作帧速率（FPS，单位：帧／s）。<br>（4）帧宽度指的是图像在水平方向上含有的像素总数。<br>（5）帧高度指的是图像在垂直方向上含有的像素总数。</p>
+<p>【实例14.8】　获取并输出视频文件的指定属性值。<br>编写一个程序，使用VideoCapture类get()方法，先获取“公司宣传.avi”的帧速率、帧数、帧宽度和帧高度，再把上述4个属性值输出在PyCharm的控制台上，代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128202243529.png" alt="image-20211128202243529"></p>
+<p>上述代码的运行结果如图14.13所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128202327955.png" alt="image-20211128202327955"></p>
+<p>​                                              图14.13　获取并输出“公司宣传.avi”的帧速率、帧数、帧宽度和帧高度<br>实例14.8演示了初始化视频文件后，获取并输出视频文件的指定属性值。那么，能否使得窗口在播放视频的同时，动态显示当前视频文件的属性值呢？例如，当前视频播放到第几帧，该帧对应着视频的第几秒等。</p>
+<p>【实例14.9】　动态显示视频文件的属性值。<br>编写一个程序，窗口在播放“公司宣传.avi”视频文件的同时，动态显示当前视频播放到第几帧和该帧对应视频的第几秒，代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128202356380.png" alt="image-20211128202356380"></p>
+<p>上述代码的运行结果如图14.14所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128202452972.png" alt="image-20211128202452972"></p>
+<p>​                                                                            图14.14　动态显示视频文件的属性值</p>
+<p>说明<br>图14.14中的185和7.4s的含义是当前视频播放到第185帧，第185帧对应着“公司宣传.avi”视频文件中的第7.4s。</p>
+<h2 id="14-3-保存视频文件"><a href="#14-3-保存视频文件" class="headerlink" title="14.3　保存视频文件"></a>14.3　保存视频文件</h2><p>在实际开发过程中，很多时候希望保存一段视频。为此，OpenCV提供了VideoWriter类。下面先来熟悉一下VideoWriter类中的常用方法。</p>
+<h3 id="14-3-1-VideoWriter类"><a href="#14-3-1-VideoWriter类" class="headerlink" title="14.3.1　VideoWriter类"></a>14.3.1　VideoWriter类</h3><p>VideoWriter类中的常用方法包括VideoWriter类的构造方法、write()方法和release()方法。其中，VideoWriter类的构造方法用于创建VideoWriter类对象，其语法格式如下：</p>
+<pre><code> &lt;VideoWriter object&gt; = cv2.VideoWriter(filename, fourcc, fps, frameSize)
+</code></pre>
+<p>参数说明：　</p>
+<p>VideoWriter object：VideoWriter类对象。　</p>
+<p>filename：保存视频时的路径（含有文件名）。　</p>
+<p>fourcc：用4个字符表示的视频编码格式。　</p>
+<p>fps：帧速率。　</p>
+<p>frameSize：每一帧的大小。</p>
+<p>在OpenCV中，使用cv2.VideoWriter_fourcc()来确定视频编码格式。表14.2列出了几个常用的视频编码格式。</p>
+<p>​                                                                  表14.2　常用的视频编码格式</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128202614177.png" alt="image-20211128202614177"></p>
+<p>根据上述内容，即可创建一个VideoWriter类对象。</p>
+<p>例如，在Windows操作系统下，fourcc的值为cv2.VideoWriter_fourcc(‘X’, ‘V’, ‘I’, ‘D’)，帧速率为20，帧大小为640×480。如果想把一段视频保存为当前项目路径下的output.avi，那么就要创建一个VideoWriter类对象output，关键代码如下：</p>
+<pre><code> fourcc = cv2.VideoWriter_fourcc(&#39;X&#39;, &#39;V&#39;, &#39;I&#39;, &#39;D&#39;)
+ output = cv2.VideoWriter(&quot;output.avi&quot;, fourcc, 20, (640, 480))
+</code></pre>
+<p>上述代码也可以写作：</p>
+<pre><code> fourcc = cv2.VideoWriter_fourcc(* &#39;XVID&#39;)
+ output = cv2.VideoWriter(&quot;output.avi&quot;, fourcc, 20, (640, 480))
+</code></pre>
+<p>为了保存一段视频，除需要使用VideoWriter类的构造方法外，还需要使用VideoWriter类提供的write()方法。write()方法的作用是在创建好的VideoWriter类对象中写入读取到的帧，其语法格式如下：</p>
+<pre><code> cv2.VideoWriter.write(frame)
+</code></pre>
+<p>参数说明：　</p>
+<p>frame：读取到的帧。</p>
+<p>注意<br>使用write()方法时，需要由VideoWriter类对象进行调用。例如，在创建好的VideoWriter类对象output中写入读取到的帧frame，关键代码如下：</p>
+<pre><code> output.write(frame)
+</code></pre>
+<p>当不需要使用VideoWriter类对象时，需要将其释放掉。为此，VideoWriter类提供了release()方法，其语法格式如下：</p>
+<p>cv2.VideoWriter.release()<br>例如，完成保存一段视频后，需要释放VideoWriter类对象output。关键代码如下：</p>
+<pre><code> output.release()
+</code></pre>
+<h3 id="14-3-2-如何使用VideoWriter类"><a href="#14-3-2-如何使用VideoWriter类" class="headerlink" title="14.3.2　如何使用VideoWriter类"></a>14.3.2　如何使用VideoWriter类</h3><p>使用VideoWriter类保存一段视频需要经过以下几个步骤：创建VideoWriter类对象、写入读取到的帧、释放VideoWriter类对象等。而且，这段视频既可以是摄像头视频，也可以是视频文件。本节将使用VideoWriter类以实例的方式分别对保存摄像头视频和保存视频文件进行讲解。</p>
+<p>【实例14.10】　保存一段摄像头视频。<br>编写一个程序，首先打开笔记本内置摄像头，实时读取并显示视频；然后按Esc键，关闭笔记本内置摄像头，销毁显示摄像头视频的窗口，并且把从打开摄像头到关闭摄像头的这段视频保存为PyCharm当前项目路径下的output.avi，代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128202745833.png" alt="image-20211128202745833"></p>
+<p>说明<br>在Windows操作系统下，fourcc的值为cv2.VideoWriter_fourcc(‘X’, ‘V’, ‘I’, ‘D’)，帧速率为20，帧大小为640×480。<br>在上述代码运行的过程中，按Esc键后，会在PyCharm当前项目路径（D:\PyCharm\PythonDevelop）下生成一个名为“output.avi”的视频文件，如图14.15所示。双击打开D:</p>
+<p>PyCharm\PythonDevelop路径下的“output.avi”视频文件，即可浏览被保存的摄像头视频，如图14.16所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128202856720.png" alt="image-20211128202856720"></p>
+<p>​                                                           图14.15　PyCharm当前项目路径下的output.avi</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128202918741.png" alt="image-20211128202918741"></p>
+<p>​                                                           图14.16　浏览被保存的摄像头视频说明       </p>
+<p>这里是使用笔记本内置摄像头录制的手机秒表的视频，读者可以根据自己的喜好录制其他视频。<br>实例14.10可以重复运行，由于output.avi已经存在于PyCharm当前项目路径下，因此新生成的output.avi会覆盖已经存在的output.avi。<br>从图14.16中能够发现，笔者使用笔记本内置摄像头录制的视频时长为26s。也就是说，从打开摄像头、到关闭摄像头的这段时间间隔为26s，并且这段时间间隔由是否按Esc键决定。那么，能否对这段时间间隔进行设置呢？例如，打开摄像头并显示10s的摄像头视频？如果能，又该如何编写具有如此功能的代码呢？</p>
+<p>【实例14.11】　保存一段时长为10s的摄像头视频。<br>编写一个程序，首先打开笔记本内置摄像头，实时读取并显示视频；然后录制一段时长为10s的摄像头视频；10s后，自动关闭笔记本内置摄像头，同时销毁显示摄像头视频的窗口，并且把这段时长为10s的摄像头视频保存为PyCharm当前项目路径下的ten_Seconds.avi，代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128203038547.png" alt="image-20211128203038547"></p>
+<p>运行上述代码10s后，会在PyCharm当前项目路径下生成一个名为“ten_Seconds.avi”的视频文件。双击打开D:\PyCharm\PythonDevelop路径下的“ten_Seconds.avi”视频文件，即可浏览被保存的摄像头视频，如图14.17所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128203057475.png" alt="image-20211128203057475"></p>
+<p>​                                                                 图14.17　浏览被保存的、时长为10s的摄像头视频</p>
+<p>实例14.10和实例14.11演示了如何使用VideoWriter类保存摄像头视频。VideoWriter类不仅能保存摄像头视频，还能保存视频文件，而且保存视频文件与保存摄像头视频的步骤是相同的。接下来，仍以实例的方式演示如何使用VideoWriter类保存视频文件。</p>
+<p>【实例14.12】　保存视频文件。<br>编写一个程序，首先读取PyCharm当前项目路径下名为“公司宣传.avi”的视频文件，然后将“公司宣传.avi”视频文件保存为PyCharm当前项目路径下的copy.avi，代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128203126554.png" alt="image-20211128203126554"></p>
+<p>由于要以帧为单位，一边读取视频文件，一边保存视频文件，因此运行上述代码后，PyCharm控制台没有立即输出代码中的提示信息，如图14.18所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128203221855.png" alt="image-20211128203221855"></p>
+<p>​                                                            图14.18　PyCharm控制台没有立即输出代码中的提示信息<br>大约1min后，会在PyCharm当前项目路径下生成一个名为“copy.avi”的视频文件，如图14.19所示。这时，PyCharm控制台也将输出如图14.20所示的提示信息。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128203239999.png" alt="image-20211128203239999"></p>
+<p>​                                                               图14.19　PyCharm当前项目路径下生成的copy.avi</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128203302454.png" alt="image-20211128203302454"></p>
+<p>​                                                                       图14.20　PyCharm控制台将输出提示信息<br>双击打开D:\PyCharm\PythonDevelop路径下的“copy.avi”视频文件，即可浏览被保存的视频文件，如图14.21所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128203324502.png" alt="image-20211128203324502"></p>
+<p>​                                                                 图14.21　浏览被保存的“copy.avi”视频文件</p>
+<p>从图14.21中能够发现，保存后的“copy.avi”视频文件的时长为49s。那么，能否缩短“copy.avi”视频文件的时长？例如，只保存“公司宣传.avi”视频文件中的前10s视频？这是可以实现的，实现逻辑与实例14.11是相同的。</p>
+<p>【实例14.13】　保存视频文件中的前10s视频。<br>编写一个程序，首先读取PyCharm当前项目路径下名为“公司宣传.avi”的视频文件，然后将“公司宣传.avi”视频文件中的前10s视频保存为PyCharm当前项目路径下的ten_Seconds.avi，代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128203418911.png" alt="image-20211128203418911"></p>
+<p>运行上述代码10s后，不仅会在PyCharm当前项目路径下生成一个名为“ten_Seconds.avi”视频文件，而且会在PyCharm控制台输出提示信息。双击打开D:\PyCharm\PythonDevelop路径下的“ten_Seconds.avi”视频文件，即可浏览被保存的视频文件，如图14.22所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128203447064.png" alt="image-20211128203447064"></p>
+<p>​                                                       图14.22　保存“公司宣传.avi”视频文件中的前10s视频</p>
+<h2 id="14-4-小结"><a href="#14-4-小结" class="headerlink" title="14.4　小结"></a>14.4　小结</h2><p>视频是由一系列连续的图像构成的，这一系列连续的图像被称作帧，帧是以固定的时间间隔从视频中获取的。因为视频播放的速度就是获取帧的速度，所以把视频播放的速度称作帧速率，其单位是帧／s（即1s内出现的图像数）。所谓视频处理，处理的对象就是从视频中获取的帧，而后使用图像处理的方法对获取的帧进行处理。OpenCV提供了VideoCapture类和VideoWriter类处理视频，虽然这2个类在不同的操作系统中支持的视频文件的格式不同，但是这2个类在不同的操作系统中都支持AVI格式的视频文件。</p>
+<h1 id="第15章-人脸检测和人脸识别"><a href="#第15章-人脸检测和人脸识别" class="headerlink" title="第15章　人脸检测和人脸识别"></a>第15章　人脸检测和人脸识别</h1><p>人脸识别是基于人的脸部特征信息进行身份识别的一种生物识别技术，也是计算机视觉重点发展的技术。机器学习算法诞生之后，计算机可以通过摄像头等输入设备自动分析图像中包含的内容信息，随着技术的不断发展，现在已经有了多种人脸识别的算法。本章将介绍OpenCV自带的多种图像跟踪技术和3种人脸识别技术的用法。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128203604892.png" alt="image-20211128203604892"></p>
+<h2 id="15-1-人脸检测"><a href="#15-1-人脸检测" class="headerlink" title="15.1　人脸检测"></a>15.1　人脸检测</h2><p>人脸检测是让计算机在一幅画面中找出人脸的位置。毕竟计算机还达不到人类的智能水平，所以计算机在检测人脸的过程中实际上是在做“分类”操作，例如，计算机发现图像中有一些像素组成了眼睛的特征，那这些像素就有可能是“眼睛”；如果“眼睛”旁边还有“鼻子”和“另一只眼睛”的特征，那这3个元素所在的区域就很有可能是人脸区域；但如果“眼睛”旁边缺少必要的“鼻子”和“另一只眼睛”，那就认为这些像素并没有组成人脸，它们不是人脸图像的一部分。<br>检测人脸的算法比较复杂，但OpenCV已经将这些算法封装好，本节将介绍如何利用OpenCV自带的功能进行人脸检测。</p>
+<h3 id="15-1-1-级联分类器"><a href="#15-1-1-级联分类器" class="headerlink" title="15.1.1　级联分类器"></a>15.1.1　级联分类器</h3><p>将一系列简单的分类器按照一定顺序级联到一起就构成了级联分类器，使用级联分类器的程序可以通过一系列简单的判断来对样本进行识别。例如，依次满足“有6条腿”“有翅膀”“有头、胸、腹”这3个条件的样本就可以被初步判断为昆虫，但如果任何一个条件不满足，则不会被认为是昆虫。</p>
+<p>OpenCV提供了一些已经训练好的级联分类器，这些级联分类器以XML文件的方式保存在以下路径中：</p>
+<pre><code> ...\Python\Lib\site-packages\cv2\data\
+</code></pre>
+<p>路径说明：　“…\Python\”：Python虚拟机的本地目录。　“\Lib\site-packages\”：pip安装扩展包的默认目录。　“\cv2\data\”：OpenCV库的data文件夹。<br>例如，这里的Python虚拟机安装在C:\Program Files\Python\目录下，级联分类器文件所在的位置如图15.1所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128203651374.png" alt="image-20211128203651374"></p>
+<p>​                                                                 图15.1　OpenCV自带的级联分类器XML文件<br>不同版本的OpenCV自带的级联分类器XML文件可能会有差别，data文件夹中缺少的XML文件可以到OpenCV的源码托管平台下载，地址为：<a target="_blank" rel="noopener" href="https://github.com/opencv/opencv/tree/master/data/haarcascades%E3%80%82">https://github.com/opencv/opencv/tree/master/data/haarcascades。</a><br>每一个XML文件都对应一种级联分类器，但有些级联分类器的功能是类似的（正面人脸识别分类器就有3个），表15.1是部分XML文件对应的功能，</p>
+<p>​                                                                                       表15.1　部分级联分类器XML的功能</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128203757228.png" alt="image-20211128203757228"></p>
+<p>想要实现哪种图像检测，就要在程序启动时加载对应的级联分类器。下一节将介绍如何加载并使用这些XML文件。</p>
+<h3 id="15-1-2-方法"><a href="#15-1-2-方法" class="headerlink" title="15.1.2　方法"></a>15.1.2　方法</h3><p>OpenCV实现人脸检测需要做两步操作：加载级联分类器和使用分类器识别图像。这两步操作都有对应的方法。<br>首先是加载级联分类器，OpenCV通过CascadeClassifier()方法创建了分类器对象，其语法如下：</p>
+<pre><code> &lt;CascadeClassifier object&gt; = cv2.CascadeClassifier(filename)
+</code></pre>
+<p>参数说明：　</p>
+<p>filename：级联分类器的XML文件名。</p>
+<p>返回值说明：　</p>
+<p>object：分类器对象。<br>然后使用已经创建好的分类器对图像进行识别，这个过程需要调用分类器对象的detectMultiScale()方法，其语法如下：</p>
+<pre><code> objects = cascade.detectMultiScale(image, scaleFactor, minNeighbors, flags, minSize, maxSize)
+</code></pre>
+<p>对象说明：　</p>
+<p>cascade：已有的分类器对象。<br>参数说明：　</p>
+<p>image：待分析的图像</p>
+<p>scaleFactor：可选参数，扫描图像时的缩放比例。　</p>
+<p>minNeighbors：可选参数，每个候选区域至少保留多少个检测结果才可以判定为人脸。该值越大，分析的误差越小。　</p>
+<p>flags：可选参数，旧版本OpenCV的参数，建议使用默认值。　</p>
+<p>minSize：可选参数，最小的目标尺寸。　</p>
+<p>maxSize：可选参数，最大的目标尺寸。</p>
+<p>返回值说明：　</p>
+<p>objects：捕捉到的目标区域数组，数组中每一个元素都是一个目标区域，每一个目标区域都包含4个值，分别是：左上角点横坐标、左上角点纵坐标、区域宽、区域高。object的格式为：[[244　203　111　111]　[432　81　133　133]]。<br>下一节将介绍如何在程序中使用这2个方法。</p>
+<h3 id="15-1-3-分析人脸位置"><a href="#15-1-3-分析人脸位置" class="headerlink" title="15.1.3　分析人脸位置"></a>15.1.3　分析人脸位置</h3><p>haarcascade_frontalface_default.xml是检测正面人脸的级联分类器文件，加载该文件就可以创建出追踪正面人脸的分类器，调用分类器对象的detectMultiScale()方法，得到的objects结果就是分析得出的人脸区域的坐标、宽和高。下面通过一个实例介绍如何实现此功能。【实例15.1】　在图像的人脸位置绘制红框。<br>将haarcascade_frontalface_default.xml文件放到项目根目录下的cascades文件夹中，加载此级联分类器之后，检测出所有可能是人脸的区域，通过for循环在这些区域上绘制红色边框，具体代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128203902576.png" alt="image-20211128203902576"></p>
+<p>上述代码的运行结果如图15.2所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128203949284.png" alt="image-20211128203949284"></p>
+<p>​                                                                                图15.2　检测出的人脸位置</p>
+<p>【实例15.2】　戴墨镜特效。<br>手机拍照软件自带各种各样的贴图特效，实际上这些贴图特效就是先定位了人脸位置，然后在人脸相应位置覆盖素材实现的。OpenCV也可以实现此类功能，例如为人脸添加戴墨镜的特效，需要执行以下3个步骤：</p>
+<p>（1）编写一个覆盖图片的overlay_img()方法。因为素材中可能包含透明像素，这些透明像素不可以遮挡人脸，所以在覆盖背景图像时要做判断，忽略所有透明像素。判断一个像素是否为透明像素，只需将图像从3通道转为4通道，判断第4通道的alpha值，alpha值为1表示完全不透明，0表示完全透明。<br>（2）创建人脸识别级联分类器，分析图像中人脸的区域。<br>（3）把墨镜图像按照人脸宽度进行缩放，并覆盖到人脸区域约1&#x2F;3的位置。<br>实现以上功能的具体代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128204015841.png" alt="image-20211128204015841"></p>
+<p>上述代码的运行效果如图15.3所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128204055080.png" alt="image-20211128204055080"></p>
+<p>​                                                                                          图15.3　戴墨镜特效</p>
+<h2 id="15-2-检测其他内容"><a href="#15-2-检测其他内容" class="headerlink" title="15.2　检测其他内容"></a>15.2　检测其他内容</h2><p>OpenCV提供的级联分类器除了可以识别人脸以外，还可以识别一些其他具有明显特征的物体，如眼睛、行人等。本节将介绍几个OpenCV自带的级联分类器的用法。</p>
+<h3 id="15-2-1-眼睛检测"><a href="#15-2-1-眼睛检测" class="headerlink" title="15.2.1　眼睛检测"></a>15.2.1　眼睛检测</h3><p>haarcascade_eye.xml是检测眼睛的级联分类器文件，加载该文件就可以追踪眼睛的分类器，下面通过一个实例来介绍如何实现此功能。【实例15.3】　在图像的眼睛位置绘制红框。<br>将haarcascade_eye.xml文件放到项目根目录下的cascades文件夹中，加载此级联分类器之后，检测出所有可能是眼睛的区域，通过for循环在这些区域上绘制红色边框，具体代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128204131328.png" alt="image-20211128204131328"></p>
+<p>上述代码的运行结果如图15.4所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128204151205.png" alt="image-20211128204151205"></p>
+<p>​                                                                                      图15.4　检测出的眼睛位置</p>
+<h3 id="15-2-2-猫脸检测"><a href="#15-2-2-猫脸检测" class="headerlink" title="15.2.2　猫脸检测"></a>15.2.2　猫脸检测</h3><p>OpenCV还提供了2个训练好的检测猫脸的级联分类器，分别是haarcascade_frontalcatface.xml和haarcascade_frontalcatface_extended.xml，前者的判断标准比较高，较为精确，但可能有些猫脸识别不出来；后者的判断标准比较低，只要类似猫脸就会被认为是猫脸。使用猫脸分类器不仅可以判断猫脸的位置，还可以识别图像中有几只猫。<br>下面通过一个实例来介绍如何实现此功能。</p>
+<p>【实例15.4】　在图像里找到猫脸的位置。<br>为了得到比较理想的检测结果，建议使用haarcascade_frontalcatface_extended.xml。将haarcascade_frontalcatface_extended.xml文件放到项目根目录下的cascades文件夹中，加载此级联分类器之后，检测出所有可能是猫脸的区域，通过for循环在这些区域上绘制红色边框，具体代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128204247078.png" alt="image-20211128204247078"></p>
+<p>上述代码的运行结果如图15.5所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128204308682.png" alt="image-20211128204308682"></p>
+<p>​                                                                                         图15.5　检测出猫脸的位置</p>
+<h3 id="15-2-3-行人检测"><a href="#15-2-3-行人检测" class="headerlink" title="15.2.3　行人检测"></a>15.2.3　行人检测</h3><p>haarcascade_fullbody.xml是检测人体（正面直立全身或背面直立全身）的级联分类器文件，加载该文件就可以追踪人体的分类器，下面通过一个实例介绍如何实现此功能。</p>
+<p>【实例15.5】　在图像中找到行人的位置。</p>
+<p>将haarcascade_fullbody.xml文件放到项目根目录下的cascades文件夹中，加载此级联分类器之后，检测出所有可能是人形的区域，通过for循环在这些区域上绘制红色边框，具体代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128204421178.png" alt="image-20211128204421178"></p>
+<p>上述代码的运行结果如图15.6所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128204440594.png" alt="image-20211128204440594"></p>
+<p>​                                                                                         图15.6　检测出的行人位置</p>
+<h3 id="15-2-4-车牌检测"><a href="#15-2-4-车牌检测" class="headerlink" title="15.2.4　车牌检测"></a>15.2.4　车牌检测</h3><p>haarcascade_russian_plate_number.xml是检测汽车车牌的级联分类器文件，加载该文件就可以追踪图像中的车牌，下面通过一个实例来介绍如何实现此功能。</p>
+<p>【实例15.6】　标记图像中车牌的位置。<br>将haarcascade_russian_plate_number.xml文件放到项目根目录下的cascades文件夹中，加载此级联分类器之后，检测出所有可能是车牌的区域，通过for循环在这些区域上绘制红色边框，具体代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128204518734.png" alt="image-20211128204518734"></p>
+<p>上述代码的运行结果如图15.7所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128204601073.png" alt="image-20211128204601073"></p>
+<p>​                                                                                      图15.7　检测出的车牌位置</p>
+<h2 id="15-3-人脸识别"><a href="#15-3-人脸识别" class="headerlink" title="15.3　人脸识别"></a>15.3　人脸识别</h2><p>OpenCV提供了3种人脸识别方法，分别是Eigenfaces、Fisherfaces和LBPH。这3种方法都是通过对比样本的特征最终实现人脸识别。因为这3种算法提取特征的方式不一样，侧重点不同，所以不能分出孰优孰劣，只能说每种方法都有各自的识别风格。<br>OpenCV为每一种人脸识别方法都提供了创建识别器、训练识别器和识别3种方法，这3种方法的语法非常相似。本节将简单介绍如何使用这些方法。</p>
+<h3 id="15-3-1-Eigenfaces人脸识别器"><a href="#15-3-1-Eigenfaces人脸识别器" class="headerlink" title="15.3.1　Eigenfaces人脸识别器"></a>15.3.1　Eigenfaces人脸识别器</h3><p>Eigenfaces也叫作“特征脸”。Eigenfaces通过PCA（主成分分析）方法将人脸数据转换到另外一个空间维度做相似性计算。在计算过程中，算法可以忽略一些无关紧要的数据，仅识别一些具有代表性的特征数据，最后根据这些特征识别人脸。<br>开发者需要通过以下3种方法完成人脸识别操作。<br>（1）通过cv2.face.EigenFaceRecognizer_create()方法创建Eigenfaces人脸识别器，其语法如下：</p>
+<pre><code> recognizer = cv2.face.EigenFaceRecognizer_create(num_components, threshold)
+</code></pre>
+<p>参数说明：　</p>
+<p>num_components：可选参数，PCA方法中保留的分量个数，建议使用默认值。　</p>
+<p>threshold：可选参数，人脸识别时使用的阈值，建议使用默认值。</p>
+<p>返回值说明：　</p>
+<p>recognizer：创建的Eigenfaces人脸识别器对象。</p>
+<p>（2）创建识别器对象后，需要通过对象的train()方法训练识别器。建议每个人都给出2幅以上的人脸图像作为训练样本。train()方法的语法如下：</p>
+<pre><code> recognizer.train(src, labels)
+</code></pre>
+<p>对象说明：　</p>
+<p>recognizer：已有的Eigenfaces人脸识别器对象。<br>参数说明：　</p>
+<p>src：用来训练的人脸图像样本列表，格式为list。样本图像必须宽、高一致。　</p>
+<p>labels：样本对应的标签，格式为数组，元素类型为整数。数组长度必须与样本列表长度相同。样本与标签按照插入顺序一一对应。<br>（3）训练识别器后可以通过识别器的predict()方法识别人脸，该方法对比样本的特征，给出最相近的结果和评分，其语法如下：</p>
+<pre><code> label, confidence = recognizer.predict(src)
+</code></pre>
+<p>对象说明：　</p>
+<p>recognizer：已有的Eigenfaces人脸识别器对象。<br>参数说明：　</p>
+<p>src：需要识别的人脸图像，该图像宽、高必须与样本一致。<br>返回值说明：　</p>
+<p>label：与样本匹配程度最高的标签值。　</p>
+<p>confidence：匹配程度最高的信用度评分。评分小于5000匹配程度较高，0分表示2幅图像完全一样。<br>下面通过一个实例来演示Eigenfaces人脸识别器的用法。</p>
+<p>【实例15.7】　使用Eigenfaces识别人脸。<br>现以两个人的照片作为训练样本，第一个人的照片如图15.8～图15.10所示，第二个人的照片如图15.11～图15.13所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128204741974.png" alt="image-20211128204741974"></p>
+<p>​                                                                                           图15.8　Summer 1</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128204805362.png" alt="image-20211128204805362"></p>
+<p>​                                                                                                      图15.9　Summer 2</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128204824476.png" alt="image-20211128204824476"></p>
+<p>​                                                                                                图15.10　Summer 3</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128204847564.png" alt="image-20211128204847564"></p>
+<p>​                                                                                                       图15.11　Elvis 1</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128204943018.png" alt="image-20211128204943018"></p>
+<p>​                                                                                                 图15.12　Elvis 2</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128205000900.png" alt="image-20211128205000900"></p>
+<p>​                                                                                                     图15.13　Elvis 3<br>待识别的照片如图15.14所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128205024760.png" alt="image-20211128205024760"></p>
+<p>​                                                                                                图15.14　待识别照片<br>创建Eigenfaces人脸识别器对象，训练以上样本后，判断图15.13所示是哪一个人，具体代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128205102240.png" alt="image-20211128205102240"></p>
+<p>上述代码的运行结果如下：</p>
+<pre><code> confidence = 18669.728291380223
+ Summer
+</code></pre>
+<p>程序对比样本特征分析得出，被识别的人物特征最接近的是Summer。</p>
+<h3 id="15-3-2-Fisherfaces人脸识别器"><a href="#15-3-2-Fisherfaces人脸识别器" class="headerlink" title="15.3.2　Fisherfaces人脸识别器"></a>15.3.2　Fisherfaces人脸识别器</h3><p>Fisherfaces是由Ronald Fisher最早提出的，这也是Fisherfaces名字的由来。Fisherfaces通过LDA（线性判别分析技术）方法将人脸数据转换到另外一个空间维度做投影计算，最后根据不同人脸数据的投影距离判断其相似度。<br>开发者需要通过以下3种方法完成人脸识别操作。<br>（1）通过cv2.face.FisherFaceRecognizer_create()方法创建Fisherfaces人脸识别器，其语法如下：</p>
+<pre><code> recognizer = cv2.face.FisherFaceRecognizer_create(num_components, threshold)
+</code></pre>
+<p>参数说明：　</p>
+<p>num_components：可选参数，通过Fisherface方法进行判断分析时保留的分量个数，建议使用默认值。　</p>
+<p>threshold：可选参数，人脸识别时使用的阈值，建议使用默认值。</p>
+<p>返回值说明：　</p>
+<p>recognizer：创建的Fisherfaces人脸识别器对象。<br>（2）创建识别器对象后，需通过对象的train()方法训练识别器。建议每个人都给出2幅以上的人脸图像作为训练样本。train()方法的语法如下：</p>
+<pre><code> recognizer.train(src, labels)
+</code></pre>
+<p>对象说明：　</p>
+<p>recognizer：已有的Fisherfaces人脸识别器对象。</p>
+<p>参数说明：　</p>
+<p>src：用来训练的人脸图像样本列表，格式为list。样本图像必须宽、高一致。　</p>
+<p>labels：样本对应的标签，格式为数组，元素类型为整数。数组长度必须与样本列表长度相同。样本与标签按照插入顺序一一对应。</p>
+<p>（3）训练识别器后可以通过识别器的predict()方法识别人脸，该方法对比样本的特征，给出最相近的结果和评分，其语法如下：</p>
+<pre><code> label, confidence = recognizer.predict(src)
+</code></pre>
+<p>对象说明：　</p>
+<p>recognizer：已有的Fisherfaces人脸识别器对象。</p>
+<p>参数说明：　</p>
+<p>src：需要识别的人脸图像，该图像宽、高必须与样本一致。<br>返回值说明：　</p>
+<p>label：与样本匹配程度最高的标签值。　</p>
+<p>confidence：匹配程度最高的信用度评分。评分小于5000程度较高，0分表示2幅图像完全一样。</p>
+<p>下面通过一个实例演示Fisherfaces人脸识别器的用法。</p>
+<p>【实例15.8】　使用Fisherfaces识别人脸。<br>现以2个人的照片作为训练样本，第一个人的照片如图15.15～图15.17所示，第二个人的照片如图15.18～图15.20所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128205304341.png" alt="image-20211128205304341"></p>
+<p>​                                                                                               图15.15　Mike 1</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128205346389.png" alt="image-20211128205346389"></p>
+<p>​                                                                                                 图15.16　Mike 2</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128205403358.png" alt="image-20211128205403358"></p>
+<p>​                                                                                                 图15.17　Mike 3</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128205425662.png" alt="image-20211128205425662"></p>
+<p>​                                                                                             图15.18　KaiKai 1</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128205446503.png" alt="image-20211128205446503"></p>
+<p>​                                                                                                  图15.19　KaiKai 2</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128205509193.png" alt="image-20211128205509193"></p>
+<p>​                                                                                                图15.20　KaiKai 3<br>待识别的照片如图15.21所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128205529188.png" alt="image-20211128205529188"></p>
+<p>​                                                                                                    图15.21　待识别照片</p>
+<p>创建Fisherfaces人脸识别器对象，训练以上样本后，判断图15.21是哪一个人，具体代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128205614870.png" alt="image-20211128205614870"></p>
+<p>上述代码的运行结果如下：</p>
+<pre><code> confidence = 2327.170867892041
+ Mike
+</code></pre>
+<p>程序对比样本特征分析得出，被识别的人物特征最接近的是KaiKai。</p>
+<h3 id="15-3-3-Local-Binary-Pattern-Histogram人脸识别器"><a href="#15-3-3-Local-Binary-Pattern-Histogram人脸识别器" class="headerlink" title="15.3.3　Local Binary Pattern Histogram人脸识别器"></a>15.3.3　Local Binary Pattern Histogram人脸识别器</h3><p>Local Binary Pattern Histogram简称LBPH，即局部二进制模式直方图，这是一种基于局部二进制模式算法，这种算法善于捕获局部纹理特征。<br>开发者需要通过以下3种方法来完成人脸识别操作。</p>
+<p>（1）通过cv2.face. LBPHFaceRecognizer_create()方法创建LBPH人脸识别器，其语法如下：</p>
+<pre><code> recognizer = cv2.face.LBPHFaceRecognizer_create(radius, neighbors, grid_x, grid_y, threshold)
+</code></pre>
+<p>参数说明：　</p>
+<p>radius：可选参数，圆形局部二进制模式的半径，建议使用默认值。　</p>
+<p>neighbors：可选参数，圆形局部二进制模式的采样点数目，建议使用默认值。</p>
+<p>grid_x：可选参数，水平方向上的单元格数，建议使用默认值。　</p>
+<p>grid_y：可选参数，垂直方向上的单元格数，建议使用默认值。　</p>
+<p>threshold：可选参数，人脸识别时使用的阈值，建议使用默认值。</p>
+<p>（2）创建识别器对象后，需要通过对象的train()方法训练识别器。建议每个人都给出2幅以上的人脸图像作为训练样本。train()方法的语法如下：</p>
+<pre><code> recognizer.train(src, labels)
+</code></pre>
+<p>对象说明：　</p>
+<p>recognizer：已有的LBPH人脸识别器对象。</p>
+<p>参数说明：　</p>
+<p>src：用来训练的人脸图像样本列表，格式为list。样本图像必须宽、高一致。</p>
+<p>labels：样本对应的标签，格式为数组，元素类型为整数。数组长度必须与样本列表长度相同。样本与标签按照插入顺序一一对应。</p>
+<p>（3）训练识别器后就可以通过识别器的predict()方法识别人脸，该方法对比样本的特征，给出最相近的结果和评分，其语法如下：</p>
+<pre><code> label, confidence = recognizer.predict(src)
+</code></pre>
+<p>对象说明：　</p>
+<p>recognizer：已有的LBPH人脸识别器对象。</p>
+<p>参数说明：　</p>
+<p>src：需要识别的人脸图像，该图像宽、高必须与样本一致。</p>
+<p>返回值说明：　</p>
+<p>label：与样本匹配程度最高的标签值。　</p>
+<p>confidence：匹配程度最高的信用度评分。评分小于50匹配程度较高，0分表示2幅图像完全一样。<br>下面通过一个实例来演示LBPH人脸识别器的用法。</p>
+<p>【实例15.9】　使用LBPH识别人脸。<br>现以2个人的照片作为训练样本，第一个人的照片如图15.22～图15.24所示，第二个人的照片如图15.25～图15.27所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128205807097.png" alt="image-20211128205807097"></p>
+<p>​                                                                                                      图15.22　lxe 1</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128205827725.png" alt="image-20211128205827725"></p>
+<p>​                                                                                               图15.23　lxe 2</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128205853204.png" alt="image-20211128205853204"></p>
+<p>​                                                                                                  图15.24　lxe 3</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128205910674.png" alt="image-20211128205910674"></p>
+<p>​                                                                                                   图15.25　RuiRui 1</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128205956685.png" alt="image-20211128205956685"></p>
+<p>​                                                                                                   图15.26　RuiRui 2</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128210013982.png" alt="image-20211128210013982"></p>
+<p>​                                                                                                 图15.27　RuiRui 3<br>待识别的照片如图15.28所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128210039659.png" alt="image-20211128210039659"></p>
+<p>​                                                                                                图15.28　待识别照片<br>创建LBPH人脸识别器对象，训练以上样本之后，判断图15.27是哪一个人，具体代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128210105190.png" alt="image-20211128210105190"></p>
+<p>上述代码的运行结果如下：</p>
+<pre><code> confidence = 45.082326535640014
+ RuiRui
+</code></pre>
+<p>程序对比样本特征分析得出，被识别的人物特征最接近的是RuiRui。</p>
+<h2 id="15-4-小结"><a href="#15-4-小结" class="headerlink" title="15.4　小结"></a>15.4　小结</h2><p>人脸检测和人脸识别是相辅相成的，这是因为在进行人脸识别前，要先判断当前图像内是否出现了人脸，这个判断过程需要由人脸检测完成。只有在当前图像内检测到人脸，才能判断出这张人脸属于哪个人，这个判断是由人脸识别器完成的。因此，人脸识别指的是程序先在图像内检测人脸，再识别这张人脸属于哪个人的过程。本章讲解了3种人脸识别器，读者要熟练掌握这3种人脸识别器的实现方法和实现原理。</p>
+<h1 id="第16章-MR智能视频打卡系统"><a href="#第16章-MR智能视频打卡系统" class="headerlink" title="第16章　MR智能视频打卡系统"></a>第16章　MR智能视频打卡系统</h1><p>很多公司都使用打卡机或打卡软件进行考勤。传统的打卡方式包括点名、签字、刷卡和指纹等。随着技术的不断发展，计算机视觉技术越来越强大，已经可以实现人脸打卡功能。打卡软件通过摄像头扫描人脸特征，利用人脸的差异识别人员。人脸打卡的准确性不输于指纹打卡，甚至安全性和便捷性都高于指纹打卡。本章将介绍一个由Python OpenCV开发的智能视频打卡系统。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128210226814.png" alt="image-20211128210226814"></p>
+<h2 id="16-1-需求分析"><a href="#16-1-需求分析" class="headerlink" title="16.1　需求分析"></a>16.1　需求分析</h2><p>打卡系统有3个核心功能：录入打卡人的资料、员工打卡和查看打卡记录，在满足核心功能的基础上需要完善一些附加功能和功能细节。在开发MR智能视频打卡系统前，先对本系统的一些需求进行如下拆解和分析。</p>
+<p>1．数据模型</p>
+<p>本系统不使用第三方数据库，所有数据都以文本的形式保存在文件中，因此要规范数据内容和格式，建立统一模型。<br>若把软件的使用者设定为“公司”，那么打卡者身份可设定为“员工”，程序中数据模型就应该是员工数据类。<br>每一位员工都有姓名，“姓名”就作为员工类中必备的数据之一。<br>因为员工可能会重名，所以必须使用另一种标记作为员工身份的认证，即为每一位员工添加不重复的员工编号。员工编号的格式为从1开始递增数字，每添加一位新员工，员工编号就+1。员工类中添加“员工编号”。<br>系统中必须保存所有员工的照片用于人脸识别。为了区分每位员工的照片文件，程序使用“员工特征码+随机值.png”的规则为照片文件命名。如果使用员工编号作为特征码，1号员工和11号员工的文件名容易发生混淆，所以特征码不能使用员工编号，而是一种长度一致、复杂性高、不重复的字符串。员工类中添加“特征码”。<br>员工与编号、姓名、特征码是一对一的关系，但员工与打卡记录是一对多的关系，所以打卡记录可以放在员工类中保存，而不是单独保存在打卡记录模型中。打卡记录需要记录每一位员工的具体打卡时间，并能以报表的形式体现。可以使用字段保存打卡记录模型，员工姓名作为key，该员工的打卡记录列表作为value。</p>
+<p>2．打卡功能</p>
+<p>人脸打卡依赖于人脸识别功能。本程序可以使用OpenCV提供的人脸识别器实现此功能，建议使用正确率较高的LBPH识别器，其他识别器也可以考虑，但需要做好测试验证。<br>系统通过拍照保存员工的照片样本。当员工面对摄像头时，按Enter键就可以生成一张正面特写照片文件。为了增加识别准确率，每位员工应拍3张照片，也就是按3次Enter键才能完成录入操作。<br>OpenCV提供的人脸识别器有一个缺陷：必须比对2种不同样本才能进行判断。如果公司第一次使用打卡系统，系统中没有录入任何员工，缺少比对样本，OpenCV提供的人脸识别器就会报错。因此本系统应该给出几个无人脸的默认样本，保证即使只录入一个员工，该员工也能顺利打卡。</p>
+<p>每次员工打卡成功后，都应该记录该员工的打卡时间，然后保存到文件中。</p>
+<p>3．数据维护</p>
+<p>数据维护总结起来就是增、删、改、查4种操作。简化版的打卡系统可以忽略“改”的操作，由先删除，再新增的方式代替。<br>本系统除了提供录入新员工的功能之外，也提供删除已有员工的功能。删除员工之前应输入验证码进行验证，以防用户操作失误，误删重要数据。确认执行删除操作后，不仅要删除员工的信息，也要同时删除员工的打卡记录和照片文件。完成删除操作后，所有数据文件中不再存有被删员工的任何数据。</p>
+<p>4．考勤报表</p>
+<p>每个公司的考勤制度都不同，很多公司都主动设置“上班时间”和“下班时间”来做考勤的标准。员工要在“上班时间”之前打卡才算正常到岗，在“下班时间”之后打卡才算正常离岗。未在规定时间内打卡的情况属于“打卡异常”，“打卡异常”通常分为3种情况：迟到、早退或缺席（或缺勤）。<br>本系统分析每一位员工在某一天的打卡记录，如果该员工在“上班时间”前和“下班时间”后都有打卡记录，则认为该员工当天全勤，该员工当天的其他打卡记录会被忽略。但如果该员工在“上班时间”前未能打卡，而是在“上班时间”后到中午12点前打卡，这种情况被视为迟到。如果该员工在“下班时间”后未能打卡，而是在中午12点之后到“下班时间”前打卡，这种情况被视为早退。当天没有打卡记录被视为缺席。</p>
+<h2 id="16-2-系统设计"><a href="#16-2-系统设计" class="headerlink" title="16.2　系统设计"></a>16.2　系统设计</h2><h3 id="16-2-1-开发环境"><a href="#16-2-1-开发环境" class="headerlink" title="16.2.1　开发环境"></a>16.2.1　开发环境</h3><p>本系统开发使用的环境如下：<br>Python版本：3.8.2<br>OpenCV版本：4.2.0<br>numpy版本：1.18.1</p>
+<p>IED：PyCharm 2019.3.3 (Community Edition)<br>操作系统：Windows 7&#x2F;Windows 10</p>
+<h3 id="16-2-2-功能结构"><a href="#16-2-2-功能结构" class="headerlink" title="16.2.2　功能结构"></a>16.2.2　功能结构</h3><p>MR智能视频打卡系统的功能结构如图16.1所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128210408201.png" alt="image-20211128210408201"></p>
+<p>​                                                                                                 图16.1　功能结构</p>
+<h3 id="16-2-3-业务流程"><a href="#16-2-3-业务流程" class="headerlink" title="16.2.3　业务流程"></a>16.2.3　业务流程</h3><p>MR智能视频打卡系统的总体业务流程如图16.2所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128210435530.png" alt="image-20211128210435530"></p>
+<p>​                                                                                                   图16.2　总体业务流程<br>打卡功能业务流程如图16.3所示。<br>查看记录功能业务流程如图16.4所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128210456043.png" alt="image-20211128210456043"></p>
+<p>​                                                                                   图16.3　打卡功能的业务流程</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128210539359.png" alt="image-20211128210539359"></p>
+<p>​                                                                                   图16.4　查看记录功能的业务流程<br>员工管理功能业务流程如图16.5所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128210604201.png" alt="image-20211128210604201"></p>
+<p>​                                                                             图16.5　员工管理功能的业务流程<br>考勤报表功能业务流程如图16.6所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128210648098.png" alt="image-20211128210648098"></p>
+<p>​                                                                                 图16.6　考勤报表功能的业务流程<br>员工管理、查看记录和考勤报表这3个功能中都涉及权限管理业务。如果用户要使用这3个功能，需要登录管理员账号，只有登录成功后才有权使用。权限管理业务流程如图16.7所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128210720411.png" alt="image-20211128210720411"></p>
+<p>​                                                                                    图16.7　权限管理业务流程</p>
+<h3 id="16-2-4-项目结构"><a href="#16-2-4-项目结构" class="headerlink" title="16.2.4　项目结构"></a>16.2.4　项目结构</h3><p>MR智能视频打卡系统的项目结构如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128210741943.png" alt="image-20211128210741943"></p>
+<h2 id="16-3-文件系统设计"><a href="#16-3-文件系统设计" class="headerlink" title="16.3　文件系统设计"></a>16.3　文件系统设计</h2><p>本程序没有使用任何数据库保存数据，而是采用直接读写文件的方式来保存数据。项目中的所有数据文件都保存在data文件夹中。<br>程序使用的数据文件及文件夹信息如表16.1所示。</p>
+<p>​                                                                       表16.1　程序使用的数据文件及文件夹信息</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128210902635.png" alt="image-20211128210902635"></p>
+<p>下面详细介绍每种数据文件的内容格式。<br>（1）employee_data.txt文件以字符串的形式保存所有员工的数据，数据之间用英文逗号隔开，一行保存一个员工。其格式如下：</p>
+<pre><code> 编号1,姓名1,特征码1
+ 编号2,姓名2,特征码2
+ ...
+</code></pre>
+<p>例如，employee_data.txt文件保存的实际内容可能如下：</p>
+<pre><code> 1,张三,526380
+ 2,李四,571096
+ 3,王五,381609
+</code></pre>
+<p>（2）lock_record.txt文件以字符串的形式保存数据，数据格式为打卡记录字典的字符串内容，其格式如下：</p>
+<pre><code> &#123;姓名a: [日期list], 姓名b: [日期list], ... , 姓名n：[日期list]&#125;
+</code></pre>
+<p>例如，lock_record.txt文件保存的实际内容可能如下：</p>
+<p>{‘张三’: [‘2020-04-15 14:59:54’], ‘李四’: [‘2020-04-15 15:02:08’], ‘王五’: [‘2020-04-15 15:11:02’, ‘2020-04-15<br>     15:35:49’]}<br>（3）work_time.txt文件以字符串的形式保存数据，其格式如下：</p>
+<pre><code> 08:00:00/16:00:00
+</code></pre>
+<p>前一个时间为上班时间，后一个时间为下班时间，格式均为%H:%M:%S。系统以这2个时间为标准判断员工是否出现迟到、早退。<br>（4）user_password.txt文件以字符串的形式保存数据，数据格式为管理员账号密码字典的字符串内容，其格式如下：</p>
+<pre><code> &#123;管理员账号:管理员密码&#125;
+</code></pre>
+<p>例如，user_password.txt文件保存的实际内容可能如下：</p>
+<pre><code> &#123;&#39;mr&#39;: &#39;mrsoft&#39;, &#39;123456&#39;: &#39;123456&#39;&#125;
+</code></pre>
+<p>用户可以在这个文件中手动修改管理员账号和密码。<br>（5）&#x2F;data&#x2F;face&#x2F;文件夹下保存的是所有员工的照片文件，格式为PNG。每张照片的大小都是640×480。每名员工需保存3张照片。<br>该文件夹下还有2个默认的图像文件，文件名分别为1000000000.png和2000000000.png。这是2幅纯色图像，用于辅助训练人脸识别器。<br>人脸识别器使用样本进行训练时，至少要有2个以上的标签分类。如果程序中仅保存了一位员工的照片，人脸识别器无法拿此员工照片与其他样本做对比，人脸识别器就会报错，此时2幅默认图像文件就充当了对比样本，以防止人脸识别器无法完成训练。当程序录入了足够多的员工信息后，这2幅默认图像虽然丧失了功能，但也不会影响识别器的识别能力。</p>
+<h2 id="16-4-数据实体模块设计"><a href="#16-4-数据实体模块设计" class="headerlink" title="16.4　数据实体模块设计"></a>16.4　数据实体模块设计</h2><p>entity包下的organizations.py文件用于封装数据模型。该文件中设计了员工类，并提供一些维护数据的方法。接下来将详细介绍organizations.py中的代码。</p>
+<p>1．构建员工类<br>创建Employee类作为员工类，并创建包含3个参数的构造方法。3个参数分别是员工编号、员工姓名和员工特征码。员工类将作为系统的最重要的数据模型，以对象的方式保存每一位员工的信息。<br>员工类的代码如下（代码位置：资源包\TM\sl\16\clock\entity\organizations.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128211042060.png" alt="image-20211128211042060"></p>
+<p>2．全局变量<br>organizations.py中的全局变量较多，主要用来当作系统缓存保存所有数据。这些全局代码包括：　</p>
+<p>LOCK_RECORD　实时保存员工的打卡记录。　</p>
+<p>EMPLOYEES　实时保存所有员工信息。　</p>
+<p>MAX_ID　记录当前最大ID，可在录入新员工时，为新员工分配新ID。　</p>
+<p>CODE_LEN　开发者可以通过修改CODE_LEN的值来控制员工特征码的长度，默认长度为6位。　</p>
+<p>WORK_TIME　上班时间，用来判断员工打卡情况。程序启动时由IO流模块为其赋值。　</p>
+<p>CLOSING_TIME　下班时间，功能同WORK_TIME。　</p>
+<p>USERS　系统所有管理员的账号和密码字典，用于校验用户输入的管理员账号和密码。</p>
+<p>这些全局代码如下</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128211155281.png" alt="image-20211128211155281"></p>
+<p>3．增删员工<br>organizations.py提供了添加新员工和删除员工的方法，其他模块需要调用这些方法来进行增删操作，不应直接修改EMPLOYEES列表中的数据。<br>add()方法用于向组织中增加新员工，因为不需要对数据做校验，所以方法中的代码非常少。该方法代码如下：</p>
+<pre><code> # 添加新员工
+ def add(e: Employee):
+     EMPLOYEES.append(e)
+</code></pre>
+<p>remove()方法用于删除组织中的员工，参数为员工编号。方法遍历员工列表，找到该员工之后，将该员工删除，如果该员工有过打卡记录，同时将其打卡记录删除，该方法代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128211222751.png" alt="image-20211128211222751"></p>
+<p>4．分配ID<br>员工编号是员工的唯一标识，有新员工加入时，应为其分配最新编号。<br>get_new_id()方法用于生成新员工编号，其生成规则为“当前最大的员工编号+1”，这样可以保证所有编号都不重复，该方法代码如下）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128211305025.png" alt="image-20211128211305025"></p>
+<h2 id="16-5-工具模块设计"><a href="#16-5-工具模块设计" class="headerlink" title="16.5　工具模块设计"></a>16.5　工具模块设计</h2><p>本系统的工具模块包含3个文件：public_tools.py、io_tools.py和camera.py。本节将详细介绍这3个文件中的代码。</p>
+<h3 id="16-5-1-公共工具模块"><a href="#16-5-1-公共工具模块" class="headerlink" title="16.5.1　公共工具模块"></a>16.5.1　公共工具模块</h3><p>uitl文件夹下的public_tools.py就是本程序的公共工具模块，该模块提供了以下功能。　生成随机数和随机特征码。　校验时间字符串格式。<br>下面详细介绍public_tools.py中的代码。</p>
+<p>1．导入模块<br>公共工具涉及随机数和日期格式，所以导入random和datetime两个服务模块。生成随机特征码需要通过organizations.py获取特征码长度，所以也要导入数据实体模块，代码如下：</p>
+<pre><code> import random
+ import datetime
+ from entity import organizations as o2．生成随机数
+</code></pre>
+<p>特征码、照片文件名和验证码都用到了随机数，公共工具模块提供了一个生成指定位数数字的randomNumber()方法，其参数就是数字的位数。例如，参数为4，生成的参数就是4位数，且不会以0开头。该方法最后返回的是字符串类。<br>randomNumber()方法的具体代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128211436263.png" alt="image-20211128211436263"></p>
+<p>特征码实际上是长度固定的随机码，特征码的程度保存在数据实体模块的CODE_LEN变量中，可以直接调用randomNumber(CODE_LEN)创建特征码。特征码最好保持6位以上，这样才能降低特征码重复的概率。<br>randomCode()就是生成特征码的方法，该方法代码如下# 随机生成与特征码长度相等的数字<br>     def randomCode():<br>         return randomNumber(o.CODE_LEN)  # 特征码的长度</p>
+<p>3．校验时间格式</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128211533748.png" alt="image-20211128211533748"></p>
+<h3 id="16-5-2-IO流模块"><a href="#16-5-2-IO流模块" class="headerlink" title="16.5.2　IO流模块"></a>16.5.2　IO流模块</h3><p>uitl文件夹下的io_tools.py是本程序的IO流工具模块，该模块提供了以下功能。　</p>
+<p>封装所有对文件的读写操作，包括加载员工信息、加载打卡记录、加载照片文件、删除员工信息、删除打卡记录等。　文件自检功能。　创建CSV文件。<br>下面详细介绍io_tools.py中的代码。</p>
+<p>1．导入模块<br>IO流工具将文件中的数据保存到数据实体模块中，需导入os模块和organizations.py文件。因为删除图片需要员工特征码，所以需要人事服务模块提供相关功能，代码如下：</p>
+<pre><code> from service import hr_service as hr
+ from entity import organizations as o
+ from service import recognize_service as rs
+ import os
+ import cv2
+ import numpy as np
+</code></pre>
+<p>2．全局变量<br>全局变量中保存了各个数据文件配置，包含文件路径、文件名和照片的宽和高。这里使用了os模块提供的os.getcwd()方法来获取项目根目录。全局变量的代码如下（代码位置：资源包\TM\sl\16\clock\util\io_tools.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128211636692.png" alt="image-20211128211636692"></p>
+<p>3．文件自检方法<br>为了防止用户误删数据文件而导致程序无法正常运行，公共工具模块提供了checking_data_files()文件自检方法。该方法在程序启动时执行，然后自动检查所有数据文件的状态，如果发现丢失文件（或文件夹），就会自动创建新的空数据文件（或文件夹）。该方法代码如下（代码位置：资源包\TM\sl\16\clock\util\io_tools.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128211707043.png" alt="image-20211128211707043"></p>
+<p>4．从文件中加载数据。</p>
+<p>本系统中的所有数据都保存在文本文件中，当程序启动时，需要加载所有数据，包括员工信息、员工打卡记录和员工照片。这3类数据都有各自的加载方法。<br>load_employee_info()是加载员工信息的方法，该方法读取全局变量指定的员工信息文件，将文件中的内容逐行读取，然后通过英文逗号分隔，根据分隔出的数据创建员工对象，最后把员工对象保存在员工列表中。这样就完成了员工信息的加载。<br>在读取员工数据的同时，该方法也会记录出现过的最大员工编号，并将最大员工编号赋值给数据实体模块。<br>load_employee_info()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\util\io_tools.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128211741820.png" alt="image-20211128211741820"></p>
+<p>load_lock_record()是加载员工打卡记录的方法。该方法读取全局变量指定的打卡记录文件，因为文件保存的是打卡记录字典的字符串内容，所以直接将文件中所有文本读出，然后转换成字典类型，最后将转换后的字典对象直接赋值数据实体模块即可。<br>load_lock_record()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\util\io_tools.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128211758371.png" alt="image-20211128211758371"></p>
+<p>load_employee_pic()是加载员工照片文件的方法，该方法首先遍历全局变量指定的照片文件夹，读取每一张照片文件并封装成OpenCV中的图像对象，然后从文件名中截取特征码，将特征码作为人脸识别的标签，最后将图像、标签统一提交人脸识别器进行训练。load_employee_pic()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\util\io_tools.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128211819740.png" alt="image-20211128211819740"></p>
+<p>load_work_time_config()是上下班时间配置文件的方法。因为配置文件中保存的数据格式非常简单，所以该方法直接将文件中所有内容读取出来，按照“&#x2F;”字符截取，并将截取的数据赋值数据实体的全局变量。<br>load_work_time_config()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\util\io_tools.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128212248428.png" alt="image-20211128212248428"></p>
+<p>load_users()是加载管理员账号密码文件的方法。因为文件保存的是管理员账号和密码字典的字符串内容，所以直接将文件中所有文本读出来，然后转换成字典类型，最后将转换之后的字典对象直接赋值数据实体模块即可<br>load_users()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\util\io_tools.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128212304806.png" alt="image-20211128212304806"></p>
+<p>5．将数据保存到文件中<br>既然有加载数据的方法，也就应该有保存数据的方法。当数据发生变化时，程序应立即将变化后的数据保存到本地硬盘上。公共工具模块提供了2种将数据保存到文件中的方法（保存新员工照片的方法由摄像头工具模块提供）。<br>save_employee_all()方法可以将员工列表中的数据保存到员工数据文件中。该方法首先打开文件的写权限，以覆盖的方式替换文件中的内容，然后遍历所有员工，将员工信息通过英文逗号和换行符拼接到一起，最后将拼接的文本写入文件中。<br>save_employee_all()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\util\io_tools.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128212324236.png" alt="image-20211128212324236"></p>
+<p>save_lock_record()方法可以将打卡记录字典中的数据保存到打卡记录数据文件中，其逻辑与保存员工数据的方法类似，只不过不需要拆分或拼接数据，而是直接把字典对象转换成字符串，将转换得到的字符串覆盖到打卡记录数据文件中。<br>save_lock_record()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\util\io_tools.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128211903408.png" alt="image-20211128211903408"></p>
+<p>save_work_time_config()方法可以将数据实体中的上班时间和下班时间保存到文件中。先按照“上班时间／下班时间”格式拼接2个时间的字符串，然后将拼接好的内容写入上下班配置文件中。<br>save_work_time_config ()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\util\io_tools.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128212417032.png" alt="image-20211128212417032"></p>
+<p>6．删除照片<br>当一名员工被删除，该员工的照片就成了系统的垃圾文件，若不及时清除不仅会占用空间，还会加重人脸识别器的训练成本。<br>remove_pics()方法就是公共工具模块提供的删除指定员工照片的方法，参数为被删除的员工编号。该方法首先通过员工编号获取该员工的特征码，然后到照片文件夹中遍历所有文件，只要文件名以此员工的特征码开头，就将文件删除。删除后在控制台打印删除日志以提醒用户。<br>remove_pics()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\util\io_tools.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128212439429.png" alt="image-20211128212439429"></p>
+<p>7．生成CSV文件<br>考勤月报是一个内容非常多的报表，不适合在控制台中展示，但很适合生成Excel报表来展示。因为使用Python技术创建Excel文件需要下载并导入第三方模块，会加重读者的学习压力，所以这里使用更简单的CSV格式文件来展示报表。Excel可以直接打开CSV文件。<br>CSV文件实际上是一个文本文件，每一行文字都对应Excel中的一行内容。CSV文件将每一行文字内容用英文逗号分隔，Excel根据这些英文逗号自动将文字内容分配到每一列中。<br>create_CSV()方法专门用来创建CSV文件，第一个参数是CSV文件的文件名，这个名称不包含后缀；第二个参数是CSV文件写入的文本内容。方法会将CSV文件生成在／data&#x2F;文件夹下，因为大部分电脑都是用Windows系统，所以按照gbk字符编码写入内容，这样可以保证Windows系统下使用Excel打开CSV文件不会发生乱码。<br>create_CSV()方法的具体代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128212514367.png" alt="image-20211128212514367"></p>
+<h3 id="16-5-3-摄像头工具模块"><a href="#16-5-3-摄像头工具模块" class="headerlink" title="16.5.3　摄像头工具模块"></a>16.5.3　摄像头工具模块</h3><p>uitl文件夹下的camera.py是本程序的摄像头工具模块，该模块提供了以下功能：　开启摄像头打卡。　开启摄像头为员工拍照。<br>下面详细介绍camera.py中的代码。</p>
+<p>1．导入模块<br>摄像头模块需要调用OpenCV和人脸识别服务的方法来实现拍照和视频打卡功能。因为打卡成功后要显示员工姓名，所以还需调用人事服务模块提供的方法，代码如下（代码位置：资源包\TM\sl\16\clock\util\camera.py）：</p>
+<pre><code> import cv2
+ from util import public_tools as tool
+ from util import io_tools as io
+ from service import recognize_service as rs
+ from service import hr_service as hr
+</code></pre>
+<p>2．全局变量<br>录入新用户时需为新用户拍照，用户通过按键盘按键完成拍照。全局变量保存了键盘上Esc键和Enter键的ASCII码，OpenCV对比这2个变量来判断用户按了哪个按键，代码如下（代码位置：资源包\TM\sl\16\clock\util\camera.py）：</p>
+<pre><code> ESC_KEY = 27    # Esc键的ASCII码
+ ENTER_KEY = 13  # Enter键的ASCII码3．为新员工拍照
+</code></pre>
+<p>执行register()方法开启本地默认摄像头，方法参数是被拍照员工的特征码，当用户按Enter键时，该方法把摄像头的当前帧画面保存成图像文件，文件名以该员工特征码开头。每名新员工需要拍3张图片，也就是需要按3次Enter键，该方法才会结束。最后员工拍摄的照片都保存在／data&#x2F;face&#x2F;文件夹中，如图16.8所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128212615823.png" alt="image-20211128212615823"></p>
+<p>图16.8　&#x2F;data&#x2F;face&#x2F;文件夹中员工照片文件<br>register()方法的具体代码如下</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128212655013.png" alt="image-20211128212655013"></p>
+<p>4．开启摄像头打卡<br>执行clock_in()方法开启本地默认摄像头，程序扫描摄像头每一帧画面里是否有人脸，如果有人脸，就将这一帧画面与所有员工照片样本做比对，判断当前画面里的人脸属于哪位员工。人脸识别服务给出识别成功的特征码，通过特征码获得员工姓名，最后将识别成功的员工姓名返回。如果屏幕中没有出现人脸或者识别不成功，摄像头会一直处于开启状态。<br>clock_in()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\util\camera.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128212713423.png" alt="image-20211128212713423"></p>
+<h2 id="16-6-服务模块设计"><a href="#16-6-服务模块设计" class="headerlink" title="16.6　服务模块设计"></a>16.6　服务模块设计</h2><p>本系统的服务模块包含2个文件：hr_service.py和recognize_service.py。前者提供所有人事管理的相关功能，例如增减员工、查询员工数据；后者提供人脸识别服务。本节将详细介绍这2个文件中的代码。</p>
+<h3 id="16-6-1-人事服务模块"><a href="#16-6-1-人事服务模块" class="headerlink" title="16.6.1　人事服务模块"></a>16.6.1　人事服务模块</h3><p>service文件夹下的hr_service.py就是本程序的人事服务模块，该模块专门处理所有人事管理方面的业务，包含以下功能。</p>
+<p>添加新员工。　</p>
+<p>删除某员工。　</p>
+<p>为指定员工添加打卡记录。　</p>
+<p>多种获取员工信息的方法。　</p>
+<p>生成考勤日报。　</p>
+<p>生成考勤月报（CSV文件）。</p>
+<p>下面详细介绍hr_service.py中的代码。</p>
+<p>1．导入模块<br>人事服务需要管理员工类列表、记录打卡时间，还要计算、对比负责的日期和时间数值，所以要导入数据实体模块、公共工具模块、时间模块和日历模块。代码如下（代码位置：资源包\TM\sl\16\clock\service\hr_service.py）：</p>
+<pre><code> from entity import organizations as o
+ from util import public_tools as tool
+ from util import io_tools as io
+ import datetime
+ import calendar
+</code></pre>
+<p>2．加载所有数据</p>
+<p>程序启动的首要任务就是加载数据，人事服务模块将所有加载数据的方法封装成load_emp_data()方法，程序启动时运行此方法就可以一次性载入所有保存在文件中的数据。该方法依次进行文件自检，载入管理员账号密码、打卡记录、员工信息和员工照片。<br>load_emp_data()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\service\hr_service.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128212820407.png" alt="image-20211128212820407"></p>
+<p>3．添加新员工<br>add_new_employee()方法用于添加新员工，参数为新员工的姓名。该方法通过公共工具模块创建随机特征码，通过数据实体模块创建新员工编号，然后结合姓名参数创建新</p>
+<p>员工对象，在员工列表中添加新员工对象，并将最新的员工列表写入员工数据文件中，最后将该员工的特征码返回，摄像头服务根据此特征码为员工创建照片文件。<br>add_new_employee()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\service\hr_service.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128212859144.png" alt="image-20211128212859144"></p>
+<p>4．删除员工<br>remove_employee()方法用来删除已有的员工资料，参数为被删除员工的编号。该方法首先删除该员工的所有照片文件，然后在员工列表中清除该员工的所有信息，包括打卡记录，最后将当前员工列表和打卡记录覆盖到数据文件中。这样数据文件里不会再有该员工的任何信息了。<br>remove_employee()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\service\hr_service.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128212918378.png" alt="image-20211128212918378"></p>
+<p>5．添加打卡记录<br>add_lock_record()方法用来为指定员工添加打卡记录，参数为员工的姓名。如果某个员工打卡成功，该方法首先检查该员工是否有已经存在的打卡记录，如果没有记录就为其创建新记录，如果有记录就在原有记录上追加新时间字符串。该方法最后把当前打卡记录保存到数据文件中。<br>add_lock_record()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\service\hr_service.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128212933763.png" alt="image-20211128212933763"></p>
+<p>6．获取员工数据<br>人事服务提供了多种获取员工数据的方法，可以满足多种业务场景，下面分别介绍。<br>get_employee_report()方法可以返回一个包含所有员工简要信息的报表，可用于在前端展示员工列表，该方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\service\hr_service.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128213013377.png" alt="image-20211128213013377"></p>
+<p>删除员工操作需输入被删除员工的编号，程序对用户输入的值进行校验，如果用户输入的员工编号不在员工列表之中（即无效编号），就认为用户操作有误，程序中断此业务。<br>check_id()方法用来判断输入的编号是否有效，编号如果有效就返回True，无效就返回False，该方法的代码如下（代码位置：资源包\TM\sl\16\clock\service\hr_service.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128213031342.png" alt="image-20211128213031342"></p>
+<p>通过员工特征码获取该员工姓名代码如下（代码位置：资源包\TM\sl\16\clock\service\hr_service.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128213059725.png" alt="image-20211128213059725"></p>
+<p>通过员工编号获取该员工特征码的代码如下（代码位置：资源包\TM\sl\16\clock\service\hr_service.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128213116746.png" alt="image-20211128213116746"></p>
+<p>7．验证管理员账号和密码<br>valid_user()方法用来验证管理员的账号和密码，第一个参数为管理员账号，第二个参数为管理员密码。该方法首先判断输入的管理员账号是否存在，如果存在则再比对输入的密码，只有管理员账号存在且密码正确的情况下，该方法才返回True，其他情况返回False。</p>
+<p>valid_user()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\service\hr_service.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128213220573.png" alt="image-20211128213220573"></p>
+<p>8．保存上下班时间<br>save_work_time()方法用来保存用户设置的上下班时间，第一个参数为上班时间，第二个参数为下班时间，2个参数均为字符串，且必须符合“%H:%M:%S”时间格式，例如08:00:00。该方法直接修改数据实体中的全局变量，所以用户可以修改实时的上下班时间，即设置时间之后，日报和月报会立即使用新的时间分析考勤数据。<br>save_work_time()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\service\hr_service.py）：</p>
+<pre><code> # 保存上下班时间
+ def save_work_time(work_time, close_time):
+     o.WORK_TIME = work_time
+     o.CLOSING_TIME = close_time
+     io.save_work_time_config()  # 上下班时间保存到文件中
+</code></pre>
+<p>9．打印考勤日报</p>
+<p>打印考勤日报的方法有2个：get_day_report()方法打印指定日期的日报，get_today_report()方法打印今天的日报。下面分别介绍。<br>get_day_report()方法打印哪一天的日报是由参数date决定的，参数d     ate是一个字符串，且必须符合“%Y-%m-%d”时间格式，例如“2008-08-08”。该方法创建date指定的时间对象，分别计算这一天0点、12点和23点59分59秒的时间对象，并且会根据用户设置的上下班时间计算这一天上班时间对象和下班时间对象，这些时间对象将用来分析员工的考勤情况。员工的打卡规则如表16.2所示。</p>
+<p>​                                                                                  表16.2　打卡规则</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128213246503.png" alt="image-20211128213246503"></p>
+<p>方法中分别创建了迟到、早退和缺席名单3个列表，只要某员工出现不正常打卡记录，就会将该员工姓名放到对应不正常打卡状态的名单里，最后打印报表，给出各名单人数和明细。<br>get_day_report()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\service\hr_service.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128213913981.png" alt="image-20211128213913981"></p>
+<p>因为负责考勤的用户最常查看的就是当天的打卡情况，所以将当天打卡日报单独封装成get_today_report()方法。该方法自动生成当天的date字符串，并将其作为参数调用get_day_report()方法。<br>get_today_report()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\service\hr_service.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128213952660.png" alt="image-20211128213952660"></p>
+<p>10．生成考勤月报<br>与考勤日报不同，考勤月报是一种汇总形式的报表，可以展示员工整个月的考勤状况。因为月报表内容较多，所以不会在控制台中展示，而是生成独立的报表文件。<br>生成考勤月报的方法有2个：get_month_report ()方法生成指定月份的月报；get_pre_month_report ()方法打印上个月的月报。下面分别介绍。<br>考勤月报的校验逻辑与考勤日报基本相同，相当于一次性统计了一个月的日报数据。唯一不同的是统计月报的时候不是创建异常打卡名单，而是统计每一位员工每一天的打卡情况。每个员工的打卡情况用一个字符串表示，如有正常打卡，就追加正常打卡的标记，如果迟到就追加迟到标记，以此类推。统计完所有员工一个月打卡情况之后再对每个字符串进行分析。　</p>
+<p>如果员工在×日有正常上下班打卡标记，则月报×日下不显示任何内容。迟到或早退标记都被忽略，因为可能是员工误打卡。　</p>
+<p>如果员工在×日没有上班打卡标记，且有迟到标记，则在月报×日下显示【迟到】。　</p>
+<p>如果员工在×日没有下班打卡标记，且有早退标记，则月报×日下显示【早退】。　</p>
+<p>如果员工在×日没有上班打卡标记，也没有迟到标记，则在月报×日下显示【上班未打卡】。　</p>
+<p>如果员工在×日没有下班打卡标记，也没有早退标记，则在月报×日下显示【下班未打卡】。　</p>
+<p>如果员工在×日没有任何打卡标记，则在月报×日下显示【缺席】。<br>月报采用CSV格式文件展示，CSV文件自动生成在项目的／data&#x2F;文件夹下。CSV是文本文件，用换行符区分表格的行，用英文逗号区分表格的列。get_month_report()方法最后将生成的CSV格式月报用记事本打开，其效果如图16.9所示，如果用Office Excel打开则可以看到正常的表格内容，效果如图16.10所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128225917095.png" alt="image-20211128225917095"></p>
+<p>​                                                                           图16.9　用记事本打开CSV格式的月报</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128225941244.png" alt="image-20211128225941244"></p>
+<p>​                                                                    图16.10　用Office Excel打开CSV格式的月报<br>get_month_report()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\service\hr_service.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128230016478.png" alt="image-20211128230016478"></p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128230040789.png" alt="image-20211128230040789"></p>
+<p>因为负责考勤的用户最常查看上个月的月报，所以将生成上个月月报单独封装成了get_pre_month_report()方法。该方法自动生成上个月的pre_month字符串，并将其作为参数调用get_month_report()方法。<br>get_pre_month_report()具体代码如下（代码位置：资源包\TM\sl\16\clock\service\hr_service.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128230117420.png" alt="image-20211128230117420"></p>
+<h3 id="16-6-2-人脸识别服务模块"><a href="#16-6-2-人脸识别服务模块" class="headerlink" title="16.6.2　人脸识别服务模块"></a>16.6.2　人脸识别服务模块</h3><p>service文件夹下的recognize_service.py就是本程序的人脸识别服务模块，该模块提供人脸识别算法，其包含以下功能。　检测图像中是否有正面人脸。　判断图像中的人脸属于哪个人。<br>下面详细介绍recognize_service.py中的代码。</p>
+<p>1．导入包<br>人脸识别服务需要导入OpenCV相关模块和os模块，代码如下（代码位置：资源包\TM\sl\16\clock\service\recognize_service.py）：</p>
+<p>import cv2<br>import numpy as np<br>import os</p>
+<p>2．全局变量<br>全局变量中创建了人脸识别器引擎和人脸识别级联分类器对象，PASS_CONF为人脸识别的信用评分，只有低于这个值的人脸识别评分才认为相似度高。全局变量的代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128230309914.png" alt="image-20211128230309914"></p>
+<p>3．训练识别器<br>train()方法专门用来训练人脸识别器，该方法仅封装了识别器对象的训练方法，方法参数为样本图像列表和标签列表，其代码如下（代码位置：资源包\TM\sl\16\clock\service\recognize_service.py）：</p>
+<pre><code> # 训练识别器
+ def train(photos, lables):
+    RECOGNIZER.train(photos, np.array(lables))  # 识别器开始训练
+</code></pre>
+<p>4．发现人脸</p>
+<p>found_face()方法用来判断图像中是否有正面人脸，参数为灰度图像。通过正面人脸级联分类器对象检测图像中出现的人脸数量，最后返回人脸数量大于0的判断结果，有人脸就返回True，没有就返回False。<br>found_face()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\service\recognize_service.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128230328108.png" alt="image-20211128230328108"></p>
+<p>5．识别人脸<br>recognise_face()方法用来识别图像中的人脸属于哪位员工，方法参数为被识别的图像。该方法必须在识别器接受完训练之后被调用。识别器给出分析得出的评分，如果评分大于可信范围，则认为图像中不存在任何已有员工，返回-1，否则返回已有员工的特征码。<br>recognise_face()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\service\recognize_service.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128230421418.png" alt="image-20211128230421418"></p>
+<h2 id="16-7-程序入口设计"><a href="#16-7-程序入口设计" class="headerlink" title="16.7　程序入口设计"></a>16.7　程序入口设计</h2><p>main.py是整个程序的入口文件，负责在控制台中打印菜单界面，用户通过指令可以使用系统中的全部功能，包括打卡、员工管理等，所以会有大量指令判断逻辑。<br>main.py需要导入摄像头工具模块、公共工具模块和人事服务模块。代码如下（代码位置：资源包\TM\sl\16\clock\main.py）：</p>
+<pre><code> from util import camera
+ from util import public_tools as tool
+ from service import hr_service as hr
+</code></pre>
+<p>下面详细介绍main.py中的代码</p>
+<h3 id="16-7-1-用户权限管理"><a href="#16-7-1-用户权限管理" class="headerlink" title="16.7.1　用户权限管理"></a>16.7.1　用户权限管理</h3><p>系统中除了打卡和退出2项功能可以随意使用，其他菜单都需要管理员权限才能使用。用户选中查看记录、员工管理和考勤报表菜单，系统会验证用户身份，如果不是管理员身份就会弹出管理员登录提示，用户输入正确的账号和密码才可以继续使用这些功能。<br>main.py文件中定义了一个全局变量ADMIN_LOGIN，该变量表示管理员的登录状态，默认为False，即管理员未登录。其代码如下（代码位置：资源包\TM\sl\16\clock\main.py）：</p>
+<pre><code> ADMIN_LOGIN = False  # 管理员登录状态
+</code></pre>
+<p>login()为管理员登录方法，该方法弹出输入管理员账号和密码的提示，如果用户输入账号为字符串“0”，则认为用户取消了登录操作。如果用户输入了正确的账号和密码，就将全局变量ADMIN_LOGIN的值改为True，即管理员已处于登录状态，这样系统就会开放所有已设权限的功能，用户可以随意使用。<br>login()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\main.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128230514889.png" alt="image-20211128230514889"></p>
+<h3 id="16-7-2-主菜单设计"><a href="#16-7-2-主菜单设计" class="headerlink" title="16.7.2　主菜单设计"></a>16.7.2　主菜单设计</h3><p>start()方法是程序的启动方法，在初始化方法执行完毕后执行。该方法在控制台中打印程序的主功能菜单，效果如图16.11所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128230537548.png" alt="image-20211128230537548"></p>
+<p>​                                                                               图16.11　主菜单<br>此时用户需先输入菜单对应的数字，再按Enter键进入具体功能菜单中。如果用户输入的数字不在功能菜单中，则提示指令有误，请用户重新输入。<br>如果当前用户没有管理员权限，在选中查看记录、员工管理和考勤报表菜单时会要求用户先登录管理员的账号，效果如图16.12所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128230618875.png" alt="image-20211128230618875"></p>
+<p>​                                                         图16.12　用户需登录管理员账号才能使用员工管理功能<br>start()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\main.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128230644783.png" alt="image-20211128230644783"></p>
+<h3 id="16-7-3-人脸打卡功能"><a href="#16-7-3-人脸打卡功能" class="headerlink" title="16.7.3　人脸打卡功能"></a>16.7.3　人脸打卡功能</h3><p>face_clock()是人脸打卡功能的执行方法，该方法调用摄像头工具模块提供的打卡方法，此时只要用户面向摄像头，摄像头即可自动扫描人脸并识别特征，效果如图16.13所示。如果镜头中的人脸符合某个员工的特征，则会返回该员工姓名，然后调用人事服务模块为此员工添加打卡记录，最后提示该员工打卡成功，过程如图16.14所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128230722320.png" alt="image-20211128230722320"></p>
+<p>​                                                                                   图16.13　打卡者需正向面对镜头</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128230745651.png" alt="image-20211128230745651"></p>
+<p>​                                                                                  图16.14　员工王五打卡成功<br>face_clock()方法的具体代码如下：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128230807096.png" alt="image-20211128230807096"></p>
+<h3 id="16-7-4-为新员工登记人脸照片样本"><a href="#16-7-4-为新员工登记人脸照片样本" class="headerlink" title="16.7.4　为新员工登记人脸照片样本"></a>16.7.4　为新员工登记人脸照片样本</h3><p>employee_management()方法是员工管理功能的执行方法，该方法在控制台打印员工管理功能菜单，如图16.15所示。输入菜单对应的数字，再按Enter键进入具体功能菜单中。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128230830763.png" alt="image-20211128230830763"></p>
+<p>​                                                               图16.15　员工管理功能菜单<br>录入新员工的过程如图16.16所示。如果用户在员工管理功能菜单中输入数字1并按Enter键，则开始执行新员工录入操作。首先输入新员工名称，输入完毕后程序打开默认摄像头，此时让新员工面对摄像头，程序将摄像头拍摄的照片展示在如图16.17所示的register窗口中。在register窗口上按3次Enter键，自动保存3张摄像头拍摄的照片文件，最后提示录入成功。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128230908335.png" alt="image-20211128230908335"></p>
+<p>​                                                                                                   图16.16　录入新员工的过程</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128230931356.png" alt="image-20211128230931356"></p>
+<p>​                                                                                    图16.17　register窗口展示的员工照片</p>
+<h3 id="16-7-5-删除员工全部数据"><a href="#16-7-5-删除员工全部数据" class="headerlink" title="16.7.5　删除员工全部数据"></a>16.7.5　删除员工全部数据</h3><p>如果用户在员工管理功能菜单中输入数字2并按Enter键，则开始执行删除员工操作。首先程序会将所有员工的名单打印到控制台中，用户输入要删除的员工编号并按Enter键，程序给出一个验证码让用户输入，如果用户输入的验证码正确，该员工的员工信息、打卡记录和照片文件都会被删除，如果用户输入的验证码错误，则会取消删除员工操作，员工数据不会丢失。删除员工操作的过程如图16.18所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128230958321.png" alt="image-20211128230958321"></p>
+<p>​                                                                            图16.18　删除员工操作的过程<br>employee_management()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\main.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128231025347.png" alt="image-20211128231025347"></p>
+<h3 id="16-7-6-查询员工打卡记录"><a href="#16-7-6-查询员工打卡记录" class="headerlink" title="16.7.6　查询员工打卡记录"></a>16.7.6　查询员工打卡记录</h3><p>check_record()方法是查询记录功能的执行方法，该方法在控制台打印查询记录功能菜单，效果如图16.19所示。此时用户需先输入菜单对应的数字，再按Enter键进入具体功能菜单。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128231100025.png" alt="image-20211128231100025"></p>
+<p>​                                                                                    图16.19　查看记录功能菜单<br>如果用户在查询记录功能菜单中输入数字1并按Enter键，程序将所有员工列表打印到控制台中，效果如图16.20所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128231120571.png" alt="image-20211128231120571"></p>
+<p>​                                                                                图16.20　查看员工列表</p>
+<p>如果用户在查询记录功能菜单中输入数字2并按Enter键，程序将所有员工的打卡记录打印到控制台中，效果如图16.21所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128231213893.png" alt="image-20211128231213893"></p>
+<p>​                                                                                        图16.21　查看打卡记录<br>check_record()方法的具体的代码如下（代码位置：资源包\TM\sl\16\clock\main.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128231247326.png" alt="image-20211128231247326"></p>
+<h3 id="16-7-7-生成考勤报表"><a href="#16-7-7-生成考勤报表" class="headerlink" title="16.7.7　生成考勤报表"></a>16.7.7　生成考勤报表</h3><p>check_report()方法是考勤报表功能的执行方法，该方法在控制台打印考勤报表功能菜单，效果如图16.22所示。此时用户需先输入菜单对应的数字，再按Enter键进入具体功能菜单。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128231405373.png" alt="image-20211128231405373"></p>
+<p>​                                                                                               图16.22　考勤报表功能菜单<br>如果用户在考勤报表功能菜单中输入数字1并按Enter键，则会提示用户输入日期。用户按照指定格式输入日期后即可看到该日期的考勤日报。如果用户输入数字0，可以打印当天的考勤日报。例如，打印2021年3月2日考勤日报的效果如图16.23所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128231458581.png" alt="image-20211128231458581"></p>
+<p>​                                                                                     图16.23　打印2021年3月2日的考勤日报<br>如果用户在考勤报表功能菜单中输入数字2并按Enter键，则提示用户输入月份。用户按照指定格式输入月份后，即可生成该月考勤月报，并显示生成的月报文件地址。如果用户输入数字0，可以生成上个月的考勤月报。例如，生成2021年3月考勤月报的效果如图16.24所示。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128231521785.png" alt="image-20211128231521785"></p>
+<p>​                                                                    图16.24　生成2021年3月考勤月报<br>图16.24中提示“2021年3月考勤月报.csv”文件保存在D:\clock\data\文件夹中，打开这个文件夹即可以看到月报文件，如图16.25所示，用Office Excel打开月报即可以看到如图16.26所示的表格内容。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128231550636.png" alt="image-20211128231550636"></p>
+<p>​                                                                            图16.25　CSV文件的位置</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128231612666.png" alt="image-20211128231612666"></p>
+<p>​                                                                图16.26　使用Office Excel打开月报的效果<br>check_report()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\main.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128231638940.png" alt="image-20211128231638940"></p>
+<h3 id="16-7-8-自定义上下班时间"><a href="#16-7-8-自定义上下班时间" class="headerlink" title="16.7.8　自定义上下班时间"></a>16.7.8　自定义上下班时间</h3><p>report_config()方法是报表设置功能的执行方法，如果用户在考勤报表功能菜单中输入数字3并按Enter键，则进入报表设置功能菜单，效果如图16.27所示，在这个菜单中可以设置用于分析考勤记录的上下班时间。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128231711120.png" alt="image-20211128231711120"></p>
+<p>​                                                                                     图16.27　报表设置功能菜单<br>如果用户在报表设置功能菜单中输入数字1并按Enter键，则分别提示用户输入上班时间和下班时间，效果如图16.28所示。如果用户输入的时间格式错误，程序要求用户重新输入。当用户设置完后，上下班时间立即生效，此时再打印考勤报表就会按照最新的上下班时间进行分析。</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128231731240.png" alt="image-20211128231731240"></p>
+<p>​                                                                     图16.28　用户设置上班时间和下班时间      </p>
+<p>report_config()方法的具体代码如下（代码位置：资源包\TM\sl\16\clock\main.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128231810922.png" alt="image-20211128231810922"></p>
+<h3 id="16-7-9-启动程序"><a href="#16-7-9-启动程序" class="headerlink" title="16.7.9　启动程序"></a>16.7.9　启动程序</h3><p>main.py定义完所有全局变量和方法之后，代码的最下方就是整个系统的启动脚本：首先执行系统初始化操作，然后启动系统。具体代码如下（代码位置：资源包\TM\sl\16\clock\main.py）：</p>
+<p><img src="/2019/05/19/OpenCV(3)/image-20211128231824542.png" alt="image-20211128231824542"></p>
+<h2 id="16-8-小结"><a href="#16-8-小结" class="headerlink" title="16.8　小结"></a>16.8　小结</h2><p>本章详细介绍了一个完整小型项目的开发流程。这个项目主要包括5大功能：打卡、退出、查看记录、员工管理和考勤报表。其中，查看记录、员工管理和考勤报表3个功能需要管理员权限才能使用。这个项目采用命令提示符窗口实现与计算机之间的交互。虽然命令提示符窗口有些简陋，但不影响这个项目的实用价值。如果读者想制作一个绚丽的窗口界面运行这个项目，可以在掌握这个项目的功能结构、业务流程和实现原理后，尝试用Python PyQt5的相关知识予以实现。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="http://example.com">宇宙建筑家</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://example.com/2019/05/19/OpenCV(3)/">http://example.com/2019/05/19/OpenCV(3)/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/./img/girl.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/gh/overtrue/share.js@master/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2019/05/22/OpenCV(4)/"><img class="prev-cover" src="/./img/people.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">OpenCv(4)</div></div></a></div><div class="next-post pull-right"><a href="/2019/05/14/OpenCV(2)/"><img class="next-cover" src="/./img/girl.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">OpenCv(2)</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/./img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">宇宙建筑家</div><div class="author-info__description">今夜无雪无晴无悲喜</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/withu0519" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:xxxxxx@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#OpenCV%E8%BF%9B%E9%98%B6%E7%AF%8701"><span class="toc-number">1.</span> <span class="toc-text">OpenCV进阶篇01</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC14%E7%AB%A0-%E8%A7%86%E9%A2%91%E5%A4%84%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">第14章　视频处理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#14-1-%E8%AF%BB%E5%8F%96%E5%B9%B6%E6%98%BE%E7%A4%BA%E6%91%84%E5%83%8F%E5%A4%B4%E8%A7%86%E9%A2%91"><span class="toc-number">2.1.</span> <span class="toc-text">14.1　读取并显示摄像头视频</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#14-1-1-VideoCapture%E7%B1%BB"><span class="toc-number">2.1.1.</span> <span class="toc-text">14.1.1　VideoCapture类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#14-1-2-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8VideoCapture%E7%B1%BB"><span class="toc-number">2.1.2.</span> <span class="toc-text">14.1.2　如何使用VideoCapture类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-2-%E6%92%AD%E6%94%BE%E8%A7%86%E9%A2%91%E6%96%87%E4%BB%B6"><span class="toc-number">2.2.</span> <span class="toc-text">14.2　播放视频文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#14-2-1-%E8%AF%BB%E5%8F%96%E5%B9%B6%E6%98%BE%E7%A4%BA%E8%A7%86%E9%A2%91%E6%96%87%E4%BB%B6"><span class="toc-number">2.2.1.</span> <span class="toc-text">14.2.1　读取并显示视频文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#14-2-2-%E8%A7%86%E9%A2%91%E7%9A%84%E6%9A%82%E5%81%9C%E6%92%AD%E6%94%BE%E5%92%8C%E7%BB%A7%E7%BB%AD%E6%92%AD%E6%94%BE"><span class="toc-number">2.2.2.</span> <span class="toc-text">14.2.2　视频的暂停播放和继续播放</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#14-2-3-%E8%8E%B7%E5%8F%96%E8%A7%86%E9%A2%91%E6%96%87%E4%BB%B6%E7%9A%84%E5%B1%9E%E6%80%A7"><span class="toc-number">2.2.3.</span> <span class="toc-text">14.2.3　获取视频文件的属性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-3-%E4%BF%9D%E5%AD%98%E8%A7%86%E9%A2%91%E6%96%87%E4%BB%B6"><span class="toc-number">2.3.</span> <span class="toc-text">14.3　保存视频文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#14-3-1-VideoWriter%E7%B1%BB"><span class="toc-number">2.3.1.</span> <span class="toc-text">14.3.1　VideoWriter类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#14-3-2-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8VideoWriter%E7%B1%BB"><span class="toc-number">2.3.2.</span> <span class="toc-text">14.3.2　如何使用VideoWriter类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-4-%E5%B0%8F%E7%BB%93"><span class="toc-number">2.4.</span> <span class="toc-text">14.4　小结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC15%E7%AB%A0-%E4%BA%BA%E8%84%B8%E6%A3%80%E6%B5%8B%E5%92%8C%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB"><span class="toc-number">3.</span> <span class="toc-text">第15章　人脸检测和人脸识别</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#15-1-%E4%BA%BA%E8%84%B8%E6%A3%80%E6%B5%8B"><span class="toc-number">3.1.</span> <span class="toc-text">15.1　人脸检测</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#15-1-1-%E7%BA%A7%E8%81%94%E5%88%86%E7%B1%BB%E5%99%A8"><span class="toc-number">3.1.1.</span> <span class="toc-text">15.1.1　级联分类器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#15-1-2-%E6%96%B9%E6%B3%95"><span class="toc-number">3.1.2.</span> <span class="toc-text">15.1.2　方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#15-1-3-%E5%88%86%E6%9E%90%E4%BA%BA%E8%84%B8%E4%BD%8D%E7%BD%AE"><span class="toc-number">3.1.3.</span> <span class="toc-text">15.1.3　分析人脸位置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#15-2-%E6%A3%80%E6%B5%8B%E5%85%B6%E4%BB%96%E5%86%85%E5%AE%B9"><span class="toc-number">3.2.</span> <span class="toc-text">15.2　检测其他内容</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#15-2-1-%E7%9C%BC%E7%9D%9B%E6%A3%80%E6%B5%8B"><span class="toc-number">3.2.1.</span> <span class="toc-text">15.2.1　眼睛检测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#15-2-2-%E7%8C%AB%E8%84%B8%E6%A3%80%E6%B5%8B"><span class="toc-number">3.2.2.</span> <span class="toc-text">15.2.2　猫脸检测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#15-2-3-%E8%A1%8C%E4%BA%BA%E6%A3%80%E6%B5%8B"><span class="toc-number">3.2.3.</span> <span class="toc-text">15.2.3　行人检测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#15-2-4-%E8%BD%A6%E7%89%8C%E6%A3%80%E6%B5%8B"><span class="toc-number">3.2.4.</span> <span class="toc-text">15.2.4　车牌检测</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#15-3-%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB"><span class="toc-number">3.3.</span> <span class="toc-text">15.3　人脸识别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#15-3-1-Eigenfaces%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB%E5%99%A8"><span class="toc-number">3.3.1.</span> <span class="toc-text">15.3.1　Eigenfaces人脸识别器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#15-3-2-Fisherfaces%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB%E5%99%A8"><span class="toc-number">3.3.2.</span> <span class="toc-text">15.3.2　Fisherfaces人脸识别器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#15-3-3-Local-Binary-Pattern-Histogram%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB%E5%99%A8"><span class="toc-number">3.3.3.</span> <span class="toc-text">15.3.3　Local Binary Pattern Histogram人脸识别器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#15-4-%E5%B0%8F%E7%BB%93"><span class="toc-number">3.4.</span> <span class="toc-text">15.4　小结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC16%E7%AB%A0-MR%E6%99%BA%E8%83%BD%E8%A7%86%E9%A2%91%E6%89%93%E5%8D%A1%E7%B3%BB%E7%BB%9F"><span class="toc-number">4.</span> <span class="toc-text">第16章　MR智能视频打卡系统</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#16-1-%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90"><span class="toc-number">4.1.</span> <span class="toc-text">16.1　需求分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-2-%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1"><span class="toc-number">4.2.</span> <span class="toc-text">16.2　系统设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#16-2-1-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"><span class="toc-number">4.2.1.</span> <span class="toc-text">16.2.1　开发环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-2-2-%E5%8A%9F%E8%83%BD%E7%BB%93%E6%9E%84"><span class="toc-number">4.2.2.</span> <span class="toc-text">16.2.2　功能结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-2-3-%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B"><span class="toc-number">4.2.3.</span> <span class="toc-text">16.2.3　业务流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-2-4-%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84"><span class="toc-number">4.2.4.</span> <span class="toc-text">16.2.4　项目结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-3-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1"><span class="toc-number">4.3.</span> <span class="toc-text">16.3　文件系统设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-4-%E6%95%B0%E6%8D%AE%E5%AE%9E%E4%BD%93%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1"><span class="toc-number">4.4.</span> <span class="toc-text">16.4　数据实体模块设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-5-%E5%B7%A5%E5%85%B7%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1"><span class="toc-number">4.5.</span> <span class="toc-text">16.5　工具模块设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#16-5-1-%E5%85%AC%E5%85%B1%E5%B7%A5%E5%85%B7%E6%A8%A1%E5%9D%97"><span class="toc-number">4.5.1.</span> <span class="toc-text">16.5.1　公共工具模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-5-2-IO%E6%B5%81%E6%A8%A1%E5%9D%97"><span class="toc-number">4.5.2.</span> <span class="toc-text">16.5.2　IO流模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-5-3-%E6%91%84%E5%83%8F%E5%A4%B4%E5%B7%A5%E5%85%B7%E6%A8%A1%E5%9D%97"><span class="toc-number">4.5.3.</span> <span class="toc-text">16.5.3　摄像头工具模块</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-6-%E6%9C%8D%E5%8A%A1%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1"><span class="toc-number">4.6.</span> <span class="toc-text">16.6　服务模块设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#16-6-1-%E4%BA%BA%E4%BA%8B%E6%9C%8D%E5%8A%A1%E6%A8%A1%E5%9D%97"><span class="toc-number">4.6.1.</span> <span class="toc-text">16.6.1　人事服务模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-6-2-%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB%E6%9C%8D%E5%8A%A1%E6%A8%A1%E5%9D%97"><span class="toc-number">4.6.2.</span> <span class="toc-text">16.6.2　人脸识别服务模块</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-7-%E7%A8%8B%E5%BA%8F%E5%85%A5%E5%8F%A3%E8%AE%BE%E8%AE%A1"><span class="toc-number">4.7.</span> <span class="toc-text">16.7　程序入口设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#16-7-1-%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86"><span class="toc-number">4.7.1.</span> <span class="toc-text">16.7.1　用户权限管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-7-2-%E4%B8%BB%E8%8F%9C%E5%8D%95%E8%AE%BE%E8%AE%A1"><span class="toc-number">4.7.2.</span> <span class="toc-text">16.7.2　主菜单设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-7-3-%E4%BA%BA%E8%84%B8%E6%89%93%E5%8D%A1%E5%8A%9F%E8%83%BD"><span class="toc-number">4.7.3.</span> <span class="toc-text">16.7.3　人脸打卡功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-7-4-%E4%B8%BA%E6%96%B0%E5%91%98%E5%B7%A5%E7%99%BB%E8%AE%B0%E4%BA%BA%E8%84%B8%E7%85%A7%E7%89%87%E6%A0%B7%E6%9C%AC"><span class="toc-number">4.7.4.</span> <span class="toc-text">16.7.4　为新员工登记人脸照片样本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-7-5-%E5%88%A0%E9%99%A4%E5%91%98%E5%B7%A5%E5%85%A8%E9%83%A8%E6%95%B0%E6%8D%AE"><span class="toc-number">4.7.5.</span> <span class="toc-text">16.7.5　删除员工全部数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-7-6-%E6%9F%A5%E8%AF%A2%E5%91%98%E5%B7%A5%E6%89%93%E5%8D%A1%E8%AE%B0%E5%BD%95"><span class="toc-number">4.7.6.</span> <span class="toc-text">16.7.6　查询员工打卡记录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-7-7-%E7%94%9F%E6%88%90%E8%80%83%E5%8B%A4%E6%8A%A5%E8%A1%A8"><span class="toc-number">4.7.7.</span> <span class="toc-text">16.7.7　生成考勤报表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-7-8-%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%8A%E4%B8%8B%E7%8F%AD%E6%97%B6%E9%97%B4"><span class="toc-number">4.7.8.</span> <span class="toc-text">16.7.8　自定义上下班时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-7-9-%E5%90%AF%E5%8A%A8%E7%A8%8B%E5%BA%8F"><span class="toc-number">4.7.9.</span> <span class="toc-text">16.7.9　启动程序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-8-%E5%B0%8F%E7%BB%93"><span class="toc-number">4.8.</span> <span class="toc-text">16.8　小结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2019/05/23/%E8%99%9A%E6%8B%9FDOM/" title="虚拟DOM"><img src="/./img/people.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="虚拟DOM"/></a><div class="content"><a class="title" href="/2019/05/23/%E8%99%9A%E6%8B%9FDOM/" title="虚拟DOM">虚拟DOM</a><time datetime="2019-05-22T22:56:18.000Z" title="Created 2019-05-23 06:56:18">2019-05-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2019/05/22/OpenCV(4)/" title="OpenCv(4)"><img src="/./img/people.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="OpenCv(4)"/></a><div class="content"><a class="title" href="/2019/05/22/OpenCV(4)/" title="OpenCv(4)">OpenCv(4)</a><time datetime="2019-05-22T15:18:22.000Z" title="Created 2019-05-22 23:18:22">2019-05-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2019/05/19/OpenCV(3)/" title="OpenCv(3)"><img src="/./img/girl.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="OpenCv(3)"/></a><div class="content"><a class="title" href="/2019/05/19/OpenCV(3)/" title="OpenCv(3)">OpenCv(3)</a><time datetime="2019-05-19T12:02:56.000Z" title="Created 2019-05-19 20:02:56">2019-05-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2019/05/14/OpenCV(2)/" title="OpenCv(2)"><img src="/./img/girl.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="OpenCv(2)"/></a><div class="content"><a class="title" href="/2019/05/14/OpenCV(2)/" title="OpenCv(2)">OpenCv(2)</a><time datetime="2019-05-14T05:05:28.000Z" title="Created 2019-05-14 13:05:28">2019-05-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2019/05/12/OpenCV(1)/" title="OpenCv(1)"><img src="/./img/people.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="OpenCv(1)"/></a><div class="content"><a class="title" href="/2019/05/12/OpenCV(1)/" title="OpenCv(1)">OpenCv(1)</a><time datetime="2019-05-12T01:59:59.000Z" title="Created 2019-05-12 09:59:59">2019-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By 宇宙建筑家</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","hOffset":50,"width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7}});</script></body></html>

@@ -1,0 +1,848 @@
+<!DOCTYPE html><html lang="zh-Hans" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>OpenCv(1) | Hexo</title><meta name="keywords" content="光与路契合，月与海浪漫"><meta name="author" content="宇宙建筑家"><meta name="copyright" content="宇宙建筑家"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Python OpenCV基础篇第一章 OpenCV简介1.1 OpenCV概述OpenCV是一个开源的计算机视觉库，可以在windows，Linux，MacOS等操作系统上运行，它起源于英特尔性能实验室研究，由俄罗斯的专家负责实现和优化，并以计算机视觉提供通用性接口为目标。 人类由于被赋予了视觉，因此很容易认为“计算机视觉是一种很容易实现的功能”。但是，这种想法是错误的。如图1.7所示，人类的视">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenCv(1)">
+<meta property="og:url" content="http://example.com/2019/05/12/OpenCV(1)/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Python OpenCV基础篇第一章 OpenCV简介1.1 OpenCV概述OpenCV是一个开源的计算机视觉库，可以在windows，Linux，MacOS等操作系统上运行，它起源于英特尔性能实验室研究，由俄罗斯的专家负责实现和优化，并以计算机视觉提供通用性接口为目标。 人类由于被赋予了视觉，因此很容易认为“计算机视觉是一种很容易实现的功能”。但是，这种想法是错误的。如图1.7所示，人类的视">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/img/people.png">
+<meta property="article:published_time" content="2019-05-12T01:59:59.000Z">
+<meta property="article:modified_time" content="2022-05-28T01:39:40.046Z">
+<meta property="article:author" content="宇宙建筑家">
+<meta property="article:tag" content="光与路契合，月与海浪漫">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/people.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2019/05/12/OpenCV(1)/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'OpenCv(1)',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-05-28 09:39:40'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/./img/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/./img/people.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Hexo</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">OpenCv(1)</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2019-05-12T01:59:59.000Z" title="Created 2019-05-12 09:59:59">2019-05-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-05-28T01:39:40.046Z" title="Updated 2022-05-28 09:39:40">2022-05-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">数据分析</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="OpenCv(1)"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Python-OpenCV基础篇"><a href="#Python-OpenCV基础篇" class="headerlink" title="Python OpenCV基础篇"></a>Python OpenCV基础篇</h1><h1 id="第一章-OpenCV简介"><a href="#第一章-OpenCV简介" class="headerlink" title="第一章 OpenCV简介"></a>第一章 OpenCV简介</h1><h2 id="1-1-OpenCV概述"><a href="#1-1-OpenCV概述" class="headerlink" title="1.1 OpenCV概述"></a>1.1 OpenCV概述</h2><p>OpenCV是一个开源的计算机视觉库，可以在windows，Linux，MacOS等操作系统上运行，它起源于英特尔性能实验室研究，由俄罗斯的专家负责实现和优化，并以计算机视觉提供通用性接口为目标。</p>
+<p>人类由于被赋予了视觉，因此很容易认为“计算机视觉是一种很容易实现的功能”。但是，这种想法是错误的。<br>如图1.7所示，人类的视觉能够很轻易地从这幅图像中识别花朵。但是，计算机视觉不会像人类视觉那样能够对图像进行感知和识别，更不会自动控制焦距和光圈，而是把图像解析为按照栅格状排列的数字。以图1.7为例，计算机视觉将其解析为如图1.8所示的按照栅格状排列的数字（图1.8只是图1.7的一部分）。</p>
+<p><img src="/2019/05/12/OpenCV(1)/1.1.jpg" alt="1.1"></p>
+<p>​                                                                                        图1.7　一幅显示花朵的彩色图像</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211117145923429.png" alt="image-20211117145923429"></p>
+<p>​                                                                                          图1.8　计算机视觉中的图1.7<br>这些按照栅格状排列的数字包含大量的噪声，噪声在图像上常表现为引起较强视觉效果的孤立像素点或像素块，使得图像模糊不清。因此，噪声是计算机视觉面临的一个难题。要让图片变得清晰，就需要对抗噪声。<br>计算机视觉使用统计的方法对抗噪声，例如，计算机视觉虽然很难通过某个像素或者这个像素的相邻像素判断这个像素是否在图像主体的边缘上，但是如果对图像某一区域内的像素做统计，那么上述判断就变得简单了，即在指定区域内，图像主体的边缘应该表现为一连串独立的像素，而且这一连串像素的方向应该是一致的。<br>为了有效地解决计算机视觉面临的难题，OpenCV提供了许多模块，这些模块中的方法具有很好的完备性。</p>
+<h3 id="1-1-1-OpenCV包含的模块"><a href="#1-1-1-OpenCV包含的模块" class="headerlink" title="1.1.1　OpenCV包含的模块"></a>1.1.1　OpenCV包含的模块</h3><p>OpenCV是由很多模块组成的，这些模块可以分为很多层，具体如图1.11所示。<br>那么，OpenCV包含的模块有哪些呢？表1.1列举的是OpenCV常用的模块。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118043722625.png" alt="image-20211118043722625"></p>
+<p>​                                                                                        图1.11　OpenCV包含的模块的层级结构</p>
+<p>​                                                                                       表1.1　OpenCV常用的模块及其说明说明</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118043819255.png" alt="image-20211118043819255"></p>
+<p>表1.1中的模块随着OpenCV的版本不断地更新而发生变化，有的可能被取消，有的可能被融合到其他模块中。</p>
+<p>为了快速建立精巧的视觉应用，OpenCV提供了许多模块和方法。开发人员不必过多关注这些模块和方法的具体实现细节，只需关注图像处理本身，就能够很方便地使用它们对图像进行相应的处理。</p>
+<h3 id="1-1-2-OpenCV的发展历程"><a href="#1-1-2-OpenCV的发展历程" class="headerlink" title="1.1.2　OpenCV的发展历程"></a>1.1.2　OpenCV的发展历程</h3><p><img src="/2019/05/12/OpenCV(1)/image-20211118044141267.png" alt="image-20211118044141267"></p>
+<p>​                                                                          图1.12　自2009年OpenCV的发展历程<br>从2009年3月至今，OpenCV的发展历程如图1.12所示。随着OpenCV被越来越多的用户认可并提供越来越多的技术支持，OpenCV的研发团队也加大了研究人员和研究经费的投入，这使得OpenCV的下载量逐年增长。<br>OpenCV的发展不是一帆风顺的。OpenCV在发展历程中，不仅受到了互联网行业泡沫经济的冲击，还受到了管理层和管理方向不断变更的影响，有时甚至没有研究人员和研究经费的投入。但是，随着多核处理器的出现以及计算机视觉的应用越来越广泛，OpenCV的应用价值开始上升。<br>截至目前，OpenCV已经得到了基金会、一些上市公司和私人机构的支持。OpenCV的宗旨是促进商业（利用OpenCV构建商业产品）和研究，因此OpenCV是开源并且免费的。这不仅使得OpenCV拥有着庞大的用户群体，还使得OpenCV在世界各国逐渐流行起来。</p>
+<h3 id="1-1-3-OpenCV的应用"><a href="#1-1-3-OpenCV的应用" class="headerlink" title="1.1.3　OpenCV的应用"></a>1.1.3　OpenCV的应用</h3><p>因为OpenCV是一个开源的计算机视觉库，所以在举例介绍OpenCV的应用之前，先对计算机视觉的应用进行介绍。<br>计算机视觉不仅被广泛地应用到安保行业（见图1.13中的监控摄像头），还被应用到网页端的图像和视频处理以及游戏交互中，甚至在某些现代化工厂里，被应用到产品质检工作上。此外，计算机视觉还被应用到一些高精尖领域，包括无人机领域和航空航天领域等，这些领域使用计算机视觉中的图像拼接技术获取街景图像（见图1.14）或者航空图像（见图1.15）。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118044301194.png" alt="image-20211118044301194"></p>
+<p>​                                                                                             图1.13　监控摄像头</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118044402545.png" alt="image-20211118044402545"></p>
+<p>​                                                                                            图1.14　街景图像</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118044454076.png" alt="image-20211118044454076"></p>
+<p>​                                                                                               图1.15　航空图像<br>OpenCV自发布起便得到广泛应用，其中包括在安保以及工业检测系统，网络产品以及科研工作，医学、卫星和网络地图（例如，医学图像的降噪，街景图像或者航空图像的拼接及其扫描校准等），汽车自动驾驶，相机校正等。此外，OpenCV还被应用到处理声音的频谱图像上，进而实现对声音的识别。</p>
+<h3 id="1-1-4-Python-OpenCV的开发工具"><a href="#1-1-4-Python-OpenCV的开发工具" class="headerlink" title="1.1.4　Python OpenCV的开发工具"></a>1.1.4　Python OpenCV的开发工具</h3><p>Python相比Java、C、C++等编程语言，其优势在于集成度高。虽然Python的执行效率低，但是可以调用大量免费使用的类库。Java、C、C++语言如果要实现一个功能，那么需要先实现其中的基本功能模块。Python直接调用相应的类库就能将这个功能轻松实现。简单地说，Python通过简短的代码就能够实现很强大的功能。<br>此外，Python在OpenCV、Web、爬虫、数据分析等方向都有很好的发展前景。Python OpenCV的优势在于Python能够借助OpenCV库轻轻松松地实现对图像的处理操作。<br>Python OpenCV的开发工具如图1.16所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118044618479.png" alt="image-20211118044618479"></p>
+<p>​                                                                          图1.16　Python OpenCV的开发工具</p>
+<h1 id="第2章-搭建开发环境"><a href="#第2章-搭建开发环境" class="headerlink" title="第2章　搭建开发环境"></a>第2章　搭建开发环境</h1><p>第1章介绍了本书要使用的开发工具，它们分别是Python解释器、OpenCV-Contrib-Python库、Numpy库和集成开发工具PyCharm。使用这些开发工具前，需先对它们进行下载和安装。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118044843794.png" alt="image-20211118044843794"></p>
+<h2 id="2-1-Python的下载和安装"><a href="#2-1-Python的下载和安装" class="headerlink" title="2.1　Python的下载和安装"></a>2.1　Python的下载和安装</h2><p>工欲善其事，必先利其器。为了使用Python OpenCV对图像进行处理，本节介绍Python的下载和安装。Python是跨平台的开发工具，可以在Windows、Linux和MacOS等操作系统上使用。说明<br>本节使用的是64位的Windows 10操作系统。</p>
+<h3 id="2-1-1-下载Python"><a href="#2-1-1-下载Python" class="headerlink" title="2.1.1　下载Python"></a>2.1.1　下载Python</h3><p>在Python的官网中，可以很方便地下载Python的开发工具，具体下载步骤如下。<br>（1）打开浏览器，在浏览器的地址栏中输入Python的官网地址<a target="_blank" rel="noopener" href="https://www.python.org/%EF%BC%8C%E6%8C%89Enter%E9%94%AE%E5%90%8E%EF%BC%8C%E8%BF%9B%E5%85%A5Python%E7%9A%84%E5%AE%98%E7%BD%91%E9%A6%96%E9%A1%B5%EF%BC%9B%E5%B0%86%E9%BC%A0%E6%A0%87%E7%A7%BB%E5%8A%A8%E5%88%B0Downloads%E8%8F%9C%E5%8D%95%E4%B8%8A%EF%BC%8C%E6%98%BE%E7%A4%BA%E5%A6%82%E5%9B%BE2.1%E6%89%80%E7%A4%BA%E7%9A%84%E8%8F%9C%E5%8D%95%E9%A1%B9%E3%80%82%E8%AF%B4%E6%98%8E">https://www.python.org/，按Enter键后，进入Python的官网首页；将鼠标移动到Downloads菜单上，显示如图2.1所示的菜单项。说明</a><br>推荐使用Python 3.8.2及其以上版本。<br>（2）单击图2.1中的Windows菜单项后，将进入详细的下载列表，如图2.2所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118045031864.png" alt="image-20211118045031864"></p>
+<p>​                                                                              图2.1　Downloads菜单中的菜单项</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118045054226.png" alt="image-20211118045054226"></p>
+<p>​                                                                   图2.2　适合Windows系统的Python下载列表说明<br>在如图2.2所示的下载列表中，带有“x86”字样的压缩包，表示该开发工具可以在Windows 32位系统上使用；而带有“x86-64”字样的压缩包，则表示该开发工具可以在Windows 64位系统上使用。另外，标记为“web-based installer”字样的压缩包，表示需要通过联网完成安装；标记为“executable installer”字样的压缩包，表示通过可执行文件（*.exe）方式离线安装；标记为“embeddable zip file”字样的压缩包，表示嵌入式版本，可以集成到其他应用中。<br>（3）在如图2.2所示的下载列表中，列出了各个版本的下载链接，可以根据需要选择相应的版本进行下载。因为本书使用的是64位的Windows 10操作系统，所以选择并单击Windows x86-64 executable installer超链接进行下载。<br>（4）下载完成后，将得到一个名为python-3.8.2-amd64.exe的安装文件。</p>
+<h3 id="2-1-2-安装Python"><a href="#2-1-2-安装Python" class="headerlink" title="2.1.2　安装Python"></a>2.1.2　安装Python</h3><p>安装Python的步骤如下。<br>（1）双击下载完成后得到的安装文件python-3.8.2-amd64.exe，将显示如图2.3所示的安装向导对话框；选中当前对话框中的Add Python 3.8 to PATH复选框，表示自动配置环境变量。<br>（2）单击图2.3中的Customize installation按钮，进行自定义安装；在弹出的如图2.4所示的安装选项对话框中，都采用默认设置。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118045151983.png" alt="image-20211118045151983"></p>
+<p>​                                                                               图2.3　Python安装向导对话框</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118045216258.png" alt="image-20211118045216258"></p>
+<p>​                                                                                        图2.4　安装选项对话框<br>（3）单击图2.4中的Next按钮，弹出如图2.5所示的高级选项对话框。在当前对话框中，除了默认设置外，选中Install for all users复选框（表示当前计算机的所有用户都可以使用）；单击Browse按钮，设置Python的安装路径。注意<br>在设置安装路径时，建议路径中不要使用中文或空格，避免使用过程中出现错误。<br>（4）单击图2.5中的Install按钮后，将显示如图2.6所示的Python安装进度。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118045243028.png" alt="image-20211118045243028"></p>
+<p>​                                                                            图2.5　高级选项对话框</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118045323265.png" alt="image-20211118045323265"></p>
+<p>​                                                                              图2.6　Python安装进度<br>（5）安装完成后，将显示如图2.7所示的对话框，单击Close按钮关闭当前对话框即可。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118045349459.png" alt="image-20211118045349459"></p>
+<p>​                                                                                   图2.7　安装完成对话框</p>
+<h3 id="2-1-3-测试Python是否安装成功"><a href="#2-1-3-测试Python是否安装成功" class="headerlink" title="2.1.3　测试Python是否安装成功"></a>2.1.3　测试Python是否安装成功</h3><p>测试Python是否安装成功的步骤如下。<br>（1）单击开始菜单，直接输入cmd，如图2.8所示。<br>（2）按Enter键后，打开“命令提示符”窗口，如图2.9所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118045430521.png" alt="image-20211118045430521"></p>
+<p>​                                                                                    图2.8　单击开始菜单输入cmd</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118045450877.png" alt="image-20211118045450877"></p>
+<p>​                                                                                   图2.9　“命令提示符”窗口<br>（3）在“命令提示符”窗口中的光标处输入python，按Enter键；如果当前窗口显示如图2.10所示的信息，说明Python安装成功。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118045511638.png" alt="image-20211118045511638"></p>
+<p>​                                                            图2.10　安装成功后输入python显示的信息说明<br>图2.10中的信息是在“命令提示符”窗口中的光标处输入python后显示的。如果读者朋友选择的版本不同，测试时显示的信息会与图2.10中显示的有所差异。当“命令提示符”窗口出现&gt;&gt;&gt;时，说明Python已经安装成功，而且已经进入Python，正在等待用户输入Python命令。</p>
+<h2 id="2-2-Python-OpenCV的下载和安装"><a href="#2-2-Python-OpenCV的下载和安装" class="headerlink" title="2.2　Python OpenCV的下载和安装"></a>2.2　Python OpenCV的下载和安装</h2><p>为了更快速、更简单地下载和安装Python OpenCV，从清华镜像下载和安装OpenCV-Contrib-Python库。在这个库中，除包括OpenCV-Contrib-Python库外，还包括Numpy库。Numpy库是Python语言的一个扩展程序库，支持大量的维度数组与矩阵运算。</p>
+<p>opencv-python 是只包含了主要模块的包，opencv-contrib-python包含了主要模块以及扩展模块，扩展模块主要是包含了一些带专利的收费算法（如shift特征检测）以及一些在测试的新的算法（稳定后会合并到主要模块）。</p>
+<h3 id="2-2-1-下载和安装OpenCV-Contrib-Python库"><a href="#2-2-1-下载和安装OpenCV-Contrib-Python库" class="headerlink" title="2.2.1　下载和安装OpenCV-Contrib-Python库"></a>2.2.1　下载和安装OpenCV-Contrib-Python库</h3><p>从清华镜像下载和安装OpenCV-Contrib-Python库的步骤如下。<br>（1）可以参照图2.8和图2.9，打开“命令提示符”窗口。<br>（2）在“命令提示符”窗口中的光标处输入pip install -i <a target="_blank" rel="noopener" href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/simple</a> opencv-contrib-python，如图2.11所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118045621571.png" alt="image-20211118045621571"></p>
+<p>​                                                                                    图2.11　输入pip命令</p>
+<p>说明</p>
+<p>​			（1）<a target="_blank" rel="noopener" href="https://pypi.tuna.tsinghua.edu.cn/simple%E6%98%AF%E6%B8%85%E5%8D%8E%E5%A4%A7%E5%AD%A6%E6%8F%90%E4%BE%9B%E7%9A%84%E7%94%A8%E4%BA%8E%E4%B8%8B%E8%BD%BD%E5%92%8C%E5%AE%89%E8%A3%85OpenCV-Contrib-Python%E5%BA%93%E7%9A%84%E9%95%9C%E5%83%8F%E5%9C%B0%E5%9D%80%E3%80%82">https://pypi.tuna.tsinghua.edu.cn/simple是清华大学提供的用于下载和安装OpenCV-Contrib-Python库的镜像地址。</a></p>
+<p>​			（2）pip命令是用于查找、下载、安装和卸载Python库的管理工具。如果图2.11中的pip命令得不到如图2.12所示的界面，那么要将pip命令修改为pip install opencv-python。</p>
+<p>（3）按Enter键后，系统将自动从<a target="_blank" rel="noopener" href="https://pypi.tuna.tsinghua.edu.cn/simple%E5%85%88%E4%B8%8B%E8%BD%BDOpenCV-Contrib-Python%E5%BA%93%EF%BC%8C%E5%86%8D%E4%B8%8B%E8%BD%BDNumpy%E5%BA%93%E3%80%82%E5%BE%85OpenCV-Contrib-Python%E5%BA%93%E5%92%8CNumpy%E5%BA%93%E9%83%BD%E4%B8%8B%E8%BD%BD%E5%AE%8C%E6%88%90%E5%90%8E%EF%BC%8C%E7%B3%BB%E7%BB%9F%E5%B0%86%E8%87%AA%E5%8A%A8%E5%AE%89%E8%A3%85Numpy%E5%BA%93%E5%92%8COpenCV-Contrib-Python%E5%BA%93%EF%BC%8C%E5%A6%82%E5%9B%BE2.12%E6%89%80%E7%A4%BA%E3%80%82">https://pypi.tuna.tsinghua.edu.cn/simple先下载OpenCV-Contrib-Python库，再下载Numpy库。待OpenCV-Contrib-Python库和Numpy库都下载完成后，系统将自动安装Numpy库和OpenCV-Contrib-Python库，如图2.12所示。</a></p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118050033294.png" alt="image-20211118050033294"></p>
+<p>​                                                图2.12　安装Numpy库和OpenCV-Contrib-Python库</p>
+<h3 id="2-2-2-测试OpenCV-Contrib-Python库和Numpy库是否安装成功"><a href="#2-2-2-测试OpenCV-Contrib-Python库和Numpy库是否安装成功" class="headerlink" title="2.2.2　测试OpenCV-Contrib-Python库和Numpy库是否安装成功"></a>2.2.2　测试OpenCV-Contrib-Python库和Numpy库是否安装成功</h3><p>测试OpenCV-Contrib-Python库和Numpy库是否安装成功的步骤如下。<br>（1）如图2.13所示，在光标处输入python，按Enter键，进入Python。<br>（2）当“命令提示符”窗口出现&gt;&gt;&gt;时，在光标处输入import cv2，按Enter键。如果“命令提示符”窗口在新的一行出现&gt;&gt;&gt;，说明OpenCV-Contrib-Python库安装成功。<br>（3）在新的一行的&gt;&gt;&gt;后的光标处输入import numpy as np，按Enter键。如果“命令提示符”窗口在新的一行出现&gt;&gt;&gt;，说明Numpy库安装成功。<br>（4）在新的一行的&gt;&gt;&gt;后的光标处输入exit()，按Enter键，退出Python。<br>（5）在“命令提示符”窗口的光标处输入exit或者exit()，按Enter键，退出“命令提示符”窗口。说明<br>exit()用于退出Python，exit或exit()用于退出“命令提示符”窗口。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118050138981.png" alt="image-20211118050138981"></p>
+<p>​                                       图2.13　测试OpenCV-Contrib-Python库和Numpy库是否安装成功</p>
+<h1 id="第3章-图像处理的基本操作"><a href="#第3章-图像处理的基本操作" class="headerlink" title="第3章　图像处理的基本操作"></a>第3章　图像处理的基本操作</h1><p>OpenCV的作用在于让开发人员更容易地通过编码来处理图像。那么，处理图像需要执行哪些操作呢？图像处理的基本操作包含4个方面的内容：读取图像、显示图像、保存图像和获取图像属性。其中，常用的图像属性有3个：shape、size和dtype。本章将依次详解实现图像处理的4个基本操作，并分别阐明常用的3个图像属性各自的含义及其使用方法。</p>
+<h2 id="3-1-读取图像"><a href="#3-1-读取图像" class="headerlink" title="3.1　读取图像"></a>3.1　读取图像</h2><p>要对一幅图像进行处理，首先要做的就是读取这幅图像。那么，如何才能读取这幅图像呢？OpenCV提供了用于读取图像的imread()方法，其语法格式如下：</p>
+<pre><code> image = cv2.imread(filename, flags)
+</code></pre>
+<p>参数说明：　</p>
+<p>image：imread()方法的返回值，返回的是读取到的图像。　</p>
+<p>filename：要读取的图像的完整文件名。例如，要读取当前项目目录下的3.1.jpg，filename的值为”3.1.jpg”（双引号是英文格式的）。　</p>
+<p>flags：读取图像颜色类型的标记。当flags的默认值为1时，表示读取的是彩色图像，此时的flags值可以省略；当flags的值为0时，表示读取的是灰度图像（如果读取的是彩色图像，也将转换为与彩色图像对应的灰度图像）。</p>
+<p>flags对应的全部属性：</p>
+<p><a target="_blank" rel="noopener" href="https://docs.opencv.org/3.4.2/d4/da8/group__imgcodecs.html#ga461f9ac09887e47797a54567df3b8b63">https://docs.opencv.org/3.4.2/d4/da8/group__imgcodecs.html#ga461f9ac09887e47797a54567df3b8b63</a></p>
+<p><img src="/2019/05/12/OpenCV(1)/工作/振涛/课件-郭溪溪/20课时讲义/专高四-机器学习算法与opencv/Day07.assets/image-20211208115112743.png" alt="image-20211208115112743"></p>
+<p>说明</p>
+<p>灰度图像是一种每个像素都是从黑到白，被处理为256个灰度级别的单色图像。256个灰度级别分别用0（纯黑色）～255（纯白色）的数值表示。</p>
+<p>【实例3.1】　读取当前项目目录下的图像。（实例位置：资源包\TM\sl\3\01）<br>如图3.1所示，在PyCharm中的PythonDevelop项目下，有一幅名为3.1.jpg的图像。在ImageTest.py文件中，先使用imread()方法读取3.1.jpg，再使用print()方法打印3.1.jpg，代码如下：</p>
+<pre><code> import cv2
+ # 读取3.1.jpg，等价于image = cv2.imread(&quot;3.1.jpg&quot;，1)
+ image = cv2.imread(&quot;3.1.jpg&quot;)
+ print(image) # 打印3.1.jpg
+</code></pre>
+<p>上述代码打印的部分结果如图3.2所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118050941447.png" alt="image-20211118050941447"></p>
+<p>​                                                                    图3.1　PythonDevelop项目下的3.1.jpg</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118051005696.png" alt="image-20211118051005696"></p>
+<p>​                                                                                 图3.2　打印3.1.jpg说明<br>图3.2输出的数字是3.1.jpg的部分像素值。<br>如果3.1.jpg在D盘的根目录下，应该如何使用imread()方法进行读取呢？<br>只需将实例3.1代码：</p>
+<p>image &#x3D; cv2.imread(“3.1.jpg”)<br>修改为如下代码：</p>
+<pre><code> image = cv2.imread(&quot;D:/3.1.jpg&quot;) # 路径中不能出现中文注意
+</code></pre>
+<p>“D:&#x2F;3.1.jpg”等价于”D:\3.1.jpg”。</p>
+<h2 id="3-2-显示图像"><a href="#3-2-显示图像" class="headerlink" title="3.2　显示图像"></a>3.2　显示图像</h2><p>相比图3.2中密密麻麻的数字，如果能够将这幅图像显示出来，就可以更加直观地看到它。为此，OpenCV提供了imshow()方法、waitKey()方法和destroyAllWindows()方法。<br>（1）imshow()方法用于显示图像，其语法格式如下：</p>
+<pre><code> cv2.imshow(winname, mat)
+</code></pre>
+<p>参数说明：　</p>
+<p>winname：显示图像的窗口名称。　</p>
+<p>mat：要显示的图像。<br>（2）waitKey()方法用于等待用户按下键盘上按键的时间。当用户按下键盘上的任意按键时，将执行waitKey()方法，并且获取waitKey()方法的返回值。其语法格式如下：</p>
+<pre><code> retval = cv2.waitKey(delay)
+</code></pre>
+<p>参数说明：　</p>
+<p>retval：与被按下的按键对应的ASCII码。例如，Esc键的ASCII码是27，当用户按Esc键时，waitKey()方法的返回值是27。如果没有按键被按下，waitKey()方法的返回值是-1。　</p>
+<p>delay：等待用户按下键盘上按键的时间，单位为毫秒（ms）。</p>
+<p>当delay的值为负数、0或者空时，表示无限等待用户按下键盘上按键的时间。</p>
+<p>(4)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cv2.namedWindow(&#x27;窗口名称&#x27;,cv2.WINDOW_NORMAL)#窗口可以缩放</span><br></pre></td></tr></table></figure>
+
+
+
+<p>（3）destroyAllWindows()方法用于销毁所有正在显示图像的窗口，其语法格式如下：</p>
+<pre><code> cv2.destroyAllWindows()【实例3.2】　显示图像。（实例位置：资源包\TM\sl\3\02）
+</code></pre>
+<p>编写一个程序，使用imread()方法、imshow()方法、waitKey()方法和destroyAllWindows()方法，读取并显示PythonDevelop项目下的3.1.jpg，代码如下：</p>
+<pre><code> import cv2
+ image = cv2.imread(&quot;3.1.jpg&quot;)       # 读取3.1.jpg
+ cv2.imshow(&quot;flower&quot;, image)         # 在名为flower的窗口中显示3.1.jpg
+ cv2.waitKey()                       # 按下任何键盘按键后
+ cv2.destroyAllWindows()             # 销毁所有窗口
+</code></pre>
+<p>上述代码的运行结果如图3.3所示。注意<br>（1）显示图像的窗口名称不能使用中文（例如，把实例3.2第4行代码中的”flower”修改为”鲜花”），否则会出现如图3.4所示的乱码。<br>（2）为了能够正常显示图像，要在cv2.imshow()之后紧跟着cv2.waitKey()。</p>
+<p><img src="/2019/05/12/OpenCV(1)/1.1.jpg" alt="1.1"></p>
+<p>​                                                                                               图3.3　显示3.1.jpg</p>
+<p>依据imread()方法的语法，如果把实例3.2第3行代码：</p>
+<pre><code> image = cv2.imread(&quot;3.1.jpg&quot;)
+</code></pre>
+<p>修改为如下代码：</p>
+<pre><code> image = cv2.imread(&quot;3.1.jpg&quot;, 0)
+</code></pre>
+<p>如果想设置窗口显示图像的时间为5s，又该如何编写代码呢？<br>只需将实例3.2第5行代码：</p>
+<pre><code> cv2.waitKey()
+</code></pre>
+<p>修改为如下代码：</p>
+<pre><code> cv2.waitKey(5000) # 1000ms为1s，5000ms为5s
+</code></pre>
+<h2 id="3-3-保存图像"><a href="#3-3-保存图像" class="headerlink" title="3.3　保存图像"></a>3.3　保存图像</h2><p>在实际开发的过程中，对一幅图像进行一系列的处理后，需要保存处理图像后的结果。为此，OpenCV提供了用于按照指定路径保存图像的imwrite()方法，其语法格式如下：</p>
+<pre><code> cv2.imwrite(filename, img)
+</code></pre>
+<p>参数说明：　</p>
+<p>filename：保存图像时所用的完整路径。　</p>
+<p>img：要保存的图像。</p>
+<p>【实例3.3】　保存图像。（实例位置：资源包\TM\sl\3\03）<br>编写一个程序，把PythonDevelop项目下的3.1.jpg保存为E盘根目录下的、Pictures文件夹中的1.jpg，代码如下：</p>
+<pre><code> import cv2
+ image = cv2.imread(&quot;3.1.jpg&quot;) # 读取3.1.jpg
+ # 把3.1.jpg保存为E盘根目录下的、Pictures文件夹中的1.jpg
+ cv2.imwrite(&quot;E:/Pictures/1.jpg&quot;, image)
+</code></pre>
+<p>运行上述代码前，确认E盘根目录下有Pictures文件夹。如果没有，在E盘根目录下新建一个空的Pictures文件夹。<br>运行上述代码后，打开E盘根目录下的Pictures文件夹，即可看到1.jpg。</p>
+<h2 id="3-4-获取图像属性"><a href="#3-4-获取图像属性" class="headerlink" title="3.4　获取图像属性"></a>3.4　获取图像属性</h2><p>在处理图像的过程中，经常需要获取图像的大小、类型等图像属性。为此，OpenCV提供了shape、size和dtype 3个常用属性，具体含义分别如下。</p>
+<p>shape：如果是彩色图像，那么获取的是一个包含图像的水平像素、垂直像素和通道数的数组，即（垂直像素，水平像素，通道数）；如果是灰度图像，那么获取的是一个包含图像的水平像素和垂直像素的数组，即（垂直像素，水平像素）。说明<br>垂直像素指的是垂直方向上的像素，水平像素指的是水平方向上的像素。有关像素、灰度图像和通道的内容，将在本书的第4章和第5章进行讲解。　</p>
+<p>size：获取的是图像包含的像素个数，其值为“水平像素×垂直像素×通道数”。灰度图像的通道数为1。　</p>
+<p>dtype：获取的是图像的数据类型。</p>
+<p>【实例3.4】　分别获取彩色图像和灰度图像的属性。（实例位置：资源包\TM\sl\3\04）<br>编写一个程序，先获取PythonDevelop项目下的3.1.jpg的属性，再获取由3.1.jpg转换得到的灰度图像的属性。代码如下：<br>上述代码的运行结果如图3.7所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118052254399.png" alt="image-20211118052254399"></p>
+<p>​                                                         图3.7　获取并打印彩色图像的属性说明</p>
+<p>图3.7中（292, 219, 3）的含义是3.1.jpg的垂直像素是292，水平像素是219，通道数是3。（292,219）的含义是由3.1.jpg转换得到的灰度图像的垂直像素是292，水平像素是219，通道数是1。</p>
+<h2 id="3-5-图像编解码"><a href="#3-5-图像编解码" class="headerlink" title="3.5 图像编解码"></a>3.5 图像编解码</h2><p>cv2.imdecode()函数从指定的内存缓存中读取数据，并把数据转换(解码)成图像格式;主要用于从网络传输数据中恢复出图像。<br>cv2.imencode()函数是将图片格式转换(编码)成流数据，赋值到内存缓存中;主要用于图像数据格式的压缩，方便网络传输。</p>
+<p><img src="/2019/05/12/OpenCV(1)/Users\123\Desktop\专高四\OpenCV(1)\image-20211208115449554.png" alt="image-20211208115449554"></p>
+<p>imdecode()使用</p>
+<p>从网络读取图像数据并转换成图片格式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">import numpy as np</span><br><span class="line">import urllib</span><br><span class="line">import cv2</span><br><span class="line"></span><br><span class="line">url = &#x27;http://www.pyimagesearch.com/wp-content/uploads/2015/01/google_logo.png&#x27;</span><br><span class="line">resp = urllib.urlopen(url)</span><br><span class="line">image = np.asarray(bytearray(resp.read()), dtype=&quot;uint8&quot;)</span><br><span class="line">image = cv2.imdecode(image, cv2.IMREAD_COLOR)</span><br><span class="line">cv2.imshow(&#x27;URL2Image&#x27;,image)</span><br><span class="line">cv2.waitKey()</span><br></pre></td></tr></table></figure>
+
+
+
+<p>imenconde()使用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">import numpy as np</span><br><span class="line">import urllib</span><br><span class="line">import cv2</span><br><span class="line"></span><br><span class="line">img = cv2.imread(&#x27;0122.jpg&#x27;)</span><br><span class="line"># &#x27;.jpg&#x27;表示把当前图片img按照jpg格式编码，按照不同格式编码的结果不一样</span><br><span class="line">img_encode = cv2.imencode(&#x27;.jpg&#x27;, img)[1]</span><br><span class="line"># imgg = cv2.imencode(&#x27;.png&#x27;, img)</span><br><span class="line"></span><br><span class="line">data_encode = np.array(img_encode)</span><br><span class="line">str_encode = data_encode.tostring()</span><br><span class="line"></span><br><span class="line"># 缓存数据保存到本地</span><br><span class="line">with open(&#x27;img_encode.txt&#x27;, &#x27;w&#x27;) as f:</span><br><span class="line">    f.write(str_encode)</span><br><span class="line">    f.flush</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="3-5-图像编解码-1"><a href="#3-5-图像编解码-1" class="headerlink" title="3.5 图像编解码"></a>3.5 图像编解码</h2><p>cv2.imdecode()函数从指定的内存缓存中读取数据，并把数据转换(解码)成图像格式;主要用于从网络传输数据中恢复出图像。<br>cv2.imencode()函数是将图片格式转换(编码)成流数据，赋值到内存缓存中;主要用于图像数据格式的压缩，方便网络传输。</p>
+<p><img src="/2019/05/12/OpenCV(1)/工作\振涛\课件-郭溪溪\20课时讲义\专高四-机器学习算法与opencv\Day07.assets\image-20211208115449554.png" alt="image-20211208115449554"></p>
+<p>imdecode()使用</p>
+<p>从网络读取图像数据并转换成图片格式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">import numpy as np</span><br><span class="line">import urllib</span><br><span class="line">import cv2</span><br><span class="line"></span><br><span class="line">url = &#x27;http://www.pyimagesearch.com/wp-content/uploads/2015/01/google_logo.png&#x27;</span><br><span class="line">resp = urllib.urlopen(url)</span><br><span class="line">image = np.asarray(bytearray(resp.read()), dtype=&quot;uint8&quot;)</span><br><span class="line">image = cv2.imdecode(image, cv2.IMREAD_COLOR)</span><br><span class="line">cv2.imshow(&#x27;URL2Image&#x27;,image)</span><br><span class="line">cv2.waitKey()</span><br></pre></td></tr></table></figure>
+
+
+
+<p>imenconde()使用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">import numpy as np</span><br><span class="line">import urllib</span><br><span class="line">import cv2</span><br><span class="line"></span><br><span class="line">img = cv2.imread(&#x27;0122.jpg&#x27;)</span><br><span class="line"># &#x27;.jpg&#x27;表示把当前图片img按照jpg格式编码，按照不同格式编码的结果不一样</span><br><span class="line">img_encode = cv2.imencode(&#x27;.jpg&#x27;, img)[1]</span><br><span class="line"># imgg = cv2.imencode(&#x27;.png&#x27;, img)</span><br><span class="line"></span><br><span class="line">data_encode = np.array(img_encode)</span><br><span class="line">str_encode = data_encode.tostring()</span><br><span class="line"></span><br><span class="line"># 缓存数据保存到本地</span><br><span class="line">with open(&#x27;img_encode.txt&#x27;, &#x27;w&#x27;) as f:</span><br><span class="line">    f.write(str_encode)</span><br><span class="line">    f.flush</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="第4章-像素的操作"><a href="#第4章-像素的操作" class="headerlink" title="第4章　像素的操作"></a>第4章　像素的操作</h1><p>像素是图像的最小单位。每一幅图像都是由M行N列的像素组成的，其中每一个像素都存储一个像素值。以灰度图像为例，计算机通常把灰度图像的像素处理为256个灰度级别，256个灰度级别分别使用区间[0, 255]中的整数数值表示。其中，“0”表示纯黑色；“255”表示纯白色。本章将围绕着像素展开，介绍如何使用NumPy模块操作像素。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118052436390.png" alt="image-20211118052436390"></p>
+<h2 id="4-1-像素"><a href="#4-1-像素" class="headerlink" title="4.1　像素"></a>4.1　像素</h2><p>像素是构成数字图像的基本单位。现有一幅显示花朵的图像（见图4.1），在花瓣边缘提取一个小圆圈圈住的区域，将得到一幅如图4.2所示的图像。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118052508759.png" alt="image-20211118052508759"></p>
+<p>​                                                                              图4.1　一幅显示花朵的图像</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118052529006.png" alt="image-20211118052529006"></p>
+<p>​                                                                    图4.2　提取并放大图4.1中被圆圈圈住的区域</p>
+<p>不难发现，图4.2所示的图像是由许多小方块组成的，通常把一个小方块称作一个像素。因此，一个像素是具有一定面积的一个块，而不是一个点。需要注意的是，像素的形状是不固定的，大多数情况下，像素被认为是方形的，但有时也可能是圆形的或者是其他形状的。</p>
+<h3 id="4-1-1-确定像素的位置"><a href="#4-1-1-确定像素的位置" class="headerlink" title="4.1.1　确定像素的位置"></a>4.1.1　确定像素的位置</h3><p>以图4.1为例，在访问图4.1中的某个像素前，要确定这个像素在图4.1中的位置。那么，这个位置应该如何确定呢？<br>首先，确定图4.1在水平方向和垂直方向的像素个数。图4.1的水平方向和垂直方向如图4.3所示。<br>在Windows 10系统的“画图”工具中打开图4.1，得到如图4.4所示的界面。在这个界面中，就会得到图4.1在水平方向的像素是219个，在垂直方向的像素是292个。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118052630446.png" alt="image-20211118052630446"></p>
+<p>​                                                                                       图4.3　图4.1的水平方向和垂直方向</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118052657074.png" alt="image-20211118052657074"></p>
+<p>​                                                                                                       图4.4　用“画图”工具打开图4.1</p>
+<p>然后，根据图4.1在水平方向和垂直方向的像素，绘制如图4.5所示的坐标系。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118052750858.png" alt="image-20211118052750858"></p>
+<p>​                                                                  图4.5　根据图4.1在水平方向和垂直方向的像素绘制坐标系</p>
+<p>说明<br>图4.1在水平方向的像素是219个，与其对应的是x轴的取值范围，即0～218；同理，在垂直方向的像素是292个，与其对应的是y轴的取值范围，即0～291。<br>这样，就能够通过坐标来确定某个像素在图4.1中的位置。在OpenCV中，正确表示图4.1中某个像素坐标的方式是(y, x)。例如，在如图4.5所示的坐标系中，图4.1右下角的像素坐标是(291, 218)。</p>
+<p>【实例4.1】　表示图4.1中的指定像素。（实例位置：资源包\TM\sl\4\01）<br>编写一段代码，先读取D盘根目录下的4.1.jpg，再表示坐标(291, 218)上的像素，具体如下：</p>
+<pre><code> import cv2
+ image = cv2.imread(&quot;D:/4.1.jpg&quot;)  # 读取D盘根目录下的4.1.jpg
+ px = image[291, 218]              # 坐标(291, 218)上的像素
+</code></pre>
+<h3 id="4-1-2-获取像素的BGR值"><a href="#4-1-2-获取像素的BGR值" class="headerlink" title="4.1.2　获取像素的BGR值"></a>4.1.2　获取像素的BGR值</h3><p>在4.1.1节中，已经得到了坐标(291, 218)上的像素px。现使用print()方法打印这个像素，将得到这个像素的BGR值，代码如下：</p>
+<pre><code> print(&quot;坐标(291, 218)上的像素的BGR值是&quot;, px)
+</code></pre>
+<p>上述代码的运行结果如下：</p>
+<pre><code> 坐标(291, 218)上的像素的BGR值是 [36 42 49]
+</code></pre>
+<p>不难发现，坐标(291, 218)上的像素的BGR值是由36、42和49这3个数值组成的。在讲解这3个数值各自代表的含义之前，先了解什么是三基色。<br>如图4.6所示，人眼能够感知红色、绿色和蓝色3种不同的颜色，因此把这3种颜色称作三基色。如果将这3种颜色以不同的比例进行混合，人眼就会感知到丰富多彩的颜色。<br>那么，对于计算机而言，是如何对这些颜色进行编码的呢？答案就是利用色彩空间。也就是说，色彩空间是计算机对颜色进行编码的模型。</p>
+<p>以较为常用的RGB色彩空间为例，在RGB色彩空间中，存在3个通道，即R通道、G通道和B通道。其中，R通道指的是红色通道；G通道指的是绿色通道；B通道指的是蓝色通道；并且每个色彩通道都在区间[0, 255]内取值。<br>这样，计算机将利用3个色彩通道的不同组合来表示不同的颜色。如图4.7所示，通过截图工具，能够得到坐标(291, 218)上的像素值为(49, 42, 36)。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118053134133.png" alt="image-20211118053134133"></p>
+<p>​                                                                                              图4.6　三基色</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118053208551.png" alt="image-20211118053208551"></p>
+<p>​                                                                           图4.7　坐标(291, 218)上的像素的像素值<br>使用print()方法打印图4.1中坐标(291, 218)上的像素px，其结果是(36, 42, 49)。而图4.7中这个坐标上的像素值为(49, 42, 36)。这时会发现这两个结果中的数值是相同的，但顺序是相反的，这是为什么呢？<br>原因是在RGB色彩空间中，彩色图像的通道顺序是R（49）→G（42）→B（36）；但是，在OpenCV中，RGB色彩空间被BGR色彩空间取代，使得彩色图像的通道顺序变为了B（36）→G（42）→R（49）。<br>从上文能够知晓，在BGR色彩空间的图像中，每3个数值表示一个像素，这3个数值分别表示蓝色、绿色和红色3种颜色分量，把每一种颜色分量所在的区域称作通道。那么，OpenCV是如何获取指定位置上的像素的B通道、G通道和R通道的值呢？<br>有如下两种方式（以坐标(291, 218)上的像素为例）。<br>（1）同时获取坐标(291, 218)上的像素的B通道、G通道和R通道的值，代码如下：</p>
+<pre><code> import cv2
+ image = cv2.imread(&quot;D:/4.1.jpg&quot;)
+ px = image[291, 218]              # 坐标(291, 218)上的像素
+ print(px)
+</code></pre>
+<p>上述代码的运行结果如下：</p>
+<pre><code> [36 42 49]
+</code></pre>
+<p>（2）分别获取坐标(291, 218)上的像素的B通道、G通道和R通道的值，代码如下：</p>
+<pre><code> import cv2
+ image = cv2.imread(&quot;D:/4.1.jpg&quot;)
+ blue = image[291, 218, 0]         # 坐标(291, 218)上的像素的B通道的值
+ green = image[291, 218, 1]        # 坐标(291, 218)上的像素的G通道的值
+ red = image[291, 218, 2]          # 坐标(291, 218)上的像素的R通道的值
+ print(blue, green, red)
+</code></pre>
+<p>上述代码的运行结果如下：</p>
+<pre><code> 36 42 49说明
+</code></pre>
+<p>（1）image[291, 218, 0]中的最后一个数值0表示B通道。<br>（2）image[291, 218, 1]中的最后一个数值1表示G通道。<br>（3）image[291, 218, 2]中的最后一个数值2表示R通道。</p>
+<h3 id="4-1-3-修改像素的BGR值"><a href="#4-1-3-修改像素的BGR值" class="headerlink" title="4.1.3　修改像素的BGR值"></a>4.1.3　修改像素的BGR值</h3><p>在4.1.2节中，已经获取了图4.5中坐标(291, 218)上的像素px的BGR值，即(36, 42, 49)。现要将像素px的BGR值由原来的(36, 42, 49)修改为(255, 255, 255)，代码如下：</p>
+<pre><code> import cv2
+ image = cv2.imread(&quot;D:/4.1.jpg&quot;)
+ px = image[291, 218]
+ print(&quot;坐标(291, 218)上的像素的初始BGR值是&quot;, px)
+ px = [255, 255, 255]                # 把坐标(291, 218)上的像素的值修改为[255, 255, 255]
+ print(&quot;坐标(291, 218)上的像素修改后的BGR值是&quot;, px)
+</code></pre>
+<p>上述代码的运行结果如下：</p>
+<pre><code> 坐标(291, 218)上的像素的初始BGR值是 [36 42 49]
+ 坐标(291, 218)上的像素修改后的BGR值是 [255, 255, 255]说明
+</code></pre>
+<p>对于BGR色彩空间的图像，当每个像素的B、G、R的3个数值相等时，就可以得到灰度图像。其中，B&#x3D;G&#x3D;R&#x3D;0为纯黑色，B&#x3D;G&#x3D;R&#x3D;255为纯白色。</p>
+<p>【实例4.2】　修改图4.1中指定区域内的所有像素。<br>编写一个程序，将图4.1中的坐标(241, 168)、(241, 218)、(291, 168)和(291, 218)的4个点所围成的区域内的所有像素都修改为纯白色，代码如下：</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118053821109.png" alt="image-20211118053821109">上述代码的运行结果如图4.8所示（左侧的图片是原图)。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118054002437.png" alt="image-20211118054002437"></p>
+<p>​                                                           图4.8　把指定区域内的所有像素都修改为白色</p>
+<h2 id="4-2-使用NumPy模块操作像素"><a href="#4-2-使用NumPy模块操作像素" class="headerlink" title="4.2　使用NumPy模块操作像素"></a>4.2　使用NumPy模块操作像素</h2><p>图像在OpenCV中以二维或三维数组表示，数组中的每一个值就是图像的像素值。善于操作数组的NumPy模块就成了OpenCV的依赖包。OpenCV中很多操作都要依赖NumPy模块，例如创建纯色图像、创建掩模和创建卷积核等。本节将简单介绍NumPy模块的常用操作方法，并演示如何利用NumPy模块创建图像。</p>
+<h3 id="4-2-1-NumPy概述"><a href="#4-2-1-NumPy概述" class="headerlink" title="4.2.1　NumPy概述"></a>4.2.1　NumPy概述</h3><p>NumPy（见图4.9）更像是一个魔方（见图4.10），它是Python数组计算、矩阵运算和科学计算的核心库，NumPy来源于Numerical和Python两个单词。NumPy提供了一个高性能的数组对象，以及可以轻松创建一维数组、二维数组和多维数组等大量实用方法，帮助开发者轻松地进行数组计算，从而广泛地应用于数据分析、机器学习、图像处理和计算机图形学、数学任务等领域中。由于NumPy是由C语言实现的，所以其运算速度非常快。具体功能如下。　</p>
+<p>有一个强大的N维数组对象ndarray。　</p>
+<p>广播功能方法。　</p>
+<p>线性代数、傅里叶变换、随机数生成、图形操作等功能。　</p>
+<p>整合C&#x2F;C++&#x2F;Fortran代码的工具。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118054232190.png" alt="image-20211118054232190"></p>
+<p>​                                                                                              图4.9　NumPy</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118054256857.png" alt="image-20211118054256857"></p>
+<p>​                                                                                                      图4.10　魔方</p>
+<h3 id="4-2-2-数组的类型"><a href="#4-2-2-数组的类型" class="headerlink" title="4.2.2　数组的类型"></a>4.2.2　数组的类型</h3><p>在对数组进行基本操作前，首先了解一下NumPy的数据类型。NumPy比Python增加了更多种类的数值类型，如表4.1所示，为了区别于Python数据类型，NumPy中的bool、int、float、complex等数据类型名称末尾都加了短下画线“_”。</p>
+<p>表4.1　NumPy数据类型</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118054337712.png" alt="image-20211118054337712"></p>
+<p>每一种数据类型都有相应的数据转换方法。举例如下：</p>
+<pre><code> np.int8(3.141)
+ np.float64(8)
+ np.float(True)
+</code></pre>
+<p>结果为：</p>
+<p>​     3<br>​     8.0<br>​     1.0</p>
+<h3 id="4-2-3-创建数组"><a href="#4-2-3-创建数组" class="headerlink" title="4.2.3　创建数组"></a>4.2.3　创建数组</h3><p>NumPy提供了很多创建数组的方法，下面分别介绍。</p>
+<p>1．最常规的array()方法<br>NumPy创建简单的数组主要使用array()方法，通过传递列表、元组来创建NumPy数组，其中的元素可以是任何对象，语法如下：</p>
+<pre><code> numpy.array(object, dtype, copy, order, subok, ndmin)
+</code></pre>
+<p>参数说明：　</p>
+<p>object：任何具有数组接口方法的对象。　</p>
+<p>dtype：数据类型。　</p>
+<p>copy：可选参数，布尔型，默认值为True，则object对象被复制；否则，只有当__array__返回副本，object参数为嵌套序列，或者需要副本满足数据类型和顺序要求时，才会生成副本。　</p>
+<p>order：元素在内存中的出现顺序，其值为K、A、C、F。如果object参数不是数组，则新创建的数组将按行排列（C），如果值为F，则按列排列；如果object参数是一个数组，则以下顺序成立：C（按行）、F（按列）、A（原顺序）、K（元素在内存中的出现顺序）。</p>
+<p>说明<br>当order是’ A ‘，object是一个既不是’ C ‘也不是’ F ‘ order的数组，并且由于dtype的更改而强制执行了一个副本时，那么结果的顺序不一定是’ C ‘。这可能是一个bug。</p>
+<p>subok：布尔型。如果值为True，则传递子类，否则返回的数组将强制为基类数组（默认值）。　</p>
+<p>ndmin：指定生成数组的最小维数。<br>下面通过一个实例演示如何创建一维数组和二维数组。</p>
+<p>【实例4.3】　创建一维和二维数组。（实例位置：资源包\TM\sl\4\03）<br>分别创建一维数组和二维数组，效果如图4.11所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118054551232.png" alt="image-20211118054551232"></p>
+<p>​                                                                                                  图4.11　简单数组<br>具体代码如下：</p>
+<pre><code> import numpy as np            #导入numpy模块
+ n1 = np.array([1,2,3])        #创建一个简单的一维数组
+ n2 = np.array([0.1,0.2,0.3])  #创建一个包含小数的一维数组
+ n3 = np.array([[1,2],[3,4]])  #创建一个简单的二维数组
+</code></pre>
+<p>【实例4.4】　创建浮点类型数组。（实例位置：资源包\TM\sl\4\04）</p>
+<p>NumPy支持比Python更多种类的数据类型，通过dtype参数可以指定数组的数据类型，具体代码如下：<br>运行结果如下：</p>
+<pre><code>  [1. 2. 3.]
+ float64
+ &lt;class &#39;numpy.float64&#39;&gt;
+</code></pre>
+<p> 【实例4.5】　创建三维数组。（实例位置：资源包\</p>
+<p>创建三维数组是将ndmin参数值设为3即可得到三维数组，具体代码如下：</p>
+<pre><code> import numpy as np
+ nd1 = [1, 2, 3]
+ nd2 = np.array(nd1, ndmin=3)  #三维数组
+ print(nd2)
+</code></pre>
+<p>运行结果如下：</p>
+<pre><code> [[[1 2 3]]]
+</code></pre>
+<p>由此结果可以看出一维数组被转换成了三维数组。2．创建指定维度和数据类型未初始化的数组<br>创建指定维度和数据类型未初始化的数组主要使用empty()方法，数组元素因为未被初始化会自动取随机值。如果要改变数组类型，可以使用dtype参数，如将数组类型设为整型，dtype&#x3D;int。【实例4.6】　创建2行3列的未初始化数组。（实例位置：资源包\TM\sl\4\06）<br>创建2行3列的未初始化数组，具体代码如下：</p>
+<pre><code> import numpy as np
+ n = np.empty([2, 3])
+ print(n)
+</code></pre>
+<p>运行结果如下：</p>
+<pre><code> [[2.22519099e-307 2.33647355e-307 1.23077925e-312]
+  [2.33645827e-307 2.67023123e-307 1.69117157e-306]]
+</code></pre>
+<p>5．创建随机数组<br>randint()方法用于生成一定范围内的随机整数数组，左闭右开区间（[low,high)），语法如下：</p>
+<pre><code> numpy.random.randint(low,high,size)
+</code></pre>
+<p>参数说明：　</p>
+<p>low：随机数最小取值范围。　</p>
+<p>high：可选参数，随机数最大取值范围。若high为空，取值范围为（0，low）。若high不为空，则high必须大于low。　</p>
+<p>size：可选参数，数组维数。</p>
+<p>【实例4.9】　创建随机数组。（实例位置：资源包\TM\sl\4\09）<br>生成一定范围内的随机数组，具体代码如下：</p>
+<pre><code> import numpy as np
+ n1 = np.random.randint(1, 3, 10)
+ print(&#39;随机生成10个1～3且不包括3的整数：&#39;)
+ print(n1)
+ n2 = np.random.randint(5, 10)
+ print(&#39;size数组大小为空随机返回一个整数：&#39;)
+ print(n2)
+ n3 = np.random.randint(5, size=(2, 5))
+ print(&#39;随机生成5以内二维数组：&#39;)
+ print(n3)
+</code></pre>
+<p>运行结果如下：</p>
+<pre><code> 随机生成10个1～3且不包括3的整数：
+ [1 1 2 1 1 1 2 2 2 1]
+ size数组大小为空随机返回一个整数：
+ 7
+</code></pre>
+<h3 id="4-2-4-操作数组"><a href="#4-2-4-操作数组" class="headerlink" title="4.2.4　操作数组"></a>4.2.4　操作数组</h3><p>不用编写循环即可对数据执行批量运算，这就是NumPy数组运算的特点，NumPy称为矢量化。大小相等的数组之间的任何算术运算都可以用NumPy实现。本节主要介绍如何复制数组和简单的数组运算。</p>
+<p>1．加法运算<br>例如，加法运算是数组中对应位置的元素相加（即每行对应相加），如图4.12所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118054822245.png" alt="image-20211118054822245"></p>
+<p>​                                                                                 图4.12　数组加法运算示意图</p>
+<p>【实例4.10】　对数组做加法运算。（实例位置：资源包\TM\sl\4\10）<br>使用NumPy创建2个数组，并让2个数据进行加法运算，具体代码如下：</p>
+<pre><code> import numpy as np
+ n1 = np.array([1, 2])  # 创建一维数组
+ n2 = np.array([3, 4])
+ print(n1 + n2)         # 加法运算
+</code></pre>
+<p>运行结果如下：</p>
+<pre><code> [4 6]2．减法和乘除法运算
+</code></pre>
+<p>除了加法运算，还可以实现数组的减法、乘法和除法，如图4.13所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118054909470.png" alt="image-20211118054909470"></p>
+<p>​                                                                                图4.13　数组减法和乘除法运算示意图</p>
+<p>【实例4.11】　对数组做减法、乘法和除法运算。（实例位置：资源包\TM\sl\4\11）<br>使用NumPy创建2个数组，并让2个数组进行减法、乘法和除法运算，具体代码如下：</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118054951102.png" alt="image-20211118054951102">运行结果如下：</p>
+<pre><code> [-2 -2]
+ [3 8]
+ [0.33333333 0.5  ]3．幂运算
+</code></pre>
+<p>幂是数组中对应位置元素的幂运算，使用“**”运算符进行运算，效果如图4.14所示。从图中得出：数组n1的元素1和数组n2的元素3，通过幂运算得到的是1的3次幂；数组n1的元素2和数组n2的元素4，通过幂运算得到的是2的4次幂。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118055007461.png" alt="image-20211118055007461"></p>
+<p>​                                                                                  图4.14　数组幂运算示意图</p>
+<p>【实例4.12】　两个数组做幂运算。（实例位置：资源包\TM\sl\4\12）<br>使用NumPy创建2个数组，并让2个数组做幂运算，具体代码如下：</p>
+<pre><code> import numpy as np
+ n1 = np.array([1, 2])  # 创建一维数组
+ n2 = np.array([3, 4])
+ print(n1 ** n2)        # 幂运算
+</code></pre>
+<p>运行结果如下：</p>
+<pre><code> [ 1 16]4．比较运算
+</code></pre>
+<p>NumPy创建的数组可以使用逻辑运算符进行比较运算，运算的结果是布尔值数组，数组中的布尔值为相比较的数组在相同位置元素的比较结果。</p>
+<p>【实例4.13】　使用逻辑运算符比较数组。（实例位置：资源包\TM\sl\4\13）<br>使用NumPy创建2个数组，分别使用“&gt;&#x3D;”“&#x3D;&#x3D;”“&lt;&#x3D;”和“!&#x3D;”运算符比较2个数组，具体代码如下：</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118055106239.png" alt="image-20211118055106239"></p>
+<p>运行结果如下：</p>
+<pre><code> [False False]
+ [False False]
+ [ True  True]
+ [ True  True]5．复制数组
+</code></pre>
+<p>NumPy提供的array()方法可以使用如下语法复制数据：</p>
+<pre><code> n2 = np.array(n1, copy=True)
+</code></pre>
+<p>但开发过程中更常用的是copy()方法，其语法如下：</p>
+<pre><code> n2 = n1.copy()
+</code></pre>
+<p>这两种方法都可以按照原数组的结构、类型、元素值创建出一个副本，修改副本中的元素不会影响到原数组。</p>
+<p>【实例4.14】　复制数据，比较复制的结果与原数组是否相同。（实例位置：资源包\TM\sl\4\14）<br>使用copy()方法复制数组，比较2个数组是否相同。修改副本数组中的元素值后，再查看2个数组是否相同，具体代码如下：</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118055207036.png" alt="image-20211118055207036"></p>
+<p>运行结果如下：</p>
+<pre><code> [ True  True]
+ [1 2]
+ [9 2]
+ [False  True]
+</code></pre>
+<h3 id="4-2-5-数组的索引和切片"><a href="#4-2-5-数组的索引和切片" class="headerlink" title="4.2.5　数组的索引和切片"></a>4.2.5　数组的索引和切片</h3><p>NumPy数组元素是通过数组的索引和切片来访问和修改的，因此索引和切片是NumPy中最重要、最常用的操作。</p>
+<p>1．索引<br>所谓数组的索引，即用于标记数组中对应元素的唯一数字，从0开始，即数组中的第一个元素的索引是0，依次类推。NumPy数组可以使用标准Python语法x[obj]的语法对数组进行索引，其中x是数组，obj是选择方式。</p>
+<p>【实例4.15】　查找一维数组索引为0的元素。（实例位置：资源包\TM\sl\4\15）<br>查找数组n1索引为0的元素，具体代码如下：</p>
+<pre><code> import numpy as np
+ n1=np.array([1,2,3])  #创建一维数组
+ print(n1[0])
+</code></pre>
+<p>运行结果如下：</p>
+<p>1</p>
+<p>2．切片式索引<br>数组的切片可以理解为对数组的分割，按照等分或者不等分，将一个数组切割为多个片段，与Python中列表的切片操作一样。NumPy中用冒号分隔切片参数来进行切片操作，语法如下：</p>
+<pre><code> [start:stop:step]
+</code></pre>
+<p>参数说明：　</p>
+<p>start：起始索引，若不写任何值，则表示从0开始的全部索引。　</p>
+<p>stop：终止索引，若不写任何值，则表示直到末尾的全部索引。　</p>
+<p>step：步长。<br>例如，对数组n1进行一系列切片式索引操作的示意图如图4.15所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118055256979.png" alt="image-20211118055256979"></p>
+<p>​                                                                                图4.15　切片式索引示意图</p>
+<p>【实例4.16】　获取数组中某范围内的元素。（实例位置：资源包\TM\sl\4\16）<br>按照图4.15所示的切片式索引操作获取数据中某范围的元素，具体代码如下：<br>运行结果如下：</p>
+<pre><code> 1
+ 2
+ [1 2]
+ [2 3]
+</code></pre>
+<p>[1 2]<br>切片式索引操作需要注意以下几点。<br>（1）索引是左闭右开区间，如上述代码中的n1[0:2]，只能取到索引从0～1的元素，而取不到索引为2的元素。<br>（2）当没有start参数时，代表从索引0开始取数，如上述代码中的n1[:2]。<br>（3）start、stop和step 3个参数都可以是负数，代表反向索引。以step参数为例，如图4.16所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118055352405.png" alt="image-20211118055352405"></p>
+<p>​                                                                                      图4.16　反向索引示意图</p>
+<p>【实例4.17】　使用不同的切片式索引操作获取数组中的元素。（实例位置：资源包\TM\sl\4\17）<br>分别演示start、stop、step 3种索引的切片场景，具体代码如下：</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118055419253.png" alt="image-20211118055419253"></p>
+<p>运行结果如下：</p>
+<pre><code> [0 1 2 3 4 5 6 7 8 9]
+ [0 1 2]
+ [3 4 5]
+ [6 7 8 9]
+ [0 1 2 3 4 5 6 7 8 9]
+ [0 1 2 3 4 5 6 7 8 9]
+ [0 2 4 6 8]
+ [1 6]
+ [2 8]
+ [9 8 7 6 5 4 3 2 1 0]
+ [9 8]
+ [7 6]
+ [5 4 3 2 1 0]
+</code></pre>
+<p>3．二维数组索引<br>二维数组索引可以使用array[n,m]的方式，以逗号分隔，表示第n个数组的第m个元素。<br>例如，创建一个3行4列二维数组，实现简单的索引操作，效果如图4.17所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118055517374.png" alt="image-20211118055517374"></p>
+<p>图4.17　二维数组索引示意图</p>
+<p>【实例4.18】　用3种方式获取二维数组中的元素。（实例位置：资源包\TM\sl\4\18）<br>分别获取二维数组中索引为1的元素、第2行第3列的元素、索引为-1的元素，具体代码如下：</p>
+<pre><code> import numpy as np
+ #创建3行4列的二维数组
+ n=np.array([[0,1,2,3],[4,5,6,7],[8,9,10,11]])
+ print(n[1])
+ print(n[1,2])
+ print(n[-1])
+</code></pre>
+<p>运行结果如下：</p>
+<pre><code> [4 5 6 7]
+ 6
+ [ 8  9 10 11]
+</code></pre>
+<p>上述代码中，n[1]表示第2个数组，n[1,2]表示第2个数组第3个元素，它等同于n[1][2]，表示数组n中第2行第3列的值，即n[1][2]先索引第一个维度得到一个数组，然后在此基础上再索引。</p>
+<p>4．二维数组切片式索引<br>二维数组也支持切片式索引操作，如图4.18所示就是获取二维数组中某一块区域的索引。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118055605378.png" alt="image-20211118055605378"></p>
+<p>​                                                              图4.18　二维数组切片式索引示意图</p>
+<p>【实例4.19】　对二维数组进行切片式索引操作。（实例位置：资源包\TM\sl\4\19）<br>参照图4.18创建二维数组，对该数组进行切片式索引操作，具体代码如下：</p>
+<pre><code> import numpy as np
+ # 创建3行3列的二维数组
+ n = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+ print(n[:2, 1:])
+ print(n[1, :2])
+ print(n[:2, 2])
+ print(n[:, :1])
+</code></pre>
+<p>运行结果如下：</p>
+<pre><code> [[2 3]
+  [5 6]]
+ [4 5]
+ [3 6]
+ [[1]
+  [4]
+  [7]]注意
+</code></pre>
+<p>数组索引、像素行列和像素坐标的关系如下。</p>
+<p>数组行索引&#x3D;像素所在行数-1&#x3D;像素纵坐标。<br>数组列索引&#x3D;像素所在列数-1&#x3D;像素横坐标。</p>
+<h3 id="4-2-6-创建图像"><a href="#4-2-6-创建图像" class="headerlink" title="4.2.6　创建图像"></a>4.2.6　创建图像</h3><p>在OpenCV中，黑白图像实际上就是一个二维数组，彩色图像是一个三维数组。数组中每个元素就是图像对应位置的像素值。因此修改图像像素的操作实际上就是修改数组的操作。本节将介绍几个在OpenCV中常用的操作。</p>
+<p>1．创建黑白图像<br>在黑白图像中，像素值为0表示纯黑，像素值为255表示纯白。</p>
+<p>【实例4.20】　创建纯黑图像。（实例位置：资源包\TM\sl\4\20）<br>创建一个100行、200列（即宽200、高100）的数组，数组元素格式为无符号8位整数，用0填充整个数组，将该数组当作图像显示出来，具体代码如下：</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118055711105.png" alt="image-20211118055711105"></p>
+<p>运行结果如图4.19所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118055728732.png" alt="image-20211118055728732"></p>
+<p>​                                                                                  图4.19　宽200、高100的纯黑图像<br>创建纯白图像有两种方式：第一种是先纯黑图像，然后将图像中所有的像素值改为255；第二种使用NumPy提供的ones()方法创建一个像素值均为1的数组，然后让数组乘以255。</p>
+<p>【实例4.21】　创建纯白图像。（实例位置：资源包\TM\sl\4\21）<br>创建一个100行、200列（即宽200、高100）的数组，数组元素格式为无符号8位整数，用1填充整个数组，然后让数组乘以255，最后将该数组当作图像显示出来，具体代码如下：</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118055838709.png" alt="image-20211118055838709"></p>
+<p>运行结果如图4.20所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118055855352.png" alt="image-20211118055855352"></p>
+<p>​                                                                         图4.20　宽200、高100的纯白图像<br>通过切片式索引操作可以修改图像中指定区域内的像素，从而达到修改图像内容的效果，下面通过实例来展示。</p>
+<p>【实例4.22】　在黑图像内部绘制白色矩形。（实例位置：资源包\TM\sl\4\22）<br>先绘制纯黑图像作为背景，然后使用切片式索引操作将图像中横坐标为50<del>100、纵坐标为25</del>75的矩形区域颜色改为纯白色，具体代码如下：</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118055923134.png" alt="image-20211118055923134"></p>
+<p>运行结果如图4.21所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118055940627.png" alt="image-20211118055940627"></p>
+<p>​                                                                              图4.21　在黑色图像内部绘制白色矩形<br>若将切片式索引操作引入循环内，则可以绘制带有规律的几何图像，下面通过实例来展示。</p>
+<p>【实例4.23】　创建黑白相间的图像。（实例位置：资源包\TM\sl\4\23）<br>先绘制纯黑图像作为背景，然后在循环中使用切片式索引操作绘制黑白间隔图像，具体代码如下：</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118060035152.png" alt="image-20211118060035152"></p>
+<p>运行结果如图4.22所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118060052474.png" alt="image-20211118060052474"></p>
+<p>​                                                                                 图4.22　黑白相间的图像</p>
+<p>2．创建彩色图像<br>以上实例演示的都是用二维数组表示的黑白图像，而当显示生活中丰富多彩的颜色需要引入光谱三基色的概念时，无法用二维数组表示，而要用到三维数组。OpenCV中彩色图像默认为BGR格式，彩色图像的第三个索引表示的就是蓝、绿、红3种颜色的分量。</p>
+<p>【实例4.24】　创建彩色图像。（实例位置：资源包\TM\sl\4\24）<br>创建彩色图像数组时要将数组创建成三维数组，元素类型仍然为无符号8位整数。创建好表示纯黑图像的三维数组后，复制出3个副本，3个副本分别修改最后一个索引代表的元素值。根据BGR的顺序，索引0表示蓝色分量，索引1表示绿色分量，索引2表示红色分量，让3个副本分别显示纯蓝、纯绿和纯红，具体代码如下：</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118060117266.png" alt="image-20211118060117266"></p>
+<p>运行结果如图4.23～图4.25所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118060249284.png" alt="image-20211118060249284"></p>
+<pre><code>         图4.23　纯蓝图像图                 4.24　纯绿图像图                                 4.25　纯红图像
+</code></pre>
+<p>3．创建随机图像<br>随机图像是指图像中每一个像素值都是随机生成的，因为像素之间不会组成有效的视觉信息，所以这样的图像看上去就像杂乱无章的沙子。虽然随机图像没有任何视觉信息，但对于图像处理技术仍然很重要，毫无规律的像素数组被称为干扰图像的噪声，可以当作图像加密的密钥。<br>下面介绍如何利用NumPy创建随机图像。</p>
+<p>【实例4.25】　创建随机像素的雪花点图像。（实例位置：资源包\TM\sl\4\25）<br>使用NumPy提供的random.randint()方法就可以创建随机数组，将随机值的取值范围设定在0～256（即像素值范围），元素类型设定为无符号8位整数，具体代码如下：</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118060413130.png" alt="image-20211118060413130"></p>
+<p>运行结果如图4.26所示。<br>这个实例演示的是随机的黑白图像，random.randint()方法在指定数组行列后默认创建的是二维数组，如果创建的是三维数组，就可以获得随机彩色图像。创建三维随机数组仅需修改size参数中的维度参数，修改后的代码如下：</p>
+<pre><code> img = np.random.randint(256, size=(height, width, 3), dtype=np.uint8)
+</code></pre>
+<p>再次运行后随机彩色图像效果如图4.27所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118060503763.png" alt="image-20211118060503763"></p>
+<p>图4.26　随机黑白图像</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118060553084.png" alt="image-20211118060553084"></p>
+<p>图4.27　随机彩色图像</p>
+<h3 id="4-2-7-拼接图像"><a href="#4-2-7-拼接图像" class="headerlink" title="4.2.7　拼接图像"></a>4.2.7　拼接图像</h3><p>NumPy提供了两种拼接数组的方法，分别是hstack()方法和vstack()方法。这两种拼接方法同样可用于拼接图像，下面分别介绍。1．水平拼接数组<br>hstack()方法可以对数组进行水平拼接（或叫横向拼接），其语法如下：</p>
+<pre><code> array = numpy.hstack(tup)
+</code></pre>
+<p>参数说明：　</p>
+<p>tup：要拼接的数组元组。<br>返回值说明：　</p>
+<p>array：将参数元组中的数组水平拼接后生成的新数组。<br>hstack()方法可以拼接多个数组，拼接效果如图4.28所示。被拼接的数组必须在每一个维度都具有相同的长度，也就是数组“形状相同”，例如2行2列的数组只能拼接2行2列的数组，否则会出现错误。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118060627002.png" alt="image-20211118060627002"></p>
+<p>图4.28　水平拼接2个数组<br>例如，创建3个一维数组，将这3个数组进行水平拼接，代码如下：</p>
+<p>import numpy as np<br>     a &#x3D; np.array([1, 2, 3])<br>     b &#x3D; np.array([4, 5, 6])<br>     c &#x3D; np.array([7, 8, 9])<br>     result &#x3D; np.hstack((a, b, c))<br>     print(result)<br>运行结果如下：</p>
+<pre><code> [1 2 3 4 5 6 7 8 9]
+</code></pre>
+<p>从这个结果可以看出，一维数组进行水平拼接之后，会生成一个较长的、包含所有元素的新一维数组。2．垂直拼接数组<br>vstack()方法可以对数组进行垂直拼接（或叫纵向拼接），其语法如下：</p>
+<pre><code> array = numpy.vstack(tup)
+</code></pre>
+<p>参数说明：　</p>
+<p>tup：要拼接的数组元组。<br>返回值说明：　</p>
+<p>array：将参数元组中的数组垂直拼接后生成的新数组。<br>vstack()方法可以拼接多个数组，拼接效果如图4.29所示。被拼接的数组的格式要求与hstack()方法相同。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118060727628.png" alt="image-20211118060727628"></p>
+<p>图4.29　垂直拼接2个数组<br>例如，创建3个一维数组，将这3个数组进行垂直拼接，代码如下：</p>
+<pre><code> import numpy as np
+ a = np.array([1, 2, 3])
+ b = np.array([4, 5, 6])
+ c = np.array([7, 8, 9])
+ result = np.vstack((a, b, c))
+ print(result)
+</code></pre>
+<p>运行结果如下：</p>
+<pre><code> [[1 2 3]
+  [4 5 6]
+  [7 8 9]]
+</code></pre>
+<p>从这个结果可以看出，一维数组进行垂直拼接后，生成一个三维数组，每一个被拼接的一维数组都形成三维数组中的一行。</p>
+<p>3．在图像处理中的应用</p>
+<p>在OpenCV中，图像就是一个二维或三维的像素数组，这些数组同样可以被NumPy拼接，下面通过一个实例展示图像拼接的效果。</p>
+<p>【实例4.26】　按照水平和垂直2种方式拼接2幅图像。（实例位置：资源包\TM\sl\4\26）<br>读取一幅图像，让该图像拼接自身图像，分别用水平和垂直2种方式拼接，具体代码如下：</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118060817990.png" alt="image-20211118060817990"></p>
+<p>运行效果如图4.30和图4.31所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118061009035.png" alt="image-20211118061009035"></p>
+<p>​                                                            图4.30　水平拼接的效果</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118061107773.png" alt="image-20211118061107773"></p>
+<p>​                                                                                  图4.31　垂直拼接的效果</p>
+<h2 id="4-3-小结"><a href="#4-3-小结" class="headerlink" title="4.3　小结"></a>4.3　小结</h2><p>本章详细讲解了像素和使用NumPy模块操作像素两个方面的内容。</p>
+<p>注意掌握以下几个内容：一是在表示图像某一个像素的坐标的时候，正确的表示方式是（垂直像素，水平像素）；二是在OpenCV中，彩色图像的通道顺序是B→G→R；三是重点掌握且灵活运用NumPy模块实现图像的创建和图像的拼接。</p>
+<h1 id="第5章-色彩空间与通道"><a href="#第5章-色彩空间与通道" class="headerlink" title="第5章　色彩空间与通道"></a>第5章　色彩空间与通道</h1><p>色彩是人类的眼睛对于不同频率的光线的不同感受，不同频率的光线既是客观存在的又是人类主观感知的。为了表示这些不同频率的光线的色彩，人类建立了多种色彩模型，把这些色彩模型称作色彩空间。OpenCV中的BGR色彩空间有3个通道，即表示蓝色的B通道、表示绿色的G通道和表示红色的R通道。本章将具体讲解色彩空间和通道，以及二者之间的紧密联系。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118061230858.png" alt="image-20211118061230858"></p>
+<h2 id="5-1-色彩空间"><a href="#5-1-色彩空间" class="headerlink" title="5.1　色彩空间"></a>5.1　色彩空间</h2><p>虽然Photoshop把一幅彩色图像的色彩空间默认为RGB色彩空间，但是OpenCV把一幅彩色图像的色彩空间默认为BGR色彩空间，这是因为OpenCV拆分一幅彩色图像的通道后，默认的通道顺序是B→G→R。熟悉了BGR色彩空间后，本节将结合如图5.1所示的图像（本书彩色图像见资源包），介绍另外两个比较常见的色彩空间：GRAY色彩空间和HSV色彩空间。</p>
+<p><img src="/2019/05/12/OpenCV(1)/1.1-16371871184721.jpg" alt="1.1"></p>
+<p>​                                                                                                图5.1　一幅彩色图像</p>
+<h3 id="5-1-1-GRAY色彩空间"><a href="#5-1-1-GRAY色彩空间" class="headerlink" title="5.1.1　GRAY色彩空间"></a>5.1.1　GRAY色彩空间</h3><p>1．什么是GRAY色彩空间<br>GRAY色彩空间通常指的是灰度图像，灰度图像是一种每个像素都是从黑到白，被处理为256个灰度级别的单色图像。这256个灰度级别分别用区间[0, 255]中的数值表示。其中，“0”表示纯黑色，“255”表示纯白色，0～255的数值表示</p>
+<p>不同亮度（即色彩的深浅程度）的深灰色或者浅灰色。因此，一幅灰度图像也能够展现丰富的细节信息，如图5.2所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118061419144.png" alt="image-20211118061419144"></p>
+<p>​                                                   图5.2　一幅灰度图像</p>
+<p>2．从BGR色彩空间转换到GRAY色彩空间<br>读者朋友很容易就会发现，图5.1和图5.2是同一幅图像。只不过，图5.1是彩色图像，而图5.2是灰度图像。OpenCV能够将同一幅图像从一个色彩空间转换到另一个色彩空间。例如，图5.1从BGR色彩空间转换到图5.2所示的GRAY色彩空间。<br>那么，OpenCV是如何实现从BGR色彩空间转换到GRAY色彩空间的呢？答案就是OpenCV中用于转换图像色彩空间的cvtColor()方法，其语法格式如下：</p>
+<pre><code> dst = cv2.cvtColor(src, code)
+</code></pre>
+<p>参数说明：　</p>
+<p>dst：转换后的图像。　</p>
+<p>src：转换前的初始图像。　</p>
+<p>code：色彩空间转换码。</p>
+<p>说明<br>当图像从BGR色彩空间转换到GRAY色彩空间时，常用的色彩空间转换码是cv2.COLOR_BGR2GRAY。</p>
+<p>【实例5.1】　从BGR色彩空间转换到GRAY色彩空间。（实例位置：资源包\TM\sl\5\01）<br>编写一个程序，将图5.1从BGR色彩空间转换到GRAY色彩空间，代码如下：</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118061511239.png" alt="image-20211118061511239"></p>
+<p>上述代码的运行结果如图5.3所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118061629219.png" alt="image-20211118061629219"></p>
+<p>​                                                      图5.3从BGR色彩空间转换到GRAY色彩空间</p>
+<p>说明<br>虽然色彩空间类型转换是双向的，而且OpenCV也提供了cv2.COLOR_GRAY2BGR（从GRAY色彩空间转换到BGR色彩空间）和cv2.COLOR_ BGR2GRAY（从BGR色彩空间转换到GRAY色彩空间）2个色彩空间转换码，但是灰度图像是无法转换成彩色图像的。这是因为在彩色图像转换成灰度图像的过程中，丢失了颜色比例（即红色、绿色和蓝色之间的混合比例）。这些比例一旦丢失，就再也找不回来了。</p>
+<h3 id="5-1-2-HSV色彩空间"><a href="#5-1-2-HSV色彩空间" class="headerlink" title="5.1.2　HSV色彩空间"></a>5.1.2　HSV色彩空间</h3><p>1．什么是HSV色彩空间<br>BGR色彩空间是基于三基色而言的，三基色指的是红色、绿色和蓝色。而HSV色彩空间则是基于色调、饱和度和亮度而言的。<br>其中，色调（H）是指光的颜色，例如，彩虹中的赤、橙、黄、绿、青、蓝、紫分别表示不同的色调，如图5.4所示。在OpenCV中，色调在区间[0, 180]内取值。例如，代表红色、黄色、绿色和蓝色的色调值分别为0、30、60和120。<br>饱和度（S）是指色彩的深浅。在OpenCV中，饱和度在区间[0, 255]内取值。当饱和度为0时，图像将变为灰度图像。例如，图5.1是用手机拍摄的原图像，图5.5是把图5.1的饱和度调为0时的效果。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118061921187.png" alt="image-20211118061921187"></p>
+<p>​                                                                                        图5.4　彩虹中的色调</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118061951173.png" alt="image-20211118061951173"></p>
+<p>​                                                                          图5.5　图5.1的饱和度调为0时的效果<br>如图5.6所示，亮度（V）是指光的明暗。与饱和度相同，在OpenCV中，亮度在区间[0, 255]内取值。亮度值越大，图像越亮；当亮度值为0时，图像呈纯黑色。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118062031261.png" alt="image-20211118062031261"></p>
+<p>​                                                                                                 图5.6　光的明暗</p>
+<p>2．从BGR色彩空间转换到HSV色彩空间<br>OpenCV提供的cvtColor()方法不仅能将图像从BGR色彩空间转换到GRAY色彩空间，还能将图像从BGR色彩空间转换到HSV色彩空间。当图像在BGR色彩空间和HSV色彩空间之间转换时，常用的色彩空间转换码是cv2.COLOR_BGR2HSV和cv2.COLOR_HSV2BGR。</p>
+<p>【实例5.2】　从BGR色彩空间转换到HSV色彩空间。（实例位置：资源包\TM\sl\5\02）<br>编写一个程序，将图5.1从BGR色彩空间转换到HSV色彩空间，代码如下：</p>
+<pre><code> import cv2
+ image = cv2.imread(&quot;D:/5.1.jpg&quot;)
+ cv2.imshow(&quot;5.1&quot;, image)                 # 显示图5.1
+ # 将图5.1从BGR色彩空间转换到HSV色彩空间
+ hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+ cv2.imshow(&quot;HSV&quot;, hsv_image)             # 用HSV色彩空间显示的图像
+ cv2.waitKey()
+ cv2.destroyAllWindows()
+</code></pre>
+<p>上述代码的运行结果如图5.7所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118062234401.png" alt="image-20211118062234401"></p>
+<p>图5.7　把图5.1从BGR色彩空间转换到HSV色彩空间</p>
+<h2 id="5-2-通道"><a href="#5-2-通道" class="headerlink" title="5.2　通道"></a>5.2　通道</h2><p>在BGR色彩空间中，图像的通道由B通道、G通道和R通道构成。本节将介绍如何使用OpenCV提供的方法拆分和合并通道。</p>
+<h3 id="5-2-1-拆分通道"><a href="#5-2-1-拆分通道" class="headerlink" title="5.2.1　拆分通道"></a>5.2.1　拆分通道</h3><p>为了拆分图像中的通道，OpenCV提供了split()方法。</p>
+<p>1．拆分一幅BGR图像中的通道<br>当使用split()方法拆分一幅BGR图像中的通道时，split()方法的语法如下：</p>
+<pre><code> b, g, r = cv2.split(bgr_image)
+</code></pre>
+<p>参数说明：　</p>
+<p>b：B通道图像。　</p>
+<p>g：G通道图像。</p>
+<p>r：R通道图像。　</p>
+<p>bgr_image：一幅BGR图像。</p>
+<p>【实例5.3】　拆分一幅BGR图像中的通道。（实例位置：资源包\TM\sl\5\03）<br>编写一个程序，先拆分图5.1中的通道，再显示拆分后的通道图像，代码如下：</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118062257967.png" alt="image-20211118062257967"></p>
+<p>运行上述代码后，得到如图5.8所示的4个窗口。其中，图5.8（a）是原图像（见图5.1），图5.8（b）是图5.1中的B通道图像，图5.8（c）是图5.1中的G通道图像，图5.8（d）是图5.1中的R通道图像。</p>
+<p>图5.8　拆分BGR图像中通道的效果</p>
+<p>R通道是红色通道，G通道是绿色通道，B通道是蓝色通道。但是图5.9中的B通道图像、G通道图像和R通道图像是3幅不同亮度的灰度图像，这是为什么呢？<br>原因是当程序执行到cv2.imshow(“B”, b)时，原图像B、G、R这3个通道的值都会被修改为B通道图像的值，即(b, b, b)。同理，当程序执行到cv2.imshow(“G”, g)和cv2.imshow(“R”, r)时，原图像R、G、B这3个通道的值将依次被修改为G通道图像的值(g, g, g)和R通道图像的值(r, r, r)。对于BGR图像，只要B、G、R这3个通道的值都相同，就可以得到灰度图像。</p>
+<p>2．拆分一幅HSV图像中的通道<br>当使用split()方法拆分一幅HSV图像中的通道时，split()方法的语法如下：</p>
+<pre><code> h, s, v = cv2.split(hsv_image)
+</code></pre>
+<p>参数说明：　</p>
+<p>h：H通道图像。　</p>
+<p>s：S通道图像。　</p>
+<p>v：V通道图像。　</p>
+<p>hsv_image：一幅HSV图像。</p>
+<p>【实例5.4】　拆分一幅HSV图像中的通道。（实例位置：资源包\TM\sl\5\04）<br>编写一个程序，首先将图5.1从BGR色彩空间转换到HSV色彩空间，然后拆分得到的HSV图像中的通道，最后显示拆分后的通道图像，代码如下：</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118062529046.png" alt="image-20211118062529046"></p>
+<p>运行上述代码后，得到如图5.9所示的4个窗口。其中，图5.9（a）是原图像（见图5.1），图5.9（b）是图5.1中的H通道图像，图5.9（c）是图5.1中的S通道图像，图5.9（d）是图5.1中的V通道图像。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118062558943.png" alt="image-20211118062558943"></p>
+<p>​                                                                    图5.9　拆分HSV图像中通道的效果</p>
+<h3 id="5-2-2-合并通道"><a href="#5-2-2-合并通道" class="headerlink" title="5.2.2　合并通道"></a>5.2.2　合并通道</h3><p>合并通道是拆分通道的逆过程。以图5.1为例，虽然拆分通道后，会得到3幅不同亮度的灰度图像；但是将这3幅不同亮度的灰度图像合并后，又重新得到图5.1。下面将使用OpenCV中用于合并通道的merge()方法，验证一下上述说法。</p>
+<p>1．合并B通道图像、G通道图像和R通道图像<br>当使用merge()方法按B→G→R的顺序合并通道时，merge()方法的语法如下：</p>
+<pre><code> bgr = cv2.merge([b, g, r])
+</code></pre>
+<p>参数说明：　</p>
+<p>bgr：按B→G→R的顺序合并通道后得到的图像。</p>
+<p>b：B通道图像。</p>
+<p>g：G通道图像。　</p>
+<p>r：R通道图像。</p>
+<p>【实例5.5】　合并B通道图像、G通道图像和R通道图像。（实例位置：资源包\TM\sl\5\05）<br>编写一个程序，按B→G→R的顺序对图5.1执行先拆分通道，再合并通道，代码如下：</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118062834827.png" alt="image-20211118062834827"></p>
+<p>上述代码的运行结果如图5.10所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118062855098.png" alt="image-20211118062855098"></p>
+<p>​                                                                       图5.10　按B→G→R的顺序合并通道后的图像</p>
+<p>2．合并H通道图像、S通道图像和V通道图像<br>当使用merge()方法合并H通道图像、S通道图像和V通道图像时，merge()方法的语法如下：</p>
+<pre><code> hsv = cv2.merge([h, s, v])
+</code></pre>
+<p>参数说明：　</p>
+<p>hsv：合并H通道图像、S通道图像和V通道图像后得到的图像。　</p>
+<p>h：H通道图像。　</p>
+<p>s：S通道图像。　</p>
+<p>v：V通道图像。</p>
+<p>【实例5.6】　合并H通道图像、S通道图像和V通道图像。（实例位置：资源包\TM\sl\5\06）<br>编写一个程序，首先将图5.1从BGR色彩空间转换到HSV色彩空间，然后拆分得到的HSV图像中的通道，接着合并拆分后的通道图像，最后将合并通道后的图像从HSV色彩空间转换到BGR色彩空间，代码如下：</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118062943783.png" alt="image-20211118062943783"></p>
+<p>上述代码的运行结果如图5.11所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118063132901.png" alt="image-20211118063132901"></p>
+<p>​                                                         图5.11　合并H通道、S通道和V通道图像后的图像</p>
+<p>说明<br>实例5.5和实例5.6分别对BGR色彩空间和HSV色彩空间的图5.1执行先拆分通道，再合并通道的操作，执行操作后的结果图像均与图5.1保持一致，印证了“以图5.1为例，虽然拆分通道后，得到3幅不同亮度的灰度图像，但是将这3幅不同亮度的灰度图像合并后，又重新得到图5.1”这一说法的正确性。</p>
+<h3 id="5-2-3-综合运用拆分通道和合并通道"><a href="#5-2-3-综合运用拆分通道和合并通道" class="headerlink" title="5.2.3　综合运用拆分通道和合并通道"></a>5.2.3　综合运用拆分通道和合并通道</h3><p>在HSV色彩空间内，如果保持其中两个通道的值不变，调整第3个通道的值，会得到相应的艺术效果。</p>
+<p>【实例5.7】　只把H通道的值调整为180。（实例位置：资源包\TM\sl\5\07）<br>编写一个程序，首先将图5.1从BGR色彩空间转换到HSV色彩空间；然后拆分HSV图像中的通道；接着让S通道和V通道的值保持不变，把H通道的值调整为180；再接着合并拆分后的通道图像，把这个图像从HSV色彩空间转换到BGR色彩空间；最后显示得到的BGR图像。代码如下：</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118063157781.png" alt="image-20211118063157781"></p>
+<p>上述代码的运行结果如图5.12所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118063242770.png" alt="image-20211118063242770"></p>
+<p>​                                                 图5.12　原图像把H通道的值调整为180的效果<br>如果让H通道和S通道的值保持不变，把V通道的值调整为255，会得到什么样的效果呢？把实例5.7第8行代码：</p>
+<pre><code> h[:, :] = 180 # 将H通道的值调整为180
+</code></pre>
+<p>修改为如下代码：</p>
+<pre><code> v[:, :] = 255 # 将V通道的值调整为255
+</code></pre>
+<p>上述代码的运行结果如图5.13所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118063302849.png" alt="image-20211118063302849"></p>
+<p>​                                                     图5.13　原图像把V通道的值调整为255的效果<br>如果让H通道和V通道的值保持不变，把S通道的值调整为255，又会得到什么样的效果呢？把实例5.7第8行代码：</p>
+<pre><code> h[:, :] = 180 # 将H通道的值调整为180
+</code></pre>
+<p>修改为如下代码：</p>
+<pre><code> s[:, :] = 255 # 将S通道的值调整为255
+</code></pre>
+<p>上述代码的运行结果如图5.14所示。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118063503250.png" alt="image-20211118063503250"></p>
+<p>图5.14　原图像把S通道的值调整为255的效果</p>
+<h3 id="5-2-4-alpha通道"><a href="#5-2-4-alpha通道" class="headerlink" title="5.2.4　alpha通道"></a>5.2.4　alpha通道</h3><p>BGR色彩空间包含了3个通道，即B通道、G通道和R通道。OpenCV在BGR色彩空间的基础上，又增加了一个用于设置图像透明度的A通道，即alpha通道。这样，形成一个由B通道、G通道、R通道和A通道4个通道构成的色彩空间，即BGRA色彩空间。在BGRA色彩空间中，alpha通道在区间[0, 255]内取值；其中，0表示透明，255表示不透明。</p>
+<p>【实例5.8】　调整A通道的值。（实例位置：资源包\TM\sl\5\08）<br>编写一个程序，首先将图5.1从BGR色彩空间转换到BGRA色彩空间；然后拆分BGRA图像中的通道；接着把BGRA图像的透明度调整为172后，合并拆分后的通道图像；再接着把BGRA图像的透明度调整为0后，合并拆分后的通道图像；最后分别显示BGRA图像、透明度为172的BGRA图像和透明度为0的BGRA图像，代码如下：</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118063529768.png" alt="image-20211118063529768"></p>
+<p>运行上述代码后，得到如图5.15所示的3个窗口。其中，图5.15（a）是BGRA图像（见图5.1），图5.15（b）是把BGRA图像的透明度调整为172后的图像，图5.15（c）是把BGRA图像的透明度调整为0后的图像。</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118063625877.png" alt="image-20211118063625877"></p>
+<p>​                                                                              图5.15　调整A通道的值后的效果<br>虽然在代码中已经调整了BGRA图像中A通道的值，但是显示图像的效果是一样的。为了显示3幅图像的不同效果，需要使用imwrite()方法将3幅图像保存在D盘根目录下，代码如下：</p>
+<p><img src="/2019/05/12/OpenCV(1)/image-20211118063708689.png" alt="image-20211118063708689"></p>
+<p>运行上述代码后，在D盘根目录下，依次双击打开bgra_image.png、bgra_172.png和bgra_0.png，3幅图像的显示效果如图5.16～图5.18所示。<br><img src="/2019/05/12/OpenCV(1)/image-20211118063742930.png" alt="image-20211118063742930"><br>PNG图像是一种典型的4通道（即B通道、G通道、R通道和A通道)图像，因此被保存的3幅图像的格式均为.png。</p>
+<h2 id="5-3-小结"><a href="#5-3-小结" class="headerlink" title="5.3　小结"></a>5.3　小结</h2><p>当使用cvtColor()方法转换色彩空间时，虽然彩色图像能够转换为灰度图像，但是灰度图像不能转换为彩色图像。对于HSV色彩空间，如果保持其中两个通道的值不变，调整第3个通道的值，会得到相应的艺术效果。为了能够显示艺术效果，要把合并通道后的图像从HSV色彩空间转换到BGR色彩空间。当使用alpha通道设置图像的透明度时，为了能够直观地看到图像的透明效果，需先保存已经设置透明度的图像。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="http://example.com">宇宙建筑家</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://example.com/2019/05/12/OpenCV(1)/">http://example.com/2019/05/12/OpenCV(1)/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/./img/people.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/gh/overtrue/share.js@master/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2019/05/14/OpenCV(2)/"><img class="prev-cover" src="/./img/girl.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">OpenCv(2)</div></div></a></div><div class="next-post pull-right"><a href="/2019/05/05/scikit-learn%E5%88%9D%E7%BA%A7/"><img class="next-cover" src="/./img/people.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">scikit-learn</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/./img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">宇宙建筑家</div><div class="author-info__description">今夜无雪无晴无悲喜</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/withu0519" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:xxxxxx@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Python-OpenCV%E5%9F%BA%E7%A1%80%E7%AF%87"><span class="toc-number">1.</span> <span class="toc-text">Python OpenCV基础篇</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0-OpenCV%E7%AE%80%E4%BB%8B"><span class="toc-number">2.</span> <span class="toc-text">第一章 OpenCV简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-OpenCV%E6%A6%82%E8%BF%B0"><span class="toc-number">2.1.</span> <span class="toc-text">1.1 OpenCV概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-1-OpenCV%E5%8C%85%E5%90%AB%E7%9A%84%E6%A8%A1%E5%9D%97"><span class="toc-number">2.1.1.</span> <span class="toc-text">1.1.1　OpenCV包含的模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-2-OpenCV%E7%9A%84%E5%8F%91%E5%B1%95%E5%8E%86%E7%A8%8B"><span class="toc-number">2.1.2.</span> <span class="toc-text">1.1.2　OpenCV的发展历程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-3-OpenCV%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-number">2.1.3.</span> <span class="toc-text">1.1.3　OpenCV的应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-4-Python-OpenCV%E7%9A%84%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7"><span class="toc-number">2.1.4.</span> <span class="toc-text">1.1.4　Python OpenCV的开发工具</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC2%E7%AB%A0-%E6%90%AD%E5%BB%BA%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"><span class="toc-number">3.</span> <span class="toc-text">第2章　搭建开发环境</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-Python%E7%9A%84%E4%B8%8B%E8%BD%BD%E5%92%8C%E5%AE%89%E8%A3%85"><span class="toc-number">3.1.</span> <span class="toc-text">2.1　Python的下载和安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-1-%E4%B8%8B%E8%BD%BDPython"><span class="toc-number">3.1.1.</span> <span class="toc-text">2.1.1　下载Python</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-2-%E5%AE%89%E8%A3%85Python"><span class="toc-number">3.1.2.</span> <span class="toc-text">2.1.2　安装Python</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-3-%E6%B5%8B%E8%AF%95Python%E6%98%AF%E5%90%A6%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F"><span class="toc-number">3.1.3.</span> <span class="toc-text">2.1.3　测试Python是否安装成功</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-Python-OpenCV%E7%9A%84%E4%B8%8B%E8%BD%BD%E5%92%8C%E5%AE%89%E8%A3%85"><span class="toc-number">3.2.</span> <span class="toc-text">2.2　Python OpenCV的下载和安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-%E4%B8%8B%E8%BD%BD%E5%92%8C%E5%AE%89%E8%A3%85OpenCV-Contrib-Python%E5%BA%93"><span class="toc-number">3.2.1.</span> <span class="toc-text">2.2.1　下载和安装OpenCV-Contrib-Python库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2-%E6%B5%8B%E8%AF%95OpenCV-Contrib-Python%E5%BA%93%E5%92%8CNumpy%E5%BA%93%E6%98%AF%E5%90%A6%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F"><span class="toc-number">3.2.2.</span> <span class="toc-text">2.2.2　测试OpenCV-Contrib-Python库和Numpy库是否安装成功</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC3%E7%AB%A0-%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-number">4.</span> <span class="toc-text">第3章　图像处理的基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E8%AF%BB%E5%8F%96%E5%9B%BE%E5%83%8F"><span class="toc-number">4.1.</span> <span class="toc-text">3.1　读取图像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E6%98%BE%E7%A4%BA%E5%9B%BE%E5%83%8F"><span class="toc-number">4.2.</span> <span class="toc-text">3.2　显示图像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E4%BF%9D%E5%AD%98%E5%9B%BE%E5%83%8F"><span class="toc-number">4.3.</span> <span class="toc-text">3.3　保存图像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E8%8E%B7%E5%8F%96%E5%9B%BE%E5%83%8F%E5%B1%9E%E6%80%A7"><span class="toc-number">4.4.</span> <span class="toc-text">3.4　获取图像属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-5-%E5%9B%BE%E5%83%8F%E7%BC%96%E8%A7%A3%E7%A0%81"><span class="toc-number">4.5.</span> <span class="toc-text">3.5 图像编解码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-5-%E5%9B%BE%E5%83%8F%E7%BC%96%E8%A7%A3%E7%A0%81-1"><span class="toc-number">4.6.</span> <span class="toc-text">3.5 图像编解码</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC4%E7%AB%A0-%E5%83%8F%E7%B4%A0%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-number">5.</span> <span class="toc-text">第4章　像素的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E5%83%8F%E7%B4%A0"><span class="toc-number">5.1.</span> <span class="toc-text">4.1　像素</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-1-%E7%A1%AE%E5%AE%9A%E5%83%8F%E7%B4%A0%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="toc-number">5.1.1.</span> <span class="toc-text">4.1.1　确定像素的位置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-2-%E8%8E%B7%E5%8F%96%E5%83%8F%E7%B4%A0%E7%9A%84BGR%E5%80%BC"><span class="toc-number">5.1.2.</span> <span class="toc-text">4.1.2　获取像素的BGR值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-3-%E4%BF%AE%E6%94%B9%E5%83%8F%E7%B4%A0%E7%9A%84BGR%E5%80%BC"><span class="toc-number">5.1.3.</span> <span class="toc-text">4.1.3　修改像素的BGR值</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E4%BD%BF%E7%94%A8NumPy%E6%A8%A1%E5%9D%97%E6%93%8D%E4%BD%9C%E5%83%8F%E7%B4%A0"><span class="toc-number">5.2.</span> <span class="toc-text">4.2　使用NumPy模块操作像素</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-1-NumPy%E6%A6%82%E8%BF%B0"><span class="toc-number">5.2.1.</span> <span class="toc-text">4.2.1　NumPy概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-2-%E6%95%B0%E7%BB%84%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">5.2.2.</span> <span class="toc-text">4.2.2　数组的类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-3-%E5%88%9B%E5%BB%BA%E6%95%B0%E7%BB%84"><span class="toc-number">5.2.3.</span> <span class="toc-text">4.2.3　创建数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-4-%E6%93%8D%E4%BD%9C%E6%95%B0%E7%BB%84"><span class="toc-number">5.2.4.</span> <span class="toc-text">4.2.4　操作数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-5-%E6%95%B0%E7%BB%84%E7%9A%84%E7%B4%A2%E5%BC%95%E5%92%8C%E5%88%87%E7%89%87"><span class="toc-number">5.2.5.</span> <span class="toc-text">4.2.5　数组的索引和切片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-6-%E5%88%9B%E5%BB%BA%E5%9B%BE%E5%83%8F"><span class="toc-number">5.2.6.</span> <span class="toc-text">4.2.6　创建图像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-7-%E6%8B%BC%E6%8E%A5%E5%9B%BE%E5%83%8F"><span class="toc-number">5.2.7.</span> <span class="toc-text">4.2.7　拼接图像</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E5%B0%8F%E7%BB%93"><span class="toc-number">5.3.</span> <span class="toc-text">4.3　小结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC5%E7%AB%A0-%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4%E4%B8%8E%E9%80%9A%E9%81%93"><span class="toc-number">6.</span> <span class="toc-text">第5章　色彩空间与通道</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4"><span class="toc-number">6.1.</span> <span class="toc-text">5.1　色彩空间</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-1-GRAY%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4"><span class="toc-number">6.1.1.</span> <span class="toc-text">5.1.1　GRAY色彩空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-2-HSV%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4"><span class="toc-number">6.1.2.</span> <span class="toc-text">5.1.2　HSV色彩空间</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E9%80%9A%E9%81%93"><span class="toc-number">6.2.</span> <span class="toc-text">5.2　通道</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-1-%E6%8B%86%E5%88%86%E9%80%9A%E9%81%93"><span class="toc-number">6.2.1.</span> <span class="toc-text">5.2.1　拆分通道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-2-%E5%90%88%E5%B9%B6%E9%80%9A%E9%81%93"><span class="toc-number">6.2.2.</span> <span class="toc-text">5.2.2　合并通道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-3-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8%E6%8B%86%E5%88%86%E9%80%9A%E9%81%93%E5%92%8C%E5%90%88%E5%B9%B6%E9%80%9A%E9%81%93"><span class="toc-number">6.2.3.</span> <span class="toc-text">5.2.3　综合运用拆分通道和合并通道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-4-alpha%E9%80%9A%E9%81%93"><span class="toc-number">6.2.4.</span> <span class="toc-text">5.2.4　alpha通道</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-%E5%B0%8F%E7%BB%93"><span class="toc-number">6.3.</span> <span class="toc-text">5.3　小结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2019/05/23/%E8%99%9A%E6%8B%9FDOM/" title="虚拟DOM"><img src="/./img/people.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="虚拟DOM"/></a><div class="content"><a class="title" href="/2019/05/23/%E8%99%9A%E6%8B%9FDOM/" title="虚拟DOM">虚拟DOM</a><time datetime="2019-05-22T22:56:18.000Z" title="Created 2019-05-23 06:56:18">2019-05-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2019/05/22/OpenCV(4)/" title="OpenCv(4)"><img src="/./img/people.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="OpenCv(4)"/></a><div class="content"><a class="title" href="/2019/05/22/OpenCV(4)/" title="OpenCv(4)">OpenCv(4)</a><time datetime="2019-05-22T15:18:22.000Z" title="Created 2019-05-22 23:18:22">2019-05-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2019/05/19/OpenCV(3)/" title="OpenCv(3)"><img src="/./img/girl.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="OpenCv(3)"/></a><div class="content"><a class="title" href="/2019/05/19/OpenCV(3)/" title="OpenCv(3)">OpenCv(3)</a><time datetime="2019-05-19T12:02:56.000Z" title="Created 2019-05-19 20:02:56">2019-05-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2019/05/14/OpenCV(2)/" title="OpenCv(2)"><img src="/./img/girl.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="OpenCv(2)"/></a><div class="content"><a class="title" href="/2019/05/14/OpenCV(2)/" title="OpenCv(2)">OpenCv(2)</a><time datetime="2019-05-14T05:05:28.000Z" title="Created 2019-05-14 13:05:28">2019-05-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2019/05/12/OpenCV(1)/" title="OpenCv(1)"><img src="/./img/people.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="OpenCv(1)"/></a><div class="content"><a class="title" href="/2019/05/12/OpenCV(1)/" title="OpenCv(1)">OpenCv(1)</a><time datetime="2019-05-12T01:59:59.000Z" title="Created 2019-05-12 09:59:59">2019-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By 宇宙建筑家</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","hOffset":50,"width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7}});</script></body></html>
