@@ -1,0 +1,192 @@
+<!DOCTYPE html><html lang="zh-Hans" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>小程序的性能优化 | Hexo</title><meta name="keywords" content="光与路契合，月与海浪漫"><meta name="author" content="宇宙建筑家"><meta name="copyright" content="宇宙建筑家"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="优化方式  代码压缩。 及时清理无用代码和资源文件。 减少代码包中的图片等资源文件的大小和数量。 分包加载。  首屏加载的体验优化建议  提前请求: 异步数据请求不需要等待页面渲染完成。 利用缓存: 利用 storage API 对异步请求数据进行缓存，二次启动时先利用缓存数据渲染页面，在进行后台更新。 避免白屏：先展示页面骨架页和基础内容。 及时反馈：即时地对需要用户等待的交互操作给出反馈，避免">
+<meta property="og:type" content="article">
+<meta property="og:title" content="小程序的性能优化">
+<meta property="og:url" content="http://example.com/2021/07/31/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="优化方式  代码压缩。 及时清理无用代码和资源文件。 减少代码包中的图片等资源文件的大小和数量。 分包加载。  首屏加载的体验优化建议  提前请求: 异步数据请求不需要等待页面渲染完成。 利用缓存: 利用 storage API 对异步请求数据进行缓存，二次启动时先利用缓存数据渲染页面，在进行后台更新。 避免白屏：先展示页面骨架页和基础内容。 及时反馈：即时地对需要用户等待的交互操作给出反馈，避免">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/img/back.png">
+<meta property="article:published_time" content="2021-07-31T02:45:30.000Z">
+<meta property="article:modified_time" content="2022-06-27T13:28:33.605Z">
+<meta property="article:author" content="宇宙建筑家">
+<meta property="article:tag" content="光与路契合，月与海浪漫">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/back.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2021/07/31/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '小程序的性能优化',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2022-06-27 21:28:33'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/./img/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">120</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">17</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/./img/back.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Hexo</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">小程序的性能优化</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">Created</span><time datetime="2021-07-31T02:45:30.000Z" title="Created 2021-07-31 10:45:30">2021-07-31</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/">微信小程序</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="小程序的性能优化"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><strong>优化方式</strong></p>
+<ul>
+<li>代码压缩。</li>
+<li>及时清理无用代码和资源文件。</li>
+<li>减少代码包中的图片等资源文件的大小和数量。</li>
+<li>分包加载。</li>
+</ul>
+<p><strong>首屏加载的体验优化建议</strong></p>
+<ul>
+<li>提前请求: 异步数据请求不需要等待页面渲染完成。</li>
+<li>利用缓存: 利用 <code>storage API</code> 对异步请求数据进行缓存，二次启动时先利用缓存数据渲染页面，在进行后台更新。</li>
+<li>避免白屏：先展示页面骨架页和基础内容。</li>
+<li>及时反馈：即时地对需要用户等待的交互操作给出反馈，避免用户以为小程序无响应</li>
+</ul>
+<p><strong>使用分包加载优化</strong></p>
+<ul>
+<li>在构建小程序分包项目时，构建会输出一个或多个功能的分包，其中每个分包小程序必定含有一个主包，所谓的主包，即放置默认启动页面&#x2F;<code>TabBar</code> 页面，以及一些所有分包都需用到公共资源&#x2F;<code>JS</code> 脚本，而分包则是根据开发者的配置进行划分</li>
+<li>在小程序启动时，默认会下载主包并启动主包内页面，如果用户需要打开分包内某个页面，客户端会把对应分包下载下来，下载完成后再进行展示。</li>
+</ul>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>对开发者而言，能使小程序有更大的代码体积，承载更多的功能与服务</li>
+<li>对用户而言，可以更快地打开小程序，同时在不影响启动速度前提下使用更多功能</li>
+</ul>
+<p><strong>限制</strong></p>
+<ul>
+<li>整个小程序所有分包大小不超过 <code>8M</code></li>
+<li>单个分包&#x2F;主包大小不能超过 <code>2M</code></li>
+<li>原生分包加载的配置 假设支持分包的小程序目录结构如下</li>
+</ul>
+<p><strong>分包原则</strong></p>
+<ul>
+<li>声明 <code>subPackages</code> 后，将按 <code>subPackages</code> 配置路径进行打包，<code>subPackages</code> 配置路径外的目录将被打包到 <code>app</code>（主包） 中</li>
+<li><code>app</code>（主包）也可以有自己的 <code>pages</code>（即最外层的 <code>pages</code> 字段</li>
+<li><code>subPackage</code> 的根目录不能是另外一个 <code>subPackage</code> 内的子目录</li>
+<li>首页的 <code>TAB</code>页面必须在 <code>app</code>（主包）内</li>
+</ul>
+<p><strong>引用原则</strong></p>
+<ul>
+<li>&#96;&#96;packageA<code>无法</code>require packageB JS <code>文件，但可以</code>require app<code>、自己</code>package<code>内的</code>JS&#96; 文件</li>
+<li>&#96;&#96;packageA<code>无法</code>import packageB<code>的</code>template<code>，但可以</code>require app<code>、自己</code>package<code>内的</code>template&#96;</li>
+<li>&#96;&#96;packageA <code>无法使用</code>packageB<code>的资源，但可以使用</code>app<code>、自己</code>package&#96; 内的资源</li>
+</ul>
+<p><strong>使用自定义组件</strong></p>
+<blockquote>
+<p>在需要频繁更新的场景下，自定义组件的更新只在组件内部进行，不受页面其他部分内容复杂性影响</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="http://example.com">宇宙建筑家</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://example.com/2021/07/31/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">http://example.com/2021/07/31/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/./img/back.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/gh/overtrue/share.js@master/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/08/05/%E5%AF%B9git%E7%9A%84%E7%90%86%E8%A7%A3/"><img class="prev-cover" src="/./img/girl.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">对git的理解</div></div></a></div><div class="next-post pull-right"><a href="/2021/07/20/%E6%8F%90%E9%AB%98%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%BA%94%E7%94%A8%E9%80%9F%E5%BA%A6/"><img class="next-cover" src="/./img/people.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">提高小程序的应用速度</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/./img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">宇宙建筑家</div><div class="author-info__description">今夜无雪无晴无悲喜</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">120</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">17</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/withu0519" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:xxxxxx@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/07/01/Css%E9%9A%90%E8%97%8F%E9%A1%B5%E9%9D%A2%E5%85%83%E7%B4%A0/" title="Css隐藏页面元素"><img src="/./img/back.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Css隐藏页面元素"/></a><div class="content"><a class="title" href="/2022/07/01/Css%E9%9A%90%E8%97%8F%E9%A1%B5%E9%9D%A2%E5%85%83%E7%B4%A0/" title="Css隐藏页面元素">Css隐藏页面元素</a><time datetime="2022-07-01T08:27:09.000Z" title="Created 2022-07-01 16:27:09">2022-07-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/06/28/%E5%93%8D%E5%BA%94%E5%BC%8F%E8%AE%BE%E8%AE%A1/" title="响应式设计"><img src="/./img/back.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="响应式设计"/></a><div class="content"><a class="title" href="/2022/06/28/%E5%93%8D%E5%BA%94%E5%BC%8F%E8%AE%BE%E8%AE%A1/" title="响应式设计">响应式设计</a><time datetime="2022-06-28T07:33:25.000Z" title="Created 2022-06-28 15:33:25">2022-06-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/06/18/Css%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88/" title="Css优化方案"><img src="/./img/girl.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Css优化方案"/></a><div class="content"><a class="title" href="/2022/06/18/Css%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88/" title="Css优化方案">Css优化方案</a><time datetime="2022-06-17T23:35:05.000Z" title="Created 2022-06-18 07:35:05">2022-06-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/06/06/Css3%E6%96%B0%E5%A2%9E%E7%9A%84%E7%89%B9%E6%80%A7/" title="Css3新增的特性"><img src="/./img/people.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Css3新增的特性"/></a><div class="content"><a class="title" href="/2022/06/06/Css3%E6%96%B0%E5%A2%9E%E7%9A%84%E7%89%B9%E6%80%A7/" title="Css3新增的特性">Css3新增的特性</a><time datetime="2022-06-06T07:24:49.000Z" title="Created 2022-06-06 15:24:49">2022-06-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/05/31/bind%E3%80%81call%E3%80%81apply/" title="bind、call、apply"><img src="/./img/people.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="bind、call、apply"/></a><div class="content"><a class="title" href="/2022/05/31/bind%E3%80%81call%E3%80%81apply/" title="bind、call、apply">bind、call、apply</a><time datetime="2022-05-31T00:46:10.000Z" title="Created 2022-05-31 08:46:10">2022-05-31</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By 宇宙建筑家</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","hOffset":50,"width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7}});</script></body></html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html><html lang="zh-Hans" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>如何在Vue中使用ts | Hexo</title><meta name="keywords" content="光与路契合，月与海浪漫"><meta name="author" content="宇宙建筑家"><meta name="copyright" content="宇宙建筑家"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1.在Vue中使用ts与link类似 在VUE项目中应用typescript，我们需要引入一个库vue-property-decorator， 其是基于vue-class-component库而来，这个库vue官方推出的一个支持使用class方式来开发vue单文件组件的库 主要的功能如下：  methods 可以直接声明为类的成员方法 计算属性可以被声明为类的属性访问器 初始化的 data 可以被">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何在Vue中使用ts">
+<meta property="og:url" content="http://example.com/2022/01/22/%E5%A6%82%E4%BD%95%E5%9C%A8Vue%E4%B8%AD%E4%BD%BF%E7%94%A8ts/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1.在Vue中使用ts与link类似 在VUE项目中应用typescript，我们需要引入一个库vue-property-decorator， 其是基于vue-class-component库而来，这个库vue官方推出的一个支持使用class方式来开发vue单文件组件的库 主要的功能如下：  methods 可以直接声明为类的成员方法 计算属性可以被声明为类的属性访问器 初始化的 data 可以被">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/img/back.png">
+<meta property="article:published_time" content="2022-01-22T01:16:43.000Z">
+<meta property="article:modified_time" content="2022-06-28T03:55:46.841Z">
+<meta property="article:author" content="宇宙建筑家">
+<meta property="article:tag" content="光与路契合，月与海浪漫">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/back.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2022/01/22/%E5%A6%82%E4%BD%95%E5%9C%A8Vue%E4%B8%AD%E4%BD%BF%E7%94%A8ts/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '如何在Vue中使用ts',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-06-28 11:55:46'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/./img/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">120</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">17</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/./img/back.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Hexo</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">如何在Vue中使用ts</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">Created</span><time datetime="2022-01-22T01:16:43.000Z" title="Created 2022-01-22 09:16:43">2022-01-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Typescript/">Typescript</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="如何在Vue中使用ts"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h3 id="1-在Vue中使用ts"><a href="#1-在Vue中使用ts" class="headerlink" title="1.在Vue中使用ts"></a>1.在Vue中使用ts</h3><p>与link类似</p>
+<p>在<code>VUE</code>项目中应用<code>typescript</code>，我们需要引入一个库<code>vue-property-decorator</code>，</p>
+<p>其是基于<code>vue-class-component</code>库而来，这个库<code>vue</code>官方推出的一个支持使用<code>class</code>方式来开发<code>vue</code>单文件组件的库</p>
+<p>主要的功能如下：</p>
+<ul>
+<li>methods 可以直接声明为类的成员方法</li>
+<li>计算属性可以被声明为类的属性访问器</li>
+<li>初始化的 data 可以被声明为类属性</li>
+<li>data、render 以及所有的 Vue 生命周期钩子可以直接作为类的成员方法</li>
+<li>所有其他属性，需要放在装饰器中</li>
+</ul>
+<h3 id="2-如何使用"><a href="#2-如何使用" class="headerlink" title="2.如何使用"></a>2.如何使用</h3><p>vue-property-decorator 主要提供了多个装饰器和一个函数:</p>
+<ul>
+<li>@Prop</li>
+<li>@PropSync</li>
+<li>@Model</li>
+<li>@Watch</li>
+<li>@Provide</li>
+<li>@Inject</li>
+<li>@ProvideReactive</li>
+<li>@InjectReactive</li>
+<li>@Emit</li>
+<li>@Ref</li>
+<li>@Component (由 vue-class-component 提供)</li>
+<li>Mixins (由 vue-class-component 提供)</li>
+</ul>
+<h4 id="Component"><a href="#Component" class="headerlink" title="@Component"></a>@Component</h4><p><code>Component</code>装饰器它注明了此类为一个<code>Vue</code>组件，因此即使没有设置选项也不能省略</p>
+<p>如果需要定义比如 <code>name</code>、<code>components</code>、<code>filters</code>、<code>directives</code>以及自定义属性，就可以在<code>Component</code>装饰器中定义，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">import &#123;Component,Vue&#125; from &#x27;vue-property-decorator&#x27;;</span><br><span class="line">import &#123;componentA,componentB&#125; from &#x27;@/components&#x27;;</span><br><span class="line"></span><br><span class="line"> @Component(&#123;</span><br><span class="line">    components:&#123;</span><br><span class="line">        componentA,</span><br><span class="line">        componentB,</span><br><span class="line">    &#125;,</span><br><span class="line">    directives: &#123;</span><br><span class="line">        focus: &#123;</span><br><span class="line">            // 指令的定义</span><br><span class="line">            inserted: function (el) &#123;</span><br><span class="line">                el.focus()</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line">export default class YourCompoent extends Vue&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="computed、data、methods"><a href="#computed、data、methods" class="headerlink" title="computed、data、methods"></a>computed、data、methods</h4><p>这里取消了组件的data和methods属性，以往data返回对象中的属性、methods中的方法需要直接定义在Class中，当做类的属性和方法</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> <span class="title class_">HelloDecorator</span> <span class="keyword">extends</span> <span class="title class_ inherited__">Vue</span> &#123;</span><br><span class="line">    <span class="attr">count</span>: <span class="built_in">number</span> = <span class="number">123</span> <span class="comment">// 类属性相当于以前的 data</span></span><br><span class="line"></span><br><span class="line">    <span class="title function_">add</span>(): <span class="built_in">number</span> &#123; <span class="comment">// 类方法就是以前的方法</span></span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">count</span> + <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取计算属性</span></span><br><span class="line">    <span class="keyword">get</span> <span class="title function_">total</span>(): <span class="built_in">number</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">count</span> + <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置计算属性</span></span><br><span class="line">    <span class="keyword">set</span> <span class="title function_">total</span>(<span class="params">param:<span class="built_in">number</span></span>): <span class="built_in">void</span> &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">count</span> = param</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="props"><a href="#props" class="headerlink" title="@props"></a>@props</h4><p>组件接收属性的装饰器，如下使用：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;<span class="title class_">Component</span>,<span class="title class_">Vue</span>,<span class="title class_">Prop</span>&#125; <span class="keyword">from</span> vue-property-decorator;</span><br><span class="line"></span><br><span class="line">@<span class="title class_">Component</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> <span class="title class_">YourComponent</span> <span class="keyword">extends</span> <span class="title class_ inherited__">Vue</span> &#123;</span><br><span class="line">    @<span class="title class_">Prop</span>(<span class="title class_">String</span>)</span><br><span class="line">    <span class="attr">propA</span>:string;</span><br><span class="line"></span><br><span class="line">    @<span class="title class_">Prop</span>([<span class="title class_">String</span>,<span class="title class_">Number</span>])</span><br><span class="line">    <span class="attr">propB</span>:string|number;</span><br><span class="line"></span><br><span class="line">    @<span class="title class_">Prop</span>(&#123;</span><br><span class="line">     <span class="attr">type</span>: <span class="title class_">String</span>, <span class="comment">// type: [String , Number]</span></span><br><span class="line">     <span class="attr">default</span>: <span class="string">&#x27;default value&#x27;</span>, <span class="comment">// 一般为String或Number</span></span><br><span class="line">      <span class="comment">//如果是对象或数组的话。默认值从一个工厂函数中返回</span></span><br><span class="line">      <span class="comment">// defatult: () =&gt; &#123;</span></span><br><span class="line">      <span class="comment">//     return [&#x27;a&#x27;,&#x27;b&#x27;]</span></span><br><span class="line">      <span class="comment">// &#125;</span></span><br><span class="line">     <span class="attr">required</span>: <span class="literal">true</span>,</span><br><span class="line">     <span class="attr">validator</span>: <span class="function">(<span class="params">value</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> [</span><br><span class="line">          <span class="string">&#x27;InProcess&#x27;</span>,</span><br><span class="line">          <span class="string">&#x27;Settled&#x27;</span></span><br><span class="line">        ].<span class="title function_">indexOf</span>(value) !== -<span class="number">1</span></span><br><span class="line">     &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="attr">propC</span>:string;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="watch"><a href="#watch" class="headerlink" title="@watch"></a>@watch</h4><p>实际就是<code>Vue</code>中的监听器，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">import &#123; Vue, Component, Watch &#125; from &#x27;vue-property-decorator&#x27;</span><br><span class="line"></span><br><span class="line">@Component</span><br><span class="line">export default class YourComponent extends Vue &#123;</span><br><span class="line">  @Watch(&#x27;child&#x27;)</span><br><span class="line">  onChildChanged(val: string, oldVal: string) &#123;&#125;</span><br><span class="line"></span><br><span class="line">  @Watch(&#x27;person&#x27;, &#123; immediate: true, deep: true &#125;)</span><br><span class="line">  onPersonChanged1(val: Person, oldVal: Person) &#123;&#125;</span><br><span class="line"></span><br><span class="line">  @Watch(&#x27;person&#x27;)</span><br><span class="line">  onPersonChanged2(val: Person, oldVal: Person) &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="emit"><a href="#emit" class="headerlink" title="@emit"></a>@emit</h4><p><code>vue-property-decorator</code> 提供的 <code>@Emit</code> 装饰器就是代替<code>Vue</code>中的事件的触发<code>$emit</code>，如下：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;<span class="title class_">Vue</span>, <span class="title class_">Component</span>, <span class="title class_">Emit</span>&#125; <span class="keyword">from</span> <span class="string">&#x27;vue-property-decorator&#x27;</span>;</span><br><span class="line">    <span class="meta">@Component</span>(&#123;&#125;)</span><br><span class="line">    <span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> <span class="title class_">Some</span> <span class="keyword">extends</span> <span class="title class_ inherited__">Vue</span>&#123;</span><br><span class="line">        <span class="title function_">mounted</span>(<span class="params"></span>)&#123;</span><br><span class="line">            <span class="variable language_">this</span>.$on(<span class="string">&#x27;emit-todo&#x27;</span>, <span class="keyword">function</span>(<span class="params">n</span>) &#123;</span><br><span class="line">                <span class="variable language_">console</span>.<span class="title function_">log</span>(n)</span><br><span class="line">            &#125;)</span><br><span class="line">            <span class="variable language_">this</span>.<span class="title function_">emitTodo</span>(<span class="string">&#x27;world&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="meta">@Emit</span>()</span><br><span class="line">        <span class="title function_">emitTodo</span>(<span class="params">n: <span class="built_in">string</span></span>)&#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;hello&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3-总结"><a href="#3-总结" class="headerlink" title="3.总结"></a>3.总结</h3><p>可以看到上述<code>typescript</code>版本的<code>vue class</code>的语法与平时<code>javascript</code>版本使用起来还是有很大的不同，多处用到<code>class</code>与装饰器，但实际上本质是一致的，只有不断编写才会得心应手</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="http://example.com">宇宙建筑家</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://example.com/2022/01/22/%E5%A6%82%E4%BD%95%E5%9C%A8Vue%E4%B8%AD%E4%BD%BF%E7%94%A8ts/">http://example.com/2022/01/22/%E5%A6%82%E4%BD%95%E5%9C%A8Vue%E4%B8%AD%E4%BD%BF%E7%94%A8ts/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/./img/back.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/gh/overtrue/share.js@master/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/03/15/Node/"><img class="prev-cover" src="/./img/people.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">什么是Node</div></div></a></div><div class="next-post pull-right"><a href="/2022/01/18/%E5%A6%82%E4%BD%95%E5%9C%A8React%E4%B8%AD%E4%BD%BF%E7%94%A8ts/"><img class="next-cover" src="/./img/back.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">如何在React中使用ts</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/./img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">宇宙建筑家</div><div class="author-info__description">今夜无雪无晴无悲喜</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">120</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">17</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/withu0519" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:xxxxxx@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%9C%A8Vue%E4%B8%AD%E4%BD%BF%E7%94%A8ts"><span class="toc-number">1.</span> <span class="toc-text">1.在Vue中使用ts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">2.如何使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Component"><span class="toc-number">2.1.</span> <span class="toc-text">@Component</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#computed%E3%80%81data%E3%80%81methods"><span class="toc-number">2.2.</span> <span class="toc-text">computed、data、methods</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#props"><span class="toc-number">2.3.</span> <span class="toc-text">@props</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#watch"><span class="toc-number">2.4.</span> <span class="toc-text">@watch</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emit"><span class="toc-number">2.5.</span> <span class="toc-text">@emit</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%80%BB%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">3.总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/07/01/Css%E9%9A%90%E8%97%8F%E9%A1%B5%E9%9D%A2%E5%85%83%E7%B4%A0/" title="Css隐藏页面元素"><img src="/./img/back.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Css隐藏页面元素"/></a><div class="content"><a class="title" href="/2022/07/01/Css%E9%9A%90%E8%97%8F%E9%A1%B5%E9%9D%A2%E5%85%83%E7%B4%A0/" title="Css隐藏页面元素">Css隐藏页面元素</a><time datetime="2022-07-01T08:27:09.000Z" title="Created 2022-07-01 16:27:09">2022-07-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/06/28/%E5%93%8D%E5%BA%94%E5%BC%8F%E8%AE%BE%E8%AE%A1/" title="响应式设计"><img src="/./img/back.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="响应式设计"/></a><div class="content"><a class="title" href="/2022/06/28/%E5%93%8D%E5%BA%94%E5%BC%8F%E8%AE%BE%E8%AE%A1/" title="响应式设计">响应式设计</a><time datetime="2022-06-28T07:33:25.000Z" title="Created 2022-06-28 15:33:25">2022-06-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/06/18/Css%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88/" title="Css优化方案"><img src="/./img/girl.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Css优化方案"/></a><div class="content"><a class="title" href="/2022/06/18/Css%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88/" title="Css优化方案">Css优化方案</a><time datetime="2022-06-17T23:35:05.000Z" title="Created 2022-06-18 07:35:05">2022-06-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/06/06/Css3%E6%96%B0%E5%A2%9E%E7%9A%84%E7%89%B9%E6%80%A7/" title="Css3新增的特性"><img src="/./img/people.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Css3新增的特性"/></a><div class="content"><a class="title" href="/2022/06/06/Css3%E6%96%B0%E5%A2%9E%E7%9A%84%E7%89%B9%E6%80%A7/" title="Css3新增的特性">Css3新增的特性</a><time datetime="2022-06-06T07:24:49.000Z" title="Created 2022-06-06 15:24:49">2022-06-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/05/31/bind%E3%80%81call%E3%80%81apply/" title="bind、call、apply"><img src="/./img/people.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="bind、call、apply"/></a><div class="content"><a class="title" href="/2022/05/31/bind%E3%80%81call%E3%80%81apply/" title="bind、call、apply">bind、call、apply</a><time datetime="2022-05-31T00:46:10.000Z" title="Created 2022-05-31 08:46:10">2022-05-31</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By 宇宙建筑家</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","hOffset":50,"width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7}});</script></body></html>

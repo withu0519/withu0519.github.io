@@ -51,7 +51,7 @@
   isHome: true,
   isHighlightShrink: false,
   isToc: false,
-  postUpdate: '2022-06-22 16:46:12'
+  postUpdate: '2022-06-28 19:03:39'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -140,93 +140,197 @@
       }
     }
     detectApple()
-    })(window)</script><meta name="generator" content="Hexo 6.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/./img/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">50</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url('/./img/main.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Hexo</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">Hexo</h1><div id="site_social_icons"><a class="social-icon" href="https://github.com/withu0519" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:xxxxxx@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left"><a href="/2020/03/26/%E8%99%9A%E6%8B%9Fdom%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/" title="虚拟dom的工作原理"><img class="post_bg" src="/./img/back.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="虚拟dom的工作原理"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/03/26/%E8%99%9A%E6%8B%9Fdom%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/" title="虚拟dom的工作原理">虚拟dom的工作原理</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2020-03-26T01:03:33.000Z" title="Created 2020-03-26 09:03:33">2020-03-26</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/React/">React</a></span></div><div class="content">1.虚拟dom的工作原理虚拟dom的工作原理是通过JS对象模拟DOM的节点，在Facebook构建React初期，考虑到要提升代码抽象能力、避免人为的dom操作，降低代码整体风险等因素，所以引入了虚拟dom
-虚拟dom在实现上通常是Plain Object，以react为例，在render函数中写的jsx会在babel的插件作用下，编译为React.createElement执行jsx中的属性参数
-React.createElement执行后会返回一个Plain Object，它会描述自己的tag类型、props属性以及children情况等，这些Plain Object通过树形结构组成一棵虚拟dom树，当状态发生变更时，将变更前后的虚拟dom树进行差异比较，这个过程称为diff，生成的结果称为patch，计算后，会渲染Patch完成对真实dom的操作
-虚拟dom的优点：改善大规模操作dom的性能、规避xss风险、能以较低成本实现跨平台开发
-虚拟dom缺点：内存占用高，因为需要模拟整个网页的dom、高性能应用场景存在难以优化的情况
-2.除了渲染页面，虚拟 DOM 还有哪些应用场景？记录 ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2020/03/16/React%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%9A%84%E6%89%8B%E6%AE%B5/" title="React性能优化的手段"><img class="post_bg" src="/./img/people.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="React性能优化的手段"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/03/16/React%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%9A%84%E6%89%8B%E6%AE%B5/" title="React性能优化的手段">React性能优化的手段</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2020-03-16T12:42:45.000Z" title="Created 2020-03-16 20:42:45">2020-03-16</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/React/">React</a></span></div><div class="content">1.类组件中的优化手段使用纯组件PureComponent作为基类
-使用shouldComponentUpdate生命周期来自定义渲染逻辑
-2.方法组件中的优化手段使用React.memo高阶函数包装组件，React.memo可以实现类似于shouldComponentUpdate或者PureComponent的效果
-使用useMemo
-使用React.useMemo精细化的管控，useMemo控制的则是是否需要重复执行某一段逻辑，而React.memo控制是否需要重新渲染一个组件
-使用usecallBack
-3.其他方式在列表需要频繁变动时，使用唯一id作为key，而不是数组下标
-必要时通过改变css样式隐藏显示组件，而不是通过条件判断显示隐藏组件
-使用Suspense和lazy进行懒加载
-</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2020/03/16/setState%E5%8E%9F%E7%90%86/" title="setState的原理"><img class="post_bg" src="/./img/girl.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="setState的原理"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/03/16/setState%E5%8E%9F%E7%90%86/" title="setState的原理">setState的原理</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2020-03-16T12:42:45.000Z" title="Created 2020-03-16 20:42:45">2020-03-16</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/React/">React</a></span></div><div class="content">1.setState异步更新我们都知道，React通过this.state来访问state，通过this.setState()方法来更新state，当this.setState()方法被调用时，React会重新调用render方法来重新渲染UI
-如果在setState后面获取state的值是获取不到的，在React内部机能能检测到的地方，setState就是异步的；在React检测不到的地方，例如setInterval，setTimeout，setState就是同步更新的
-2.setState批量更新的过程在react生命周期和合成事件执行前后都有相应的钩子，分别是pre钩子和post钩子，pre钩子会调用batchedUpdate方法将isBatchingUpdates变量置位true，开启批量更新，而post钩子会将isBatchingUpdates置位false
-3.为什么直接修改this.state无效setState本质是通过一个队列机制实现state更新的，执行setState时，会将需要更新的state合并后放入状态队列，而不会立即更新state
-</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2020/01/18/%E5%AF%B9React%E7%9A%84%E7%90%86%E8%A7%A3/" title="对React的理解"><img class="post_bg" src="/./img/girl.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="对React的理解"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/01/18/%E5%AF%B9React%E7%9A%84%E7%90%86%E8%A7%A3/" title="对React的理解">对React的理解</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2020-01-18T07:55:19.000Z" title="Created 2020-01-18 15:55:19">2020-01-18</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/React/">React</a></span></div><div class="content">React是一个网页UI框架，通过组件化的方式来解决视图层开发复用的问题，本质是一个组件化框架
-它的核心设计思路有三点：声明式、组件化和通用性
-声明式的优势在于直观与组合
-组件化的优势在于视图的拆分与模块复用，可以更容易做到高内聚低耦合
-通用性在于一次学习，随处编写，比如React Native，React 360等，这里主要靠虚拟DOM来保证实现
-这使得React的适用范围变的足够广，无论是Web、Native、VR，甚至Shell应用都可以进行开发，这也是React的优势
-但作为一个视图层框架，React的劣势也十分明显，它并没有提供完整的一揽子解决方案，在开发大型前端应用时，需要向社区寻找并整合解决方案，虽然一定程度上促进了社区的繁荣，但也为开发者在技术选型和学习适用上造成了一定的成本
-</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2019/12/23/%E6%93%8D%E4%BD%9CDOM%E7%9A%84%E6%96%B9%E6%B3%95/" title="操作DOM的方法"><img class="post_bg" src="/./img/back.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="操作DOM的方法"></a></div><div class="recent-post-info"><a class="article-title" href="/2019/12/23/%E6%93%8D%E4%BD%9CDOM%E7%9A%84%E6%96%B9%E6%B3%95/" title="操作DOM的方法">操作DOM的方法</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2019-12-23T15:15:36.000Z" title="Created 2019-12-23 23:15:36">2019-12-23</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Javaacript/">Javaacript</a></span></div><div class="content">1.创建新节点123createDocumentFragment()    //创建一个DOM片段createElement()   //创建一个具体的元素createTextNode()   //创建一个文本节点
+    })(window)</script><meta name="generator" content="Hexo 6.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/./img/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">120</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">17</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url('/./img/main.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Hexo</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">Hexo</h1><div id="site_social_icons"><a class="social-icon" href="https://github.com/withu0519" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:xxxxxx@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left"><a href="/2022/07/01/Css%E9%9A%90%E8%97%8F%E9%A1%B5%E9%9D%A2%E5%85%83%E7%B4%A0/" title="Css隐藏页面元素"><img class="post_bg" src="/./img/back.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Css隐藏页面元素"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/07/01/Css%E9%9A%90%E8%97%8F%E9%A1%B5%E9%9D%A2%E5%85%83%E7%B4%A0/" title="Css隐藏页面元素">Css隐藏页面元素</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-07-01T08:27:09.000Z" title="Created 2022-07-01 16:27:09">2022-07-01</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Css/">Css</a></span></div><div class="content">1、前言在平常的样式排版中，我们经常遇到将某个模块隐藏的场景
+通过css隐藏元素的方法有很多种，它们看起来实现的效果是一致的
+但实际上每一种方法都有一丝轻微的不同，这些不同决定了在一些特定场合下使用哪一种方法
+2、实现方式通过css实现隐藏元素方法有如下：
+
+display:none
+visibility:hidden
+opacity:0
+设置height、width模型属性为0
+position:absolute
+clip-path
+
+display:none设置元素的display为none是最常用的隐藏元素的方法
+123.hide &#123;    display:none;&#125;
 
 
 
-2.添加、移除、替换、移入1234appendChild()      //添加removeChild()      //移除replaceChild()      //替换insertBefore()      //插入
+将元素设置为display:none后，元素在页面上将彻底消失
+元素本身占有的空间就会被其他元素占有，也就是说它会导致浏览器的重排和重绘
+消失后，自身绑定的事件不会触发，也不会有过渡效果
+特点：元素不可见，不占据空间，无法响应点击事件
+visibility:hidden设置元素的visibility为hidden也是一种常用的隐藏元素的方法
+从页面上仅仅是隐藏该元素，DOM结果均会存在， ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/06/28/%E5%93%8D%E5%BA%94%E5%BC%8F%E8%AE%BE%E8%AE%A1/" title="响应式设计"><img class="post_bg" src="/./img/back.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="响应式设计"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/06/28/%E5%93%8D%E5%BA%94%E5%BC%8F%E8%AE%BE%E8%AE%A1/" title="响应式设计">响应式设计</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-06-28T07:33:25.000Z" title="Created 2022-06-28 15:33:25">2022-06-28</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Css/">Css</a></span></div><div class="content">1、是什么响应式网站设计（Responsive Web design）是一种网络页面设计布局，页面的设计与开发应当根据用户行为以及设备环境(系统平台、屏幕尺寸、屏幕定向等)进行相应的响应和调整
+描述响应式界面最著名的一句话就是“Content is like water”
+大白话便是“如果将屏幕看作容器，那么内容就像水一样”
+响应式网站常见特点：
+
+同时适配PC + 平板 + 手机等
+标签导航在接近手持终端设备时改变为经典的抽屉式导航
+网站的布局会根据视口来调整模块的大小和位置
+
+
+2、实现方式响应式设计的基本原理是通过媒体查询检测不同的设备屏幕尺寸做处理，为了处理移动端，页面头部必须有meta声明viewport
+1&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no”&gt;
 
 
 
-3.查找123getElementsByTagName()    //通过标签名称getElementsByName()     //通过元素的Name属性的值getElementById()        //通过元素Id，唯一性</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2019/12/13/ajax/" title="Ajax总结"><img class="post_bg" src="/./img/girl.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Ajax总结"></a></div><div class="recent-post-info"><a class="article-title" href="/2019/12/13/ajax/" title="Ajax总结">Ajax总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2019-12-13T06:52:14.000Z" title="Created 2019-12-13 14:52:14">2019-12-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%85%B6%E4%BB%96/">其他</a></span></div><div class="content">1.原理Ajax的原理简单来说是在用户和服务器之间加了一个中间层（AJAX引擎），通过XmlHttpRequest对象来向服务器发异步请求，从服务器获得数据，然后用javascript来操作DOM而更新页面，使用户操作与服务器响应异步化，这其中最关键的一步就是从服务器获得请求数据。
-Ajax的过程只涉及Javascript、HXLHttprequest和DOM。XMLHttpRequest是ajax的核心机制。
-2.优缺点优点：1.通过异步模式，提升了用户体验
-​		  2.优化了浏览器和服务器之间的传输，减少不必要的数据往返，减少了带宽作用
-​		  3.Ajax在客户端运行，承担了一部分本来由服务器承担的工作，减少了大量用户下的服务器负载
-​		  4.Ajax可以实现动态不刷新（局部刷新）
-缺点： 1.安全问题。AJAX暴露了与服务器交互的细节
-​		   2.对搜索引擎支持比较弱
-​		   3.不容易调试
-</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2019/11/26/Javascript%E7%BB%A7%E6%89%BF/" title="Javascript继承"><img class="post_bg" src="/./img/girl.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Javascript继承"></a></div><div class="recent-post-info"><a class="article-title" href="/2019/11/26/Javascript%E7%BB%A7%E6%89%BF/" title="Javascript继承">Javascript继承</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2019-11-26T03:15:44.000Z" title="Created 2019-11-26 11:15:44">2019-11-26</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Javaacript/">Javaacript</a></span></div><div class="content">1.原型链继承核心：将父类的实例作为子类的原型
-SubType.prototype &#x3D; new SuperType()&#x2F;&#x2F; 所有涉及到原型链继承的继承方式都要修改子类构造函数的指向，否则子类实例的构造函数会指向SuperType。SubType.prototype.constructor &#x3D; SubType;
-优点：父类方法可以复用缺点：
+属性对应如下：
 
-父类的引用属性会被所有子类实例共享
-子类构建实例时不能向父类传递参数
+width&#x3D;device-width: 是自适应手机屏幕的尺寸宽度
+maximum-sca ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/06/18/Css%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88/" title="Css优化方案"><img class="post_bg" src="/./img/girl.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Css优化方案"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/06/18/Css%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88/" title="Css优化方案">Css优化方案</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-06-17T23:35:05.000Z" title="Created 2022-06-18 07:35:05">2022-06-18</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Css/">Css</a></span></div><div class="content">1、前言每一个网页都离不开css，但是很多人又认为，css主要是用来完成页面布局的，像一些细节或者优化，就不需要怎么考虑，实际上这种想法是不正确的
+作为页面渲染和内容展现的重要环节，css影响着用户对整个网站的第一体验
+因此，在整个产品研发过程中，css性能优化同样需要贯穿全程
+2、实现方式实现方式有很多种，主要有如下：
 
-2.构造函数继承核心：将父类构造函数的内容复制给了子类的构造函数。这是所有继承中唯一一个不涉及到prototype的继承。
-1SuperType.call(SubType);
+内联首屏关键CSS
+异步加载CSS
+资源压缩
+合理使用选择器
+减少使用昂贵的属性
+不要使用@import
 
-优点：和原型链继承完全反过来。
+内联首屏关键CSS在打开一个页面，页面首要内容出现在屏幕的时间影响着用户的体验，而通过内联css关键代码能够使浏览器在下载完html后就能立刻渲染
+而如果外部引用css代码，在解析html结构过程中遇到外部css文件，才会开始下载css代码，再渲染
+所以，CSS内联使用使渲染时间提前
+注意：但是较大的css代码并不合适内联（初始拥塞窗口、没有缓存），而其余代码则采取外部引用方式
+异步加载CSS在CSS文件请求、下载、解析完成之前，CSS会阻塞渲染，浏览器将不会渲染任何已处理的内容
+前面加载内联代码后，后面的外部引用css则没必要阻塞浏览器渲染。这时候就可以采取 ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/06/06/Css3%E6%96%B0%E5%A2%9E%E7%9A%84%E7%89%B9%E6%80%A7/" title="Css3新增的特性"><img class="post_bg" src="/./img/people.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Css3新增的特性"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/06/06/Css3%E6%96%B0%E5%A2%9E%E7%9A%84%E7%89%B9%E6%80%A7/" title="Css3新增的特性">Css3新增的特性</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-06-06T07:24:49.000Z" title="Created 2022-06-06 15:24:49">2022-06-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Css/">Css</a></span></div><div class="content">一、是什么css，即层叠样式表（Cascading Style Sheets）的简称，是一种标记语言，由浏览器解释执行用来使页面变得更美观
+css3是css的最新标准，是向后兼容的，CSS1/2的特性在CSS3 里都是可以使用的
+而CSS3 也增加了很多新特性，为开发带来了更佳的开发体验
+二、选择器css3中新增了一些选择器，主要为如下图所示：
 
-父类的引用属性不会被共享
-子类构建实例时可以向父类传递参数
+三、新样式边框css3新增了三个边框属性，分别是：
 
-缺点：父类的方法不能复用，子类实例的方法每次都是单独创建的。
-3.组合继承核心：原型式继承和构造函数继承的组合，兼具了二者的优点。
-1234567891011121314function SuperType() &#123;    this.name = &#x27;p ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2019/11/19/async,await/" title="async/await"><img class="post_bg" src="/./img/back.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="async/await"></a></div><div class="recent-post-info"><a class="article-title" href="/2019/11/19/async,await/" title="async/await">async/await</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2019-11-19T10:36:00.000Z" title="Created 2019-11-19 18:36:00">2019-11-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Javaacript/">Javaacript</a></span></div><div class="content">async&#x2F;awaitGenerator函数的语法糖，有更好的语义、更好的适用性、返回值是promise
-await和promise一样，和promise的一些区别
+border-radius：创建圆角边框
+box-shadow：为元素添加阴影
+border-image：使用图片来绘制边框
 
-await 相比直接使用 Promise 来说，优势在于处理 then 的调用链，能够更清晰准确的写出代码。缺点在于滥用 await 可能会导致性能问题，因为 await 会阻塞代码，也许之后的异步代码并不依赖于前者，但仍然需要等待前者完成，导致代码失去了并发性，此时更应该使用 Promise.all。
-一个函数如果加上 async ，那么该函数就会返回一个 Promise
+box-shadow设置元素阴影，设置属性如下：
 
-优缺点async&#x2F;await的优势在于处理 then 的调用链，能够更清晰准确的写出代码，并且也能优雅地解决回调地狱问题。当然也存在一些缺点，因为 await 将异步代码改造成了同步代码，如果多个异步代码没有依赖性却使用了 await 会导致性能上的降低。
-async原理async&#x2F;await语法糖就是使用Generator函数+自动执行器来运作的
+水平阴影
+垂直阴影
+模糊距离(虚实)
+阴影尺寸(影子大小)
+阴影颜色
+内&#x2F;外阴影
 
-在执行的过程中，判断一个函数的promise是否完成，如果已经完成， ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2019/11/13/js%E4%B8%AD%E7%9A%84%E6%A8%A1%E5%9D%97%E5%8C%96/" title="js中的模块化"><img class="post_bg" src="/./img/back.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="js中的模块化"></a></div><div class="recent-post-info"><a class="article-title" href="/2019/11/13/js%E4%B8%AD%E7%9A%84%E6%A8%A1%E5%9D%97%E5%8C%96/" title="js中的模块化">js中的模块化</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2019-11-12T17:36:20.000Z" title="Created 2019-11-13 01:36:20">2019-11-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Javaacript/">Javaacript</a></span></div><div class="content">js中现在比较成熟的有四种模块加载方案
-1.COmmonJS通过require来引入模块，通过module.exports定义模块的输出接口，这种模块加载方案是服务器端的解决方案，它是以同步的方式来引入模块的，因为在服务端文件都存储在本地磁盘，所以读取非常快，，所以以同步的方式加载没有问题，但如果在浏览器端，由于模块加载是使用网络请求，因此使用异步加载的方式更合适
-2.AMD方案这种方案采用异步加载的方式来加载模块，模块的加载不影响后面语句的执行，所有依赖这个模块的语句都定义在一个回调函数里，等到加载完成后再执行回调函数。require.js 实现了 AMD 规范
-3.CMD方案这种方案和 AMD 方案都是为了解决异步模块加载的问题，sea.js 实现了 CMD 规范。它和require.js的区别在于模块定义时对依赖的处理不同和对依赖模块的执行时机的处理不同。
-4.ES6 提出的方案，使用 import 和 export 的形式来导入导出模块在有 Babel 的情况下，我们可以直接使用 ES6的模块化
-</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2019/10/29/css%E7%A7%BB%E5%8A%A8%E7%AB%AF%E7%9A%84%E5%8D%95%E4%BD%8D/" title="css移动端的单位"><img class="post_bg" src="/./img/back.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="css移动端的单位"></a></div><div class="recent-post-info"><a class="article-title" href="/2019/10/29/css%E7%A7%BB%E5%8A%A8%E7%AB%AF%E7%9A%84%E5%8D%95%E4%BD%8D/" title="css移动端的单位">css移动端的单位</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2019-10-29T00:32:51.000Z" title="Created 2019-10-29 08:32:51">2019-10-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Css/">Css</a></span></div><div class="content">1.常用1.em：定义字体大小以父级字体大小为基准，定义长度单位时以当前字体大小为基准
-2.rem：根据根元素字体大小为基准，例如html的font-size：14px
-3.%：以父级宽度为基准
-4.vw和vh：基于视口的宽度和高度，当前屏幕大小的1&#x2F;10
-5.vim和vmax：vmin为当前vw和vh中较小的一个值；vmax为较大的一个值
-2.不常用ex和ch：ex以字符‘x’的高度为基准；ch以数字‘0’的宽度为基准
-3.总结1.移动端布局方式主要使用rem和flex，可以结合各自的优点，比如flex布局很灵活，但是字体大小不好控制，我们可以使用rem和媒体查询控制字体的大小，媒体查询视口的大小，然后不同的视口大小下设置页面html的font-size
-2.可单独制作移动端页面也可响应式pc移动端共用一个页面，没有好坏，视情况而定，因势利导
-</div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/page/2/#content-inner">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/#content-inner">5</a><a class="extend next" rel="next" href="/page/2/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/./img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">宇宙建筑家</div><div class="author-info__description">今夜无雪无晴无悲喜</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">50</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">8</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/withu0519" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:xxxxxx@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2020/03/26/%E8%99%9A%E6%8B%9Fdom%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/" title="虚拟dom的工作原理"><img src="/./img/back.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="虚拟dom的工作原理"/></a><div class="content"><a class="title" href="/2020/03/26/%E8%99%9A%E6%8B%9Fdom%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/" title="虚拟dom的工作原理">虚拟dom的工作原理</a><time datetime="2020-03-26T01:03:33.000Z" title="Created 2020-03-26 09:03:33">2020-03-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/03/16/React%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%9A%84%E6%89%8B%E6%AE%B5/" title="React性能优化的手段"><img src="/./img/people.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="React性能优化的手段"/></a><div class="content"><a class="title" href="/2020/03/16/React%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%9A%84%E6%89%8B%E6%AE%B5/" title="React性能优化的手段">React性能优化的手段</a><time datetime="2020-03-16T12:42:45.000Z" title="Created 2020-03-16 20:42:45">2020-03-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/03/16/setState%E5%8E%9F%E7%90%86/" title="setState的原理"><img src="/./img/girl.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="setState的原理"/></a><div class="content"><a class="title" href="/2020/03/16/setState%E5%8E%9F%E7%90%86/" title="setState的原理">setState的原理</a><time datetime="2020-03-16T12:42:45.000Z" title="Created 2020-03-16 20:42:45">2020-03-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/01/18/%E5%AF%B9React%E7%9A%84%E7%90%86%E8%A7%A3/" title="对React的理解"><img src="/./img/girl.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="对React的理解"/></a><div class="content"><a class="title" href="/2020/01/18/%E5%AF%B9React%E7%9A%84%E7%90%86%E8%A7%A3/" title="对React的理解">对React的理解</a><time datetime="2020-01-18T07:55:19.000Z" title="Created 2020-01-18 15:55:19">2020-01-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2019/12/23/%E6%93%8D%E4%BD%9CDOM%E7%9A%84%E6%96%B9%E6%B3%95/" title="操作DOM的方法"><img src="/./img/back.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="操作DOM的方法"/></a><div class="content"><a class="title" href="/2019/12/23/%E6%93%8D%E4%BD%9CDOM%E7%9A%84%E6%96%B9%E6%B3%95/" title="操作DOM的方法">操作DOM的方法</a><time datetime="2019-12-23T15:15:36.000Z" title="Created 2019-12-23 23:15:36">2019-12-23</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+其中水平阴影和垂直阴影是必须设置的
+背景新增了几个关于背景的属性，分别是background-clip、background-origin、background-size和background-break
+background-clip用于确定背景画区，有以下几种可能的属性：
+
+background-clip: bord ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/05/31/bind%E3%80%81call%E3%80%81apply/" title="bind、call、apply"><img class="post_bg" src="/./img/people.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="bind、call、apply"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/05/31/bind%E3%80%81call%E3%80%81apply/" title="bind、call、apply">bind、call、apply</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-05-31T00:46:10.000Z" title="Created 2022-05-31 08:46:10">2022-05-31</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Javascript/">Javascript</a></span></div><div class="content">1.作用call、apply、bind作用是改变函数执行时的上下文，简而言之就是改变函数运行时的this指向
+那么什么情况下需要改变this的指向呢？下面举个例子
+123456789var name = &quot;lucy&quot;;var obj = &#123;    name: &quot;martin&quot;,    say: function () &#123;        console.log(this.name);    &#125;&#125;;obj.say(); // martin，this 指向 obj 对象setTimeout(obj.say,0); // lucy，this 指向 window 对象
+
+从上面可以看到，正常情况say方法输出martin
+但是我们把say放在setTimeout方法中，在定时器中是作为回调函数来执行的，因此回到主栈执行时是在全局执行上下文的环境中执行的，这时候this指向window，所以输出lucy
+我们实际需要的是this指向obj对象，这时候就需要该改变this指向了
+1setTimeout(obj.say.b ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/05/19/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" title="正则表达式"><img class="post_bg" src="/./img/back.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="正则表达式"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/05/19/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" title="正则表达式">正则表达式</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-05-18T16:00:00.000Z" title="Created 2022-05-19 00:00:00">2022-05-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Javascript/">Javascript</a></span></div><div class="content">1.什么是正则表达式正则表达式是一种用来匹配字符串的强有力的武器
+它的设计思想是用一种描述性的语言定义一个规则，凡是符合规则的字符串，我们就认为它“匹配”了，否则，该字符串就是不合法的
+在 JavaScript中，正则表达式也是对象，构建正则表达式有两种方式：
+
+字面量创建，其由包含在斜杠之间的模式组成
+
+1const re = /\d+/g;
+
+​	2.调用RegExp对象的构造函数
+1234const re = new RegExp(&quot;\\d+&quot;,&quot;g&quot;);const rul = &quot;\\d+&quot;const re1 = new RegExp(rul,&quot;g&quot;);
+
+使用构建函数创建，第一个参数可以是一个变量，遇到特殊字符\需要使用\\进行转义
+2.匹配规则
+
+
+规则
+描述
+
+
+
+\
+转义
+
+
+^
+匹配输入的开始
+
+
+$
+匹配输入的结束
+
+
+*
+匹配前一个表达式 0 次或多次
+
+
++
+匹配前面一个表达式 1 次或者多次。等价于 &#123;1,&#125;
+
+
+?
+匹配前面一个表达式 0 次或者 1 次。等价于 ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/05/08/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" title="函数式编程"><img class="post_bg" src="/./img/people.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="函数式编程"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/05/08/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" title="函数式编程">函数式编程</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-05-08T02:05:36.000Z" title="Created 2022-05-08 10:05:36">2022-05-08</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Javascript/">Javascript</a></span></div><div class="content">1.函数式编程函数式编程是一种”编程范式”（programming paradigm），一种编写程序的方法论
+主要的编程范式有三种：命令式编程，声明式编程和函数式编程
+相比命令式编程，函数式编程更加强调程序执行的结果而非执行的过程，倡导利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而非设计一个复杂的执行过程
+举个例子，将数组每个元素进行平方操作，命令式编程与函数式编程如下
+12345678// 命令式编程var array = [0, 1, 2, 3]for(let i = 0; i &lt; array.length; i++) &#123;    array[i] = Math.pow(array[i], 2)&#125;// 函数式方式[0, 1, 2, 3].map(num =&gt; Math.pow(num, 2))
+
+简单来讲，就是要把过程逻辑写成函数，定义好输入参数，只关心它的输出结果
+即是一种描述集合和集合之间的转换关系，输入通过函数都会返回有且只有一个输出值
+可以看到，函数实际上是一个关系，或者说是一种映射，而这种映射关系是可以组合的，一旦我们知道一 ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/04/26/js%E5%87%BD%E6%95%B0%E7%BC%93%E5%AD%98/" title="Javascript的函数缓存"><img class="post_bg" src="/./img/back.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Javascript的函数缓存"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/04/26/js%E5%87%BD%E6%95%B0%E7%BC%93%E5%AD%98/" title="Javascript的函数缓存">Javascript的函数缓存</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-04-26T10:02:19.000Z" title="Created 2022-04-26 18:02:19">2022-04-26</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Javascript/">Javascript</a></span></div><div class="content">1.函数缓存函数缓存，就是将函数运算过的结果进行缓存
+本质上就是用空间（缓存存储）换时间（计算过程）
+常用于缓存数据计算结果和缓存对象
+1234onst add = (a,b) =&gt; a+b;const calc = memoize(add); // 函数缓存calc(10,20);// 30calc(10,20);// 30 缓存
+
+缓存只是一个临时的数据存储，它保存数据，以便将来对该数据的请求能够更快地得到处理
+2.如何实现实现函数缓存主要依靠闭包、柯里化、高阶函数，这里再简单复习下
+闭包闭包可以理解成，函数 + 函数体内可访问的变量总和
+123456789(function() &#123;    var a = 1;    function add() &#123;        const b = 2        let sum = b + a        console.log(sum); // 3    &#125;    add()&#125;)()
+
+add函数本身，以及其内部可访问的变量，即 a = 1，这两个组合在⼀起就形成了闭包
+柯里化把接受多个参数的 ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/04/19/Vue%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE%E5%90%8E404/" title="Vue部署项目404"><img class="post_bg" src="/./img/people.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vue部署项目404"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/04/19/Vue%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE%E5%90%8E404/" title="Vue部署项目404">Vue部署项目404</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-04-19T07:09:20.000Z" title="Created 2022-04-19 15:09:20">2022-04-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Vue/">Vue</a></span></div><div class="content">1.部署项目前后端分离开发模式下，前后端是独立布署的，前端只需要将最后的构建物上传至目标服务器的web容器指定的静态目录下即可
+我们知道vue项目在构建后，是生成一系列的静态文件，常规布署我们只需要将这个目录上传至目标服务器即可
+操作完后就可以在浏览器输入域名进行访问了
+当然上面只是提到最简单也是最直接的一种布署方式
+什么自动化，镜像，容器，流水线布署，本质也是将这套逻辑抽象，隔离，用程序来代替重复性的劳动
+2.404这是一个经典的问题，相信很多同学都有遇到过，那么你知道其真正的原因吗？
+我们先还原一下场景：
+
+vue项目在本地时运行正常，但部署到服务器中，刷新页面，出现了404错误
+
+先定位一下，HTTP 404 错误意味着链接指向的资源不存在
+问题在于为什么不存在？且为什么只有history模式下会出现这个问题？
+Vue是属于单页应用（single-page application）
+而SPA是一种网络应用程序或网站的模型，所有用户交互是通过动态重写当前页面，前面我们也看到了，不管我们应用有多少页面，构建物都只会产出一个index.html
+现在，我们回头来看一下我们的nginx配 ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/04/08/Vue%E7%9A%84%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/" title="Vue的权限管理"><img class="post_bg" src="/./img/people.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vue的权限管理"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/04/08/Vue%E7%9A%84%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/" title="Vue的权限管理">Vue的权限管理</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-04-08T01:40:36.000Z" title="Created 2022-04-08 09:40:36">2022-04-08</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Vue/">Vue</a></span></div><div class="content">1.Vue权限管理权限是对特定资源的访问许可，所谓权限控制，也就是确保用户只能访问到被分配的资源
+而前端权限归根结底是请求的发起权，请求的发起可能有下面两种形式触发
+
+页面加载触发
+页面上的按钮点击触发
+
+总的来说，所有的请求发起都触发自前端路由或视图
+所以我们可以从这两方面入手，对触发权限的源头进行控制，最终要实现的目标是：
+
+路由方面，用户登录后只能看到自己有权访问的导航菜单，也只能访问自己有权访问的路由地址，否则将跳转 4xx 提示页
+视图方面，用户只能看到自己有权浏览的内容和有权操作的控件
+最后再加上请求控制作为最后一道防线，路由可能配置失误，按钮可能忘了加权限，这种时候请求控制可以用来兜底，越权请求将在前端被拦截
+
+2.怎么实现前端权限控制可以分为四个方面：
+
+接口权限
+按钮权限
+菜单权限
+路由权限
+
+接口权限接口权限目前一般采用jwt的形式来验证，没有通过的话一般返回401，跳转到登录页面重新进行登录
+登录完拿到token，将token存起来，通过axios请求拦截器进行拦截，每次请求的时候头部携带token
+123456789axios.interceptors.requ ...</div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/page/2/#content-inner">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/#content-inner">12</a><a class="extend next" rel="next" href="/page/2/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/./img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">宇宙建筑家</div><div class="author-info__description">今夜无雪无晴无悲喜</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">120</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">17</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/withu0519" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:xxxxxx@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/07/01/Css%E9%9A%90%E8%97%8F%E9%A1%B5%E9%9D%A2%E5%85%83%E7%B4%A0/" title="Css隐藏页面元素"><img src="/./img/back.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Css隐藏页面元素"/></a><div class="content"><a class="title" href="/2022/07/01/Css%E9%9A%90%E8%97%8F%E9%A1%B5%E9%9D%A2%E5%85%83%E7%B4%A0/" title="Css隐藏页面元素">Css隐藏页面元素</a><time datetime="2022-07-01T08:27:09.000Z" title="Created 2022-07-01 16:27:09">2022-07-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/06/28/%E5%93%8D%E5%BA%94%E5%BC%8F%E8%AE%BE%E8%AE%A1/" title="响应式设计"><img src="/./img/back.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="响应式设计"/></a><div class="content"><a class="title" href="/2022/06/28/%E5%93%8D%E5%BA%94%E5%BC%8F%E8%AE%BE%E8%AE%A1/" title="响应式设计">响应式设计</a><time datetime="2022-06-28T07:33:25.000Z" title="Created 2022-06-28 15:33:25">2022-06-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/06/18/Css%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88/" title="Css优化方案"><img src="/./img/girl.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Css优化方案"/></a><div class="content"><a class="title" href="/2022/06/18/Css%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88/" title="Css优化方案">Css优化方案</a><time datetime="2022-06-17T23:35:05.000Z" title="Created 2022-06-18 07:35:05">2022-06-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/06/06/Css3%E6%96%B0%E5%A2%9E%E7%9A%84%E7%89%B9%E6%80%A7/" title="Css3新增的特性"><img src="/./img/people.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Css3新增的特性"/></a><div class="content"><a class="title" href="/2022/06/06/Css3%E6%96%B0%E5%A2%9E%E7%9A%84%E7%89%B9%E6%80%A7/" title="Css3新增的特性">Css3新增的特性</a><time datetime="2022-06-06T07:24:49.000Z" title="Created 2022-06-06 15:24:49">2022-06-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/05/31/bind%E3%80%81call%E3%80%81apply/" title="bind、call、apply"><img src="/./img/people.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="bind、call、apply"/></a><div class="content"><a class="title" href="/2022/05/31/bind%E3%80%81call%E3%80%81apply/" title="bind、call、apply">bind、call、apply</a><time datetime="2022-05-31T00:46:10.000Z" title="Created 2022-05-31 08:46:10">2022-05-31</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
             <i class="fas fa-folder-open"></i>
             <span>Categories</span>
-            
+            <a class="card-more-btn" href="/categories/" title="More">
+    <i class="fas fa-angle-right"></i></a>
             </div>
             <ul class="card-category-list" id="aside-cat-list">
-            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Css/"><span class="card-category-list-name">Css</span><span class="card-category-list-count">5</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Javaacript/"><span class="card-category-list-name">Javaacript</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/React/"><span class="card-category-list-name">React</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Vue/"><span class="card-category-list-name">Vue</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/python/"><span class="card-category-list-name">python</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%85%B6%E4%BB%96/"><span class="card-category-list-name">其他</span><span class="card-category-list-count">7</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/"><span class="card-category-list-name">数据分析</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"><span class="card-category-list-name">数据库</span><span class="card-category-list-count">1</span></a></li>
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Css/"><span class="card-category-list-name">Css</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/ES6/"><span class="card-category-list-name">ES6</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/HTTP/"><span class="card-category-list-name">HTTP</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Javascript/"><span class="card-category-list-name">Javascript</span><span class="card-category-list-count">22</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Node/"><span class="card-category-list-name">Node</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/React/"><span class="card-category-list-name">React</span><span class="card-category-list-count">17</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Typescript/"><span class="card-category-list-name">Typescript</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Vue/"><span class="card-category-list-name">Vue</span><span class="card-category-list-count">21</span></a></li>
             </ul></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>Archives</span><a class="card-more-btn" href="/archives/" title="More">
-    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/03/"><span class="card-archive-list-date">March 2020</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/01/"><span class="card-archive-list-date">January 2020</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/12/"><span class="card-archive-list-date">December 2019</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/11/"><span class="card-archive-list-date">November 2019</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/10/"><span class="card-archive-list-date">October 2019</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/09/"><span class="card-archive-list-date">September 2019</span><span class="card-archive-list-count">4</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/08/"><span class="card-archive-list-date">August 2019</span><span class="card-archive-list-count">4</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/07/"><span class="card-archive-list-date">July 2019</span><span class="card-archive-list-count">5</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">Article :</div><div class="item-count">50</div></div><div class="webinfo-item"><div class="item-name">UV :</div><div class="item-count" id="busuanzi_value_site_uv"></div></div><div class="webinfo-item"><div class="item-name">PV :</div><div class="item-count" id="busuanzi_value_site_pv"></div></div><div class="webinfo-item"><div class="item-name">Last Push :</div><div class="item-count" id="last-push-date" data-lastPushDate="2022-06-22T08:46:12.124Z"></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By 宇宙建筑家</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","hOffset":50,"width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7}});</script></body></html>
+    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/07/"><span class="card-archive-list-date">July 2022</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/06/"><span class="card-archive-list-date">June 2022</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/05/"><span class="card-archive-list-date">May 2022</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/04/"><span class="card-archive-list-date">April 2022</span><span class="card-archive-list-count">4</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/03/"><span class="card-archive-list-date">March 2022</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/01/"><span class="card-archive-list-date">January 2022</span><span class="card-archive-list-count">4</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/12/"><span class="card-archive-list-date">December 2021</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/11/"><span class="card-archive-list-date">November 2021</span><span class="card-archive-list-count">3</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">Article :</div><div class="item-count">120</div></div><div class="webinfo-item"><div class="item-name">UV :</div><div class="item-count" id="busuanzi_value_site_uv"></div></div><div class="webinfo-item"><div class="item-name">PV :</div><div class="item-count" id="busuanzi_value_site_pv"></div></div><div class="webinfo-item"><div class="item-name">Last Push :</div><div class="item-count" id="last-push-date" data-lastPushDate="2022-06-28T11:03:39.496Z"></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By 宇宙建筑家</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","hOffset":50,"width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7}});</script></body></html>
